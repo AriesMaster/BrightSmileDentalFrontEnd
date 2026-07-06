@@ -18,4 +18,12 @@ export class AuthService {
       password
     });
   }
+
+  register(email: string, password: string, role: string = 'Patient') {
+    return this.http.post(`${this.apiUrl}/register`, {
+      email,
+      password,
+      role
+    });
+  }
 }

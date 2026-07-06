@@ -1,0 +1,31 @@
+<div class="register-shell">
+  <div class="register-card">
+    <div class="brand-block">
+      <h1>Create account</h1>
+      <p>Join BrightSmile Dental and start managing your care.</p>
+    </div>
+
+    <form class="register-form" (ngSubmit)="register()">
+      <div class="field-group">
+        <label for="email">Email</label>
+        <input id="email" type="email" [(ngModel)]="email" name="email" placeholder="you@example.com" />
+      </div>
+
+      <div class="field-group">
+        <label for="password">Password</label>
+        <input id="password" type="password" [(ngModel)]="password" name="password" placeholder="Choose a password" />
+      </div>
+
+      <div class="field-group">
+        <label for="role">Role</label>
+        <select id="role" [(ngModel)]="role" name="role">
+          <option value="Patient">Patient</option>
+          <option value="Dentist">Dentist</option>
+          <option value="Admin">Admin</option>
+        </select>
+      </div>
+
+      <button type="submit">Register</button>
+    </form>
+  </div>
+</div>

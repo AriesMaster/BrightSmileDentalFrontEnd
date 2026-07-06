@@ -1,15 +1,18 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './core/guards/auth.guard';
+import { roleGuard } from './core/guards/role.guard';
+import { LoginComponent } from './features/auth/login/login';
+import { DashboardComponent } from './features/admin/dashboard/dashboard';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
-    pathMatch: 'full'
+    component: LoginComponent
   },
   {
-    path: 'login',
-    loadComponent: () =>
-      import('./features/auth/login/login')
-        .then(m => m.LoginComponent)
+    path: 'dashboard',
+    component: DashboardComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['Admin'] }
   }
 ];

@@ -1,3 +1,22 @@
-<button (click)="testLogin()">
-  Test Backend Connection
-</button>
+<div class="login-shell">
+  <div class="login-card">
+    <div class="brand-block">
+      <h1>BrightSmile</h1>
+      <p>Welcome back. Sign in to continue your care dashboard.</p>
+    </div>
+
+    <form class="login-form" (ngSubmit)="login()">
+      <div class="field-group">
+        <label for="email">Email</label>
+        <input id="email" type="email" [(ngModel)]="email" name="email" placeholder="you@example.com" />
+      </div>
+
+      <div class="field-group">
+        <label for="password">Password</label>
+        <input id="password" type="password" [(ngModel)]="password" name="password" placeholder="Enter your password" />
+      </div>
+
+      <button type="submit">Login</button>
+    </form>
+  </div>
+</div>

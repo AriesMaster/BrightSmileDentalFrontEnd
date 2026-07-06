@@ -1,5 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../assets/environments/environment';
+import { LoginResponse } from '../models/login';
 
 @Injectable({
   providedIn: 'root'
@@ -8,10 +10,10 @@ export class AuthService {
 
   private http = inject(HttpClient);
 
-  private apiUrl = 'http://localhost:5243/api/Auth';
+  private apiUrl = `${environment.apiUrl}/Auth`;
 
   login(email: string, password: string) {
-    return this.http.post(`${this.apiUrl}/login`, {
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, {
       email,
       password
     });

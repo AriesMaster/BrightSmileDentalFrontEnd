@@ -1,0 +1,13 @@
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.html',
+  styleUrl: './dashboard.scss'
+})
+export class DashboardComponent {
+
+  email = localStorage.getItem('email');
+  role = localStorage.getItem('role');
+
+}

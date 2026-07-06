@@ -1,0 +1,64 @@
+.home-shell {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f4fbff 0%, #e8f5ff 100%);
+  color: #123;
+}
+
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 2rem;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(6px);
+}
+
+.brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f6c9f;
+}
+
+.home-nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.home-nav a,
+.primary-btn {
+  text-decoration: none;
+  color: #0f6c9f;
+  font-weight: 600;
+}
+
+.primary-btn {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.8rem 1.2rem;
+  background: #0f6c9f;
+  color: white;
+  border-radius: 999px;
+}
+
+.home-hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 80px);
+  padding: 2rem;
+}
+
+.hero-content {
+  max-width: 600px;
+  text-align: center;
+}
+
+.hero-content h1 {
+  font-size: 2.8rem;
+  margin-bottom: 1rem;
+}
+
+.hero-content p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+}

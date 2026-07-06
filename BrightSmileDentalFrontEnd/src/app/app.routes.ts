@@ -4,10 +4,15 @@ import { roleGuard } from './core/guards/role.guard';
 import { LoginComponent } from './features/auth/login/login';
 import { RegisterComponent } from './features/auth/register/register';
 import { DashboardComponent } from './features/admin/dashboard/dashboard';
+import { HomeComponent } from './features/home/home';
 
 export const routes: Routes = [
   {
     path: '',
+    component: HomeComponent
+  },
+  {
+    path: 'login',
     component: LoginComponent
   },
   {

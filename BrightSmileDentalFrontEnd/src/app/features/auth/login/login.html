@@ -1,22 +1,29 @@
 <div class="login-shell">
-  <div class="login-card">
+  <mat-card class="login-card">
     <div class="brand-block">
       <h1>BrightSmile</h1>
       <p>Welcome back. Sign in to continue your care dashboard.</p>
     </div>
 
     <form class="login-form" (ngSubmit)="login()">
-      <div class="field-group">
-        <label for="email">Email</label>
-        <input id="email" type="email" [(ngModel)]="email" name="email" placeholder="you@example.com" />
-      </div>
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput id="email" type="email" [(ngModel)]="email" name="email" placeholder="you@example.com" />
+      </mat-form-field>
 
-      <div class="field-group">
-        <label for="password">Password</label>
-        <input id="password" type="password" [(ngModel)]="password" name="password" placeholder="Enter your password" />
-      </div>
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input matInput id="password" type="password" [(ngModel)]="password" name="password" placeholder="Enter your password" />
+      </mat-form-field>
 
-      <button type="submit">Login</button>
+      <button mat-flat-button color="primary" type="submit" [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Signing in...' : 'Login' }}
+      </button>
     </form>
-  </div>
+
+    <div class="auth-links">
+      <a routerLink="/register">Create an account</a>
+      <a routerLink="/">Back to home</a>
+    </div>
+  </mat-card>
 </div>

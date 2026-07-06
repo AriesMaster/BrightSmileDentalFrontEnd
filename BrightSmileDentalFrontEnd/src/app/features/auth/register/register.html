@@ -1,31 +1,38 @@
 <div class="register-shell">
-  <div class="register-card">
+  <mat-card class="register-card">
     <div class="brand-block">
       <h1>Create account</h1>
       <p>Join BrightSmile Dental and start managing your care.</p>
     </div>
 
     <form class="register-form" (ngSubmit)="register()">
-      <div class="field-group">
-        <label for="email">Email</label>
-        <input id="email" type="email" [(ngModel)]="email" name="email" placeholder="you@example.com" />
-      </div>
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput id="email" type="email" [(ngModel)]="email" name="email" placeholder="you@example.com" />
+      </mat-form-field>
 
-      <div class="field-group">
-        <label for="password">Password</label>
-        <input id="password" type="password" [(ngModel)]="password" name="password" placeholder="Choose a password" />
-      </div>
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input matInput id="password" type="password" [(ngModel)]="password" name="password" placeholder="Choose a password" />
+      </mat-form-field>
 
-      <div class="field-group">
-        <label for="role">Role</label>
-        <select id="role" [(ngModel)]="role" name="role">
-          <option value="Patient">Patient</option>
-          <option value="Dentist">Dentist</option>
-          <option value="Admin">Admin</option>
-        </select>
-      </div>
+      <mat-form-field appearance="outline">
+        <mat-label>Role</mat-label>
+        <mat-select [(ngModel)]="role" name="role">
+          <mat-option value="Patient">Patient</mat-option>
+          <mat-option value="Dentist">Dentist</mat-option>
+          <mat-option value="Admin">Admin</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-      <button type="submit">Register</button>
+      <button mat-flat-button color="primary" type="submit" [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Creating account...' : 'Register' }}
+      </button>
     </form>
-  </div>
+
+    <div class="auth-links">
+      <a routerLink="/login">Already have an account?</a>
+      <a routerLink="/">Back to home</a>
+    </div>
+  </mat-card>
 </div>

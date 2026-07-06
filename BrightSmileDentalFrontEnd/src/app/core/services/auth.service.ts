@@ -24,6 +24,8 @@ export class AuthService {
       email,
       password,
       role
+    }, {
+      responseType: 'text'
     });
   }
 }

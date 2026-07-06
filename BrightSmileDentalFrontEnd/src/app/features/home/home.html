@@ -1,17 +1,22 @@
 <div class="home-shell">
-  <header class="home-header">
-    <div class="brand">BrightSmile Dental</div>
-    <nav class="home-nav">
-      <a routerLink="/login">Login</a>
-      <a routerLink="/register">Register</a>
-    </nav>
-  </header>
+  <mat-toolbar color="primary" class="home-toolbar">
+    <span class="brand">BrightSmile Dental</span>
+    <span class="spacer"></span>
+    <a mat-button routerLink="/login">Login</a>
+    <a mat-raised-button color="accent" routerLink="/register">Register</a>
+  </mat-toolbar>
 
   <main class="home-hero">
-    <div class="hero-content">
-      <h1>Smile with confidence.</h1>
-      <p>Modern dental care with a simple, welcoming experience for every patient.</p>
-      <a class="primary-btn" routerLink="/register">Get Started</a>
-    </div>
+    <mat-card class="hero-card">
+      <div class="hero-content">
+        <p class="eyebrow">Trusted dental care</p>
+        <h1>Smile with confidence.</h1>
+        <p>Modern dental care with a simple, welcoming experience for every patient.</p>
+        <div class="hero-actions">
+          <a mat-raised-button color="primary" routerLink="/register">Get Started</a>
+          <a mat-stroked-button routerLink="/login">Already a member?</a>
+        </div>
+      </div>
+    </mat-card>
   </main>
 </div>

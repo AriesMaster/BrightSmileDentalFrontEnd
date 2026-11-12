@@ -1,38 +1,68 @@
-<div class="register-shell">
-  <mat-card class="register-card">
-    <div class="brand-block">
-      <h1>Create account</h1>
-      <p>Join BrightSmile Dental and start managing your care.</p>
-    </div>
+<main class="auth-shell">
+  <a class="brand-link" routerLink="/" aria-label="BrightSmile Dental home">
+    <span class="brand-mark" aria-hidden="true">B</span>
+    <span>BrightSmile <span class="brand-light">Dental</span></span>
+  </a>
 
-    <form class="register-form" (ngSubmit)="register()">
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput id="email" type="email" [(ngModel)]="email" name="email" placeholder="you@example.com" />
-      </mat-form-field>
+  <div class="auth-layout">
+    <section class="welcome-panel" aria-labelledby="welcome-title">
+      <p class="eyebrow">A healthier smile, together</p>
+      <h1>Make your next visit feel different.</h1>
+      <p class="welcome-copy">
+        Create your account to connect with your care team and make managing dental visits a little easier.
+      </p>
+      <div class="welcome-note">
+        <span class="note-indicator" aria-hidden="true"></span>
+        <span>Personal care. A plan that fits you.</span>
+      </div>
+      <div class="orbit-art" aria-hidden="true">
+        <span class="orbit orbit-one"></span>
+        <span class="orbit orbit-two"></span>
+        <span class="orbit-core">+</span>
+      </div>
+    </section>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Password</mat-label>
-        <input matInput id="password" type="password" [(ngModel)]="password" name="password" placeholder="Choose a password" />
-      </mat-form-field>
+    <mat-card class="auth-card">
+      <div class="form-heading">
+        <p class="eyebrow">Get started</p>
+        <h2>Create your account</h2>
+        <p>Set up your BrightSmile profile in a few steps.</p>
+      </div>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Role</mat-label>
-        <mat-select [(ngModel)]="role" name="role">
-          <mat-option value="Patient">Patient</mat-option>
-          <mat-option value="Dentist">Dentist</mat-option>
-          <mat-option value="Admin">Admin</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <form class="auth-form" (ngSubmit)="register()">
+        <mat-form-field appearance="outline">
+          <mat-label>Email address</mat-label>
+          <input matInput id="email" type="email" [(ngModel)]="email" name="email" placeholder="you@example.com" autocomplete="email" />
+        </mat-form-field>
 
-      <button mat-flat-button color="primary" type="submit" [disabled]="isSubmitting">
-        {{ isSubmitting ? 'Creating account...' : 'Register' }}
-      </button>
-    </form>
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input matInput id="password" type="password" [(ngModel)]="password" name="password" placeholder="Choose a password" autocomplete="new-password" />
+        </mat-form-field>
 
-    <div class="auth-links">
-      <a routerLink="/login">Already have an account?</a>
-      <a routerLink="/">Back to home</a>
-    </div>
-  </mat-card>
-</div>
+        <mat-form-field appearance="outline">
+          <mat-label>Account type</mat-label>
+          <mat-select [(ngModel)]="role" name="role">
+            <mat-option value="Patient">Patient</mat-option>
+            <mat-option value="Dentist">Dentist</mat-option>
+            <mat-option value="Admin">Admin</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" type="submit" [disabled]="isSubmitting">
+          {{ isSubmitting ? 'Creating account...' : 'Create account' }}
+          <span aria-hidden="true">↗</span>
+        </button>
+      </form>
+
+      <div class="auth-divider"><span>Already a member?</span></div>
+      <a class="secondary-action" routerLink="/login">Sign in to your account <span aria-hidden="true">→</span></a>
+      <a class="home-link" routerLink="/">← Back to home</a>
+    </mat-card>
+  </div>
+
+  <footer class="auth-footer">
+    <span>BRIGHTSMILE DENTAL</span>
+    <span>Care that moves with you.</span>
+  </footer>
+</main>

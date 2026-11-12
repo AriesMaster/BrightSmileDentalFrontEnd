@@ -5,6 +5,8 @@ import { LoginComponent } from './features/auth/login/login';
 import { RegisterComponent } from './features/auth/register/register';
 import { DashboardComponent } from './features/admin/dashboard/dashboard';
 import { HomeComponent } from './features/home/home';
+import { ServicesComponent } from './features/services/services';
+import { AboutComponent } from './features/about/about';
 import { DashboardComponent as DentistDashboardComponent } from './features/dentist/dashboard/dashboard';
 import { DashboardComponent as PatientDashboardComponent } from './features/patient/dashboard/dashboard';
 
@@ -12,6 +14,14 @@ export const routes: Routes = [
   {
     path: '',
     component: HomeComponent
+  },
+  {
+    path: 'services',
+    component: ServicesComponent
+  },
+  {
+    path: 'about',
+    component: AboutComponent
   },
   {
     path: 'login',

@@ -1,29 +1,59 @@
-<div class="login-shell">
-  <mat-card class="login-card">
-    <div class="brand-block">
-      <h1>BrightSmile</h1>
-      <p>Welcome back. Sign in to continue your care dashboard.</p>
-    </div>
+<main class="auth-shell">
+  <a class="brand-link" routerLink="/" aria-label="BrightSmile Dental home">
+    <span class="brand-mark" aria-hidden="true">B</span>
+    <span>BrightSmile <span class="brand-light">Dental</span></span>
+  </a>
 
-    <form class="login-form" (ngSubmit)="login()">
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput id="email" type="email" [(ngModel)]="email" name="email" placeholder="you@example.com" />
-      </mat-form-field>
+  <div class="auth-layout">
+    <section class="welcome-panel" aria-labelledby="welcome-title">
+      <p class="eyebrow">Your care, in sync</p>
+      <h1 id="welcome-title">A brighter smile starts with you.</h1>
+      <p class="welcome-copy">
+        Sign in to manage your visits, stay connected with your care team, and keep your smile moving forward.
+      </p>
+      <div class="welcome-note">
+        <span class="note-indicator" aria-hidden="true"></span>
+        <span>Thoughtful dental care, made simple.</span>
+      </div>
+      <div class="orbit-art" aria-hidden="true">
+        <span class="orbit orbit-one"></span>
+        <span class="orbit orbit-two"></span>
+        <span class="orbit-core">+</span>
+      </div>
+    </section>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Password</mat-label>
-        <input matInput id="password" type="password" [(ngModel)]="password" name="password" placeholder="Enter your password" />
-      </mat-form-field>
+    <mat-card class="auth-card">
+      <div class="form-heading">
+        <p class="eyebrow">Patient portal</p>
+        <h2>Welcome back</h2>
+        <p>Enter your details to sign in to your account.</p>
+      </div>
 
-      <button mat-flat-button color="primary" type="submit" [disabled]="isSubmitting">
-        {{ isSubmitting ? 'Signing in...' : 'Login' }}
-      </button>
-    </form>
+      <form class="auth-form" (ngSubmit)="login()">
+        <mat-form-field appearance="outline">
+          <mat-label>Email address</mat-label>
+          <input matInput id="email" type="email" [(ngModel)]="email" name="email" placeholder="you@example.com" autocomplete="email" />
+        </mat-form-field>
 
-    <div class="auth-links">
-      <a routerLink="/register">Create an account</a>
-      <a routerLink="/">Back to home</a>
-    </div>
-  </mat-card>
-</div>
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input matInput id="password" type="password" [(ngModel)]="password" name="password" placeholder="Enter your password" autocomplete="current-password" />
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" type="submit" [disabled]="isSubmitting">
+          {{ isSubmitting ? 'Signing in...' : 'Sign in' }}
+          <span aria-hidden="true">↗</span>
+        </button>
+      </form>
+
+      <div class="auth-divider"><span>New to BrightSmile?</span></div>
+      <a class="secondary-action" routerLink="/register">Create an account <span aria-hidden="true">→</span></a>
+      <a class="home-link" routerLink="/">← Back to home</a>
+    </mat-card>
+  </div>
+
+  <footer class="auth-footer">
+    <span>BRIGHTSMILE DENTAL</span>
+    <span>Care that moves with you.</span>
+  </footer>
+</main>

@@ -1,68 +1,205 @@
+
 <main class="auth-shell">
-  <a class="brand-link" routerLink="/" aria-label="BrightSmile Dental home">
+
+  <!-- BRAND -->
+  <a
+    class="brand-link"
+    routerLink="/"
+    aria-label="BrightSmile Dental home"
+  >
     <span class="brand-mark" aria-hidden="true">B</span>
-    <span>BrightSmile <span class="brand-light">Dental</span></span>
+
+    <span>
+      BrightSmile
+      <span class="brand-light">Dental</span>
+    </span>
   </a>
 
   <div class="auth-layout">
-    <section class="welcome-panel" aria-labelledby="welcome-title">
-      <p class="eyebrow">A healthier smile, together</p>
-      <h1>Make your next visit feel different.</h1>
-      <p class="welcome-copy">
-        Create your account to connect with your care team and make managing dental visits a little easier.
+
+    <!-- WELCOME PANEL -->
+    <section
+      class="welcome-panel"
+      aria-labelledby="welcome-title"
+    >
+
+      <p class="eyebrow">
+        A healthier smile, together
       </p>
+
+      <h1 id="welcome-title">
+        Make your next visit feel different.
+      </h1>
+
+      <p class="welcome-copy">
+        Create your patient account to connect
+        with your care team and make managing
+        dental visits a little easier.
+      </p>
+
       <div class="welcome-note">
-        <span class="note-indicator" aria-hidden="true"></span>
-        <span>Personal care. A plan that fits you.</span>
+        <span
+          class="note-indicator"
+          aria-hidden="true"
+        ></span>
+
+        <span>
+          Personal care. A plan that fits you.
+        </span>
       </div>
+
+      <!-- DECORATIVE ART -->
       <div class="orbit-art" aria-hidden="true">
         <span class="orbit orbit-one"></span>
         <span class="orbit orbit-two"></span>
         <span class="orbit-core">+</span>
       </div>
+
     </section>
 
+    <!-- REGISTRATION CARD -->
     <mat-card class="auth-card">
+
       <div class="form-heading">
-        <p class="eyebrow">Get started</p>
-        <h2>Create your account</h2>
-        <p>Set up your BrightSmile profile in a few steps.</p>
+
+        <p class="eyebrow">
+          Patient registration
+        </p>
+
+        <h2>
+          Create your account
+        </h2>
+
+        <p>
+          Set up your BrightSmile patient account
+          to manage your dental appointments.
+        </p>
+
       </div>
 
-      <form class="auth-form" (ngSubmit)="register()">
+      <!-- REGISTRATION FORM -->
+      <form
+        class="auth-form"
+        (ngSubmit)="register()"
+        #registrationForm="ngForm"
+      >
+
+        <!-- EMAIL -->
         <mat-form-field appearance="outline">
-          <mat-label>Email address</mat-label>
-          <input matInput id="email" type="email" [(ngModel)]="email" name="email" placeholder="you@example.com" autocomplete="email" />
+
+          <mat-label>
+            Email address
+          </mat-label>
+
+          <input
+            matInput
+            id="email"
+            type="email"
+            name="email"
+            [(ngModel)]="email"
+            #emailControl="ngModel"
+            placeholder="you@example.com"
+            autocomplete="email"
+            required
+            email
+          />
+
+          @if (
+            emailControl.invalid &&
+            (emailControl.dirty || emailControl.touched)
+          ) {
+            <mat-error>
+              Please enter a valid email address.
+            </mat-error>
+          }
+
         </mat-form-field>
 
+        <!-- PASSWORD -->
         <mat-form-field appearance="outline">
-          <mat-label>Password</mat-label>
-          <input matInput id="password" type="password" [(ngModel)]="password" name="password" placeholder="Choose a password" autocomplete="new-password" />
+
+          <mat-label>
+            Password
+          </mat-label>
+
+          <input
+            matInput
+            id="password"
+            type="password"
+            name="password"
+            [(ngModel)]="password"
+            #passwordControl="ngModel"
+            placeholder="Choose a password"
+            autocomplete="new-password"
+            required
+          />
+
+          @if (
+            passwordControl.invalid &&
+            (passwordControl.dirty || passwordControl.touched)
+          ) {
+            <mat-error>
+              Please enter a password.
+            </mat-error>
+          }
+
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Account type</mat-label>
-          <mat-select [(ngModel)]="role" name="role">
-            <mat-option value="Patient">Patient</mat-option>
-            <mat-option value="Dentist">Dentist</mat-option>
-            <mat-option value="Admin">Admin</mat-option>
-          </mat-select>
-        </mat-form-field>
+        <!-- SUBMIT -->
+        <button
+          mat-flat-button
+          color="primary"
+          type="submit"
+          [disabled]="isSubmitting || registrationForm.invalid"
+        >
 
-        <button mat-flat-button color="primary" type="submit" [disabled]="isSubmitting">
-          {{ isSubmitting ? 'Creating account...' : 'Create account' }}
+          {{
+            isSubmitting
+              ? 'Creating account...'
+              : 'Create patient account'
+          }}
+
           <span aria-hidden="true">↗</span>
+
         </button>
+
       </form>
 
-      <div class="auth-divider"><span>Already a member?</span></div>
-      <a class="secondary-action" routerLink="/login">Sign in to your account <span aria-hidden="true">→</span></a>
-      <a class="home-link" routerLink="/">← Back to home</a>
+      <!-- LOGIN LINK -->
+      <div class="auth-divider">
+        <span>Already a member?</span>
+      </div>
+
+      <a
+        class="secondary-action"
+        routerLink="/login"
+      >
+        Sign in to your account
+        <span aria-hidden="true">→</span>
+      </a>
+
+      <a
+        class="home-link"
+        routerLink="/"
+      >
+        ← Back to home
+      </a>
+
     </mat-card>
+
   </div>
 
+  <!-- FOOTER -->
   <footer class="auth-footer">
-    <span>BRIGHTSMILE DENTAL</span>
-    <span>Care that moves with you.</span>
+
+    <span>
+      BRIGHTSMILE DENTAL
+    </span>
+
+    <span>
+      Care that moves with you.
+    </span>
+
   </footer>
+
 </main>

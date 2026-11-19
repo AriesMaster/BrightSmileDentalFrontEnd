@@ -1,1 +1,652 @@
+
+/* ==========================================
+   BRIGHTSMILE DENTAL
+   PATIENT REGISTRATION
+========================================== */
+
+/*
+  Preserve the existing authentication
+  styling, including the dotted background,
+  branding, welcome panel and animations.
+*/
+
 @use "../login/login";
+
+/* ==========================================
+   REGISTRATION DESIGN TOKENS
+========================================== */
+
+:host {
+  --register-primary: #171717;
+  --register-text: #171717;
+  --register-secondary: #626262;
+  --register-muted: #858585;
+
+  --register-surface: #ffffff;
+  --register-surface-soft: #f8f8f8;
+
+  --register-border: #dedede;
+  --register-border-light: #eaeaea;
+
+  --register-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.035),
+    0 18px 48px rgba(0, 0, 0, 0.075);
+
+  display: block;
+  min-height: 100vh;
+}
+
+/* ==========================================
+   PAGE LAYOUT
+========================================== */
+
+.auth-shell {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/*
+  Registration requires more horizontal
+  space than the login page.
+*/
+
+.auth-layout {
+  width: min(100%, 1320px);
+  max-width: 1320px;
+
+  margin-inline: auto;
+
+  display: grid;
+  grid-template-columns:
+    minmax(0, 0.85fr)
+    minmax(0, 1.15fr);
+
+  align-items: start;
+
+  gap: clamp(24px, 4vw, 64px);
+}
+
+/* ==========================================
+   WELCOME PANEL
+========================================== */
+
+.welcome-panel {
+  min-width: 0;
+  position: relative;
+}
+
+.welcome-panel h1 {
+  max-width: 540px;
+}
+
+.welcome-copy {
+  max-width: 470px;
+  line-height: 1.85;
+}
+
+.welcome-note {
+  max-width: 440px;
+}
+
+/* ==========================================
+   REGISTRATION CARD
+========================================== */
+
+.auth-card {
+  width: 100%;
+  max-width: 720px;
+  min-width: 0;
+
+  margin-inline: auto;
+
+  padding: clamp(24px, 3.5vw, 44px);
+
+  background: var(--register-surface);
+
+  border: 1px solid var(--register-border);
+
+  border-radius: 22px;
+
+  box-shadow: var(--register-shadow);
+
+  overflow: visible;
+}
+
+/* ==========================================
+   FORM HEADING
+========================================== */
+
+.form-heading {
+  margin-bottom: 30px;
+}
+
+.form-heading .eyebrow {
+  margin-bottom: 12px;
+}
+
+.form-heading h2 {
+  margin: 0 0 12px;
+
+  color: var(--register-text);
+
+  font-size: clamp(26px, 2.4vw, 34px);
+  font-weight: 700;
+
+  letter-spacing: -0.9px;
+  line-height: 1.2;
+}
+
+.form-heading > p:last-child {
+  margin: 0;
+
+  max-width: 480px;
+
+  color: var(--register-secondary);
+
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* ==========================================
+   REGISTRATION FORM
+========================================== */
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+
+  gap: 18px;
+
+  width: 100%;
+  min-width: 0;
+}
+
+.auth-form mat-form-field {
+  display: block;
+
+  width: 100%;
+  min-width: 0;
+}
+
+/* ==========================================
+   FORM SECTION HEADINGS
+========================================== */
+
+.form-section-heading {
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+
+  margin-top: 14px;
+  margin-bottom: 2px;
+
+  padding-bottom: 14px;
+
+  border-bottom:
+    1px solid var(--register-border-light);
+}
+
+.form-section-heading:first-child {
+  margin-top: 0;
+}
+
+.form-section-heading h3 {
+  margin: 0;
+
+  color: var(--register-text);
+
+  font-size: 15px;
+  font-weight: 650;
+
+  letter-spacing: -0.2px;
+  line-height: 1.5;
+}
+
+.form-section-heading p {
+  margin: 0;
+
+  color: var(--register-secondary);
+
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+/* ==========================================
+   TWO-COLUMN FORM ROWS
+========================================== */
+
+.form-row {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 16px;
+
+  width: 100%;
+  min-width: 0;
+
+  align-items: start;
+}
+
+.form-row > mat-form-field {
+  min-width: 0;
+}
+
+/* ==========================================
+   ANGULAR MATERIAL INPUT FIELDS
+========================================== */
+
+.auth-form {
+  mat-form-field {
+    --mdc-outlined-text-field-container-shape: 12px;
+
+    --mdc-outlined-text-field-outline-color:
+      #d8d8d8;
+
+    --mdc-outlined-text-field-hover-outline-color:
+      #909090;
+
+    --mdc-outlined-text-field-focus-outline-color:
+      #171717;
+
+    --mdc-outlined-text-field-focus-label-text-color:
+      #171717;
+
+    --mdc-outlined-text-field-input-text-color:
+      #171717;
+
+    --mdc-outlined-text-field-label-text-color:
+      #666666;
+
+    --mat-form-field-container-text-size: 14px;
+  }
+
+  input {
+    font-size: 14px;
+    color: var(--register-text);
+  }
+
+  mat-select {
+    font-size: 14px;
+    color: var(--register-text);
+  }
+
+  mat-icon {
+    color: #777777;
+  }
+}
+
+/* ==========================================
+   PASSWORD VISIBILITY BUTTON
+========================================== */
+
+.auth-form button[mat-icon-button] {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 42px;
+  height: 42px;
+
+  padding: 0;
+
+  border-radius: 50%;
+
+  color: var(--register-secondary);
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.auth-form button[mat-icon-button]:hover {
+  background-color: #f1f1f1;
+  color: var(--register-primary);
+}
+
+.auth-form button[mat-icon-button] mat-icon {
+  font-size: 21px;
+}
+
+/* ==========================================
+   DATE PICKER
+========================================== */
+
+.auth-form mat-datepicker-toggle {
+  color: var(--register-secondary);
+}
+
+/* ==========================================
+   SUBMIT BUTTON
+========================================== */
+
+.auth-form .submit-button {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 12px;
+
+  width: 100%;
+  min-height: 52px;
+
+  margin-top: 12px;
+
+  padding: 12px 22px;
+
+  background: var(--register-primary);
+  color: #ffffff;
+
+  border: 1px solid var(--register-primary);
+  border-radius: 12px;
+
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.08);
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  letter-spacing: 0.1px;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.auth-form .submit-button:not(:disabled):hover {
+  background: #333333;
+
+  box-shadow:
+    0 7px 18px rgba(0, 0, 0, 0.13);
+
+  transform: translateY(-1px);
+}
+
+.auth-form .submit-button:not(:disabled):active {
+  transform: translateY(0);
+}
+
+.auth-form .submit-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+
+  box-shadow: none;
+  transform: none;
+}
+
+.auth-form .submit-button mat-icon {
+  color: #ffffff;
+
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+/* ==========================================
+   FORM FOOTER NOTE
+========================================== */
+
+.form-footer-note {
+  margin: 0;
+
+  padding: 0 8px;
+
+  color: var(--register-muted);
+
+  font-size: 11px;
+  line-height: 1.8;
+
+  text-align: center;
+}
+
+/* ==========================================
+   DIVIDER
+========================================== */
+
+.auth-divider {
+  margin-top: 26px;
+  margin-bottom: 20px;
+}
+
+.auth-divider span {
+  color: var(--register-secondary);
+  font-size: 12px;
+}
+
+/* ==========================================
+   SECONDARY ACTION
+========================================== */
+
+.secondary-action {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 12px;
+
+  width: 100%;
+  min-height: 48px;
+
+  padding: 12px 18px;
+
+  border: 1px solid var(--register-border);
+  border-radius: 12px;
+
+  background: #ffffff;
+
+  color: var(--register-text);
+
+  font-size: 13px;
+  font-weight: 600;
+
+  text-decoration: none;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.secondary-action:hover {
+  background: var(--register-surface-soft);
+
+  border-color: #bcbcbc;
+
+  box-shadow:
+    0 3px 10px rgba(0, 0, 0, 0.04);
+}
+
+.secondary-action span {
+  font-size: 18px;
+}
+
+/* ==========================================
+   BACK TO HOME
+========================================== */
+
+.home-link {
+  display: inline-flex;
+
+  align-items: center;
+
+  margin-top: 22px;
+
+  color: var(--register-secondary);
+
+  font-size: 12px;
+  font-weight: 500;
+
+  text-decoration: none;
+
+  transition: color 0.2s ease;
+}
+
+.home-link:hover {
+  color: var(--register-text);
+}
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 1100px) {
+
+  .auth-layout {
+    grid-template-columns:
+      minmax(0, 0.8fr)
+      minmax(0, 1.2fr);
+
+    gap: 28px;
+  }
+
+  .auth-card {
+    padding: 28px;
+  }
+
+  .form-row {
+    gap: 12px;
+  }
+
+}
+
+/* ==========================================
+   SMALL TABLET
+========================================== */
+
+@media (max-width: 850px) {
+
+  .auth-layout {
+    grid-template-columns: 1fr;
+
+    max-width: 680px;
+
+    gap: 28px;
+  }
+
+  .welcome-panel {
+    width: 100%;
+  }
+
+  .welcome-panel h1 {
+    max-width: 600px;
+  }
+
+  .welcome-copy {
+    max-width: 600px;
+  }
+
+  .auth-card {
+    max-width: 680px;
+  }
+
+}
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 600px) {
+
+  .auth-layout {
+    grid-template-columns: 1fr;
+
+    width: 100%;
+    gap: 22px;
+  }
+
+  .auth-card {
+    width: 100%;
+    max-width: 100%;
+
+    padding: 24px 18px;
+
+    border-radius: 18px;
+  }
+
+  .form-heading {
+    margin-bottom: 24px;
+  }
+
+  .form-heading h2 {
+    font-size: 27px;
+  }
+
+  .auth-form {
+    gap: 14px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .form-section-heading {
+    margin-top: 10px;
+    padding-bottom: 12px;
+  }
+
+  .form-section-heading h3 {
+    font-size: 14px;
+  }
+
+  .auth-form .submit-button {
+    min-height: 50px;
+  }
+
+  .form-footer-note {
+    font-size: 11px;
+  }
+
+}
+
+/* ==========================================
+   VERY SMALL SCREENS
+========================================== */
+
+@media (max-width: 380px) {
+
+  .auth-card {
+    padding: 20px 14px;
+  }
+
+  .form-heading h2 {
+    font-size: 24px;
+  }
+
+  .auth-form {
+    gap: 12px;
+  }
+
+}
+
+/* ==========================================
+   ACCESSIBILITY
+========================================== */
+
+.auth-form .submit-button:focus-visible,
+.secondary-action:focus-visible,
+.home-link:focus-visible {
+  outline: 3px solid #737373;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .auth-form .submit-button,
+  .secondary-action,
+  .home-link,
+  .auth-form button[mat-icon-button] {
+    transition: none;
+    transform: none;
+  }
+
+}

@@ -20,16 +20,42 @@ import { LoginResponse } from '../models/login';
 
 export type UserRole = 'Admin' | 'Dentist' | 'Patient';
 
+/**
+ * Patient registration information.
+ *
+ * Matches the ASP.NET Core RegisterDto.
+ */
+export interface RegisterRequest {
+  email: string;
+  password: string;
+
+  firstName: string;
+  lastName: string;
+
+  phoneNumber?: string;
+  dateOfBirth?: string | null;
+  gender?: string;
+}
+
+/**
+ * Response returned after registration.
+ */
 export interface RegisterResponse {
   message: string;
 }
 
+/**
+ * Authenticated user session.
+ */
 export interface AuthSession {
   token: string;
   email: string;
   role: UserRole;
 }
 
+/**
+ * JWT payload fields used by the frontend.
+ */
 interface JwtPayload {
   exp?: unknown;
 }
@@ -46,9 +72,10 @@ export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
 
-  private readonly apiUrl = `${environment.apiUrl}/Auth`;
+  private readonly apiUrl =
+    `${environment.apiUrl}/Auth`;
 
-  // Preserve existing storage keys for compatibility.
+  // Preserve existing storage keys.
   private readonly tokenKey = 'token';
   private readonly emailKey = 'email';
   private readonly roleKey = 'role';
@@ -57,11 +84,13 @@ export class AuthService {
   // REACTIVE SESSION STATE
   // ==========================================
 
-  private readonly sessionState = signal<AuthSession | null>(
-    this.restoreSession()
-  );
+  private readonly sessionState =
+    signal<AuthSession | null>(
+      this.restoreSession()
+    );
 
-  readonly session = this.sessionState.asReadonly();
+  readonly session =
+    this.sessionState.asReadonly();
 
   readonly isAuthenticated = computed(
     () => this.sessionState() !== null
@@ -82,12 +111,8 @@ export class AuthService {
   /**
    * POST /api/Auth/login
    *
-   * The backend returns:
-   * {
-   *   token: string,
-   *   email: string,
-   *   role: string
-   * }
+   * Authenticates the user and stores
+   * the returned JWT session.
    */
   login(
     email: string,
@@ -112,21 +137,36 @@ export class AuthService {
   /**
    * POST /api/Auth/register
    *
-   * Public registration is restricted to Patients.
-   * The backend independently enforces this rule.
+   * Registers a Patient and sends their
+   * personal information to the backend.
+   *
+   * The backend assigns the Patient role
+   * and creates the associated Profile.
    */
   register(
-    email: string,
-    password: string
+    request: RegisterRequest
   ): Observable<RegisterResponse> {
+
+    const payload: RegisterRequest = {
+      email: request.email.trim().toLowerCase(),
+      password: request.password,
+
+      firstName: request.firstName.trim(),
+      lastName: request.lastName.trim(),
+
+      phoneNumber:
+        request.phoneNumber?.trim() ?? '',
+
+      dateOfBirth:
+        request.dateOfBirth || null,
+
+      gender:
+        request.gender?.trim() ?? ''
+    };
 
     return this.http.post<RegisterResponse>(
       `${this.apiUrl}/register`,
-      {
-        email: email.trim().toLowerCase(),
-        password,
-        role: 'Patient'
-      }
+      payload
     );
   }
 
@@ -134,9 +174,13 @@ export class AuthService {
   // SAVE SESSION
   // ==========================================
 
-  private saveSession(response: LoginResponse): void {
+  private saveSession(
+    response: LoginResponse
+  ): void {
 
-    const role = this.normalizeRole(response.role);
+    const role = this.normalizeRole(
+      response.role
+    );
 
     if (!role) {
       throw new Error(
@@ -160,9 +204,20 @@ export class AuthService {
       role
     };
 
-    localStorage.setItem(this.tokenKey, session.token);
-    localStorage.setItem(this.emailKey, session.email);
-    localStorage.setItem(this.roleKey, session.role);
+    localStorage.setItem(
+      this.tokenKey,
+      session.token
+    );
+
+    localStorage.setItem(
+      this.emailKey,
+      session.email
+    );
+
+    localStorage.setItem(
+      this.roleKey,
+      session.role
+    );
 
     this.sessionState.set(session);
   }
@@ -173,9 +228,14 @@ export class AuthService {
 
   private restoreSession(): AuthSession | null {
 
-    const token = localStorage.getItem(this.tokenKey);
-    const email = localStorage.getItem(this.emailKey);
-    const storedRole = localStorage.getItem(this.roleKey);
+    const token =
+      localStorage.getItem(this.tokenKey);
+
+    const email =
+      localStorage.getItem(this.emailKey);
+
+    const storedRole =
+      localStorage.getItem(this.roleKey);
 
     if (!token || !email || !storedRole) {
       this.clearStoredSession();
@@ -184,7 +244,10 @@ export class AuthService {
 
     const role = this.normalizeRole(storedRole);
 
-    if (!role || !this.isTokenValid(token)) {
+    if (
+      !role ||
+      !this.isTokenValid(token)
+    ) {
       this.clearStoredSession();
       return null;
     }
@@ -201,9 +264,7 @@ export class AuthService {
   // ==========================================
 
   /**
-   * Return a non-expired JWT.
-   *
-   * Expired tokens are removed from storage.
+   * Returns the current non-expired JWT.
    */
   getToken(): string | null {
 
@@ -249,7 +310,8 @@ export class AuthService {
 
     const session = this.getCurrentUser();
 
-    return session !== null && roles.includes(session.role);
+    return session !== null &&
+      roles.includes(session.role);
   }
 
   // ==========================================
@@ -264,10 +326,10 @@ export class AuthService {
   }
 
   /**
-   * Clear the session without navigating.
+   * Clears authentication without navigation.
    *
-   * Useful for handling API authentication
-   * failures in the HTTP interceptor.
+   * Used by HTTP interceptors when a session
+   * is no longer valid.
    */
   clearSession(): void {
 
@@ -287,7 +349,9 @@ export class AuthService {
   // DASHBOARD NAVIGATION
   // ==========================================
 
-  getDashboardRoute(role: UserRole): string {
+  getDashboardRoute(
+    role: UserRole
+  ): string {
 
     switch (role) {
 
@@ -321,8 +385,8 @@ export class AuthService {
   // ==========================================
 
   /**
-   * Return the JWT expiration time
-   * in Unix seconds.
+   * Returns the JWT expiration time
+   * as a Unix timestamp in seconds.
    */
   getTokenExpiration(): number | null {
 
@@ -332,7 +396,9 @@ export class AuthService {
       return null;
     }
 
-    const payload = this.decodeJwtPayload(session.token);
+    const payload = this.decodeJwtPayload(
+      session.token
+    );
 
     return typeof payload?.exp === 'number'
       ? payload.exp
@@ -340,30 +406,41 @@ export class AuthService {
   }
 
   /**
-   * Return remaining session lifetime
+   * Returns remaining session lifetime
    * in seconds.
    */
   getRemainingSessionSeconds(): number {
 
-    const expiration = this.getTokenExpiration();
+    const expiration =
+      this.getTokenExpiration();
 
     if (expiration === null) {
       return 0;
     }
 
-    const currentTime = Math.floor(Date.now() / 1000);
+    const currentTime =
+      Math.floor(Date.now() / 1000);
 
-    return Math.max(0, expiration - currentTime);
+    return Math.max(
+      0,
+      expiration - currentTime
+    );
   }
+
+  // ==========================================
+  // JWT VALIDATION
+  // ==========================================
 
   /**
    * Checks JWT structure and expiration.
    *
-   * This does not verify the token's signature.
-   * Signature and authorization checks are
-   * enforced by ASP.NET Core.
+   * This does not verify the signature.
+   * Signature verification is performed
+   * by ASP.NET Core.
    */
-  private isTokenValid(token: string): boolean {
+  private isTokenValid(
+    token: string
+  ): boolean {
 
     if (typeof token !== 'string') {
       return false;
@@ -375,13 +452,18 @@ export class AuthService {
       return false;
     }
 
-    const payload = this.decodeJwtPayload(token);
+    const payload =
+      this.decodeJwtPayload(token);
 
-    if (!payload || typeof payload.exp !== 'number') {
+    if (
+      !payload ||
+      typeof payload.exp !== 'number'
+    ) {
       return false;
     }
 
-    const currentTime = Math.floor(Date.now() / 1000);
+    const currentTime =
+      Math.floor(Date.now() / 1000);
 
     return payload.exp > currentTime;
   }
@@ -413,9 +495,11 @@ export class AuthService {
         '='
       );
 
-      const decoded = atob(paddedBase64);
+      const decoded =
+        atob(paddedBase64);
 
-      const parsed: unknown = JSON.parse(decoded);
+      const parsed: unknown =
+        JSON.parse(decoded);
 
       if (
         typeof parsed !== 'object' ||
@@ -440,7 +524,9 @@ export class AuthService {
     role: string | null | undefined
   ): UserRole | null {
 
-    switch (role?.trim().toLowerCase()) {
+    switch (
+      role?.trim().toLowerCase()
+    ) {
 
       case 'admin':
         return 'Admin';

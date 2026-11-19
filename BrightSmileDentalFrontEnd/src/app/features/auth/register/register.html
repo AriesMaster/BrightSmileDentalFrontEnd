@@ -1,23 +1,36 @@
 
 <main class="auth-shell">
 
-  <!-- BRAND -->
+  <!-- ==========================================
+       BRAND
+  =========================================== -->
+
   <a
     class="brand-link"
     routerLink="/"
     aria-label="BrightSmile Dental home"
   >
-    <span class="brand-mark" aria-hidden="true">B</span>
+    <span
+      class="brand-mark"
+      aria-hidden="true"
+    >
+      B
+    </span>
 
     <span>
       BrightSmile
-      <span class="brand-light">Dental</span>
+      <span class="brand-light">
+        Dental
+      </span>
     </span>
   </a>
 
   <div class="auth-layout">
 
-    <!-- WELCOME PANEL -->
+    <!-- ==========================================
+         WELCOME PANEL
+    =========================================== -->
+
     <section
       class="welcome-panel"
       aria-labelledby="welcome-title"
@@ -38,6 +51,7 @@
       </p>
 
       <div class="welcome-note">
+
         <span
           class="note-indicator"
           aria-hidden="true"
@@ -46,10 +60,15 @@
         <span>
           Personal care. A plan that fits you.
         </span>
+
       </div>
 
       <!-- DECORATIVE ART -->
-      <div class="orbit-art" aria-hidden="true">
+
+      <div
+        class="orbit-art"
+        aria-hidden="true"
+      >
         <span class="orbit orbit-one"></span>
         <span class="orbit orbit-two"></span>
         <span class="orbit-core">+</span>
@@ -57,7 +76,10 @@
 
     </section>
 
-    <!-- REGISTRATION CARD -->
+    <!-- ==========================================
+         REGISTRATION CARD
+    =========================================== -->
+
     <mat-card class="auth-card">
 
       <div class="form-heading">
@@ -71,42 +93,163 @@
         </h2>
 
         <p>
-          Set up your BrightSmile patient account
-          to manage your dental appointments.
+          Enter your details to create your
+          BrightSmile Dental patient account.
         </p>
 
       </div>
 
-      <!-- REGISTRATION FORM -->
+      <!-- ==========================================
+           REGISTRATION FORM
+      =========================================== -->
+
       <form
         class="auth-form"
         (ngSubmit)="register()"
         #registrationForm="ngForm"
       >
 
+        <!-- ======================================
+             PERSONAL INFORMATION
+        ======================================= -->
+
+        <div class="form-section-heading">
+
+          <h3>Personal Information</h3>
+
+          <p>
+            Tell us a little about yourself.
+          </p>
+
+        </div>
+
+        <div class="form-row">
+
+          <!-- FIRST NAME -->
+
+          <mat-form-field appearance="outline">
+
+            <mat-label>First name</mat-label>
+
+            <input
+              matInput
+              id="firstName"
+              name="firstName"
+              type="text"
+              [(ngModel)]="firstName"
+              #firstNameControl="ngModel"
+              placeholder="Enter your first name"
+              autocomplete="given-name"
+              minlength="2"
+              maxlength="100"
+              required
+            />
+
+            <mat-icon matSuffix>
+              person_outline
+            </mat-icon>
+
+            @if (
+              firstNameControl.invalid &&
+              (
+                firstNameControl.dirty ||
+                firstNameControl.touched
+              )
+            ) {
+              <mat-error>
+                Enter a first name of at least
+                2 characters.
+              </mat-error>
+            }
+
+          </mat-form-field>
+
+          <!-- LAST NAME -->
+
+          <mat-form-field appearance="outline">
+
+            <mat-label>Last name</mat-label>
+
+            <input
+              matInput
+              id="lastName"
+              name="lastName"
+              type="text"
+              [(ngModel)]="lastName"
+              #lastNameControl="ngModel"
+              placeholder="Enter your last name"
+              autocomplete="family-name"
+              minlength="2"
+              maxlength="100"
+              required
+            />
+
+            <mat-icon matSuffix>
+              person_outline
+            </mat-icon>
+
+            @if (
+              lastNameControl.invalid &&
+              (
+                lastNameControl.dirty ||
+                lastNameControl.touched
+              )
+            ) {
+              <mat-error>
+                Enter a last name of at least
+                2 characters.
+              </mat-error>
+            }
+
+          </mat-form-field>
+
+        </div>
+
+        <!-- ======================================
+             CONTACT INFORMATION
+        ======================================= -->
+
+        <div class="form-section-heading">
+
+          <h3>Contact Information</h3>
+
+          <p>
+            We'll use your email to identify
+            your account.
+          </p>
+
+        </div>
+
         <!-- EMAIL -->
+
         <mat-form-field appearance="outline">
 
-          <mat-label>
-            Email address
-          </mat-label>
+          <mat-label>Email address</mat-label>
 
           <input
             matInput
             id="email"
-            type="email"
             name="email"
+            type="email"
             [(ngModel)]="email"
             #emailControl="ngModel"
             placeholder="you@example.com"
             autocomplete="email"
+            maxlength="256"
             required
             email
           />
 
+          <mat-icon matSuffix>
+            mail_outline
+          </mat-icon>
+
           @if (
             emailControl.invalid &&
-            (emailControl.dirty || emailControl.touched)
+            (
+              emailControl.dirty ||
+              emailControl.touched
+            )
           ) {
             <mat-error>
               Please enter a valid email address.
@@ -115,7 +258,158 @@
 
         </mat-form-field>
 
+        <!-- PHONE NUMBER -->
+
+        <mat-form-field appearance="outline">
+
+          <mat-label>
+            Phone number (optional)
+          </mat-label>
+
+          <input
+            matInput
+            id="phoneNumber"
+            name="phoneNumber"
+            type="tel"
+            [(ngModel)]="phoneNumber"
+            #phoneControl="ngModel"
+            placeholder="e.g. 082 123 4567"
+            autocomplete="tel"
+            maxlength="20"
+          />
+
+          <mat-icon matSuffix>
+            phone_outline
+          </mat-icon>
+
+          <mat-hint>
+            South African or international number
+          </mat-hint>
+
+          @if (
+            phoneControl.invalid &&
+            (
+              phoneControl.dirty ||
+              phoneControl.touched
+            )
+          ) {
+            <mat-error>
+              Please enter a valid phone number.
+            </mat-error>
+          }
+
+        </mat-form-field>
+
+        <!-- ======================================
+             ADDITIONAL DETAILS
+        ======================================= -->
+
+        <div class="form-section-heading">
+
+          <h3>Additional Details</h3>
+
+          <p>
+            These details are optional and
+            can be updated later.
+          </p>
+
+        </div>
+
+        <div class="form-row">
+
+          <!-- DATE OF BIRTH -->
+
+          <mat-form-field appearance="outline">
+
+            <mat-label>
+              Date of birth
+            </mat-label>
+
+            <input
+              matInput
+              id="dateOfBirth"
+              name="dateOfBirth"
+              [matDatepicker]="birthDatePicker"
+              [max]="maxDate"
+              [(ngModel)]="dateOfBirth"
+              placeholder="DD/MM/YYYY"
+              autocomplete="bday"
+            />
+
+            <mat-datepicker-toggle
+              matIconSuffix
+              [for]="birthDatePicker"
+            ></mat-datepicker-toggle>
+
+            <mat-datepicker
+              #birthDatePicker
+              startView="multi-year"
+            ></mat-datepicker>
+
+            <mat-hint>
+              Optional
+            </mat-hint>
+
+          </mat-form-field>
+
+          <!-- GENDER -->
+
+          <mat-form-field appearance="outline">
+
+            <mat-label>
+              Gender
+            </mat-label>
+
+            <mat-select
+              id="gender"
+              name="gender"
+              [(ngModel)]="gender"
+            >
+
+              <mat-option value="">
+                Prefer not to specify
+              </mat-option>
+
+              @for (
+                option of genders;
+                track option.value
+              ) {
+
+                <mat-option
+                  [value]="option.value"
+                >
+                  {{ option.label }}
+                </mat-option>
+
+              }
+
+            </mat-select>
+
+            <mat-hint>
+              Optional
+            </mat-hint>
+
+          </mat-form-field>
+
+        </div>
+
+        <!-- ======================================
+             ACCOUNT SECURITY
+        ======================================= -->
+
+        <div class="form-section-heading">
+
+          <h3>Account Security</h3>
+
+          <p>
+            Choose a secure password for
+            your patient account.
+          </p>
+
+        </div>
+
         <!-- PASSWORD -->
+
         <mat-form-field appearance="outline">
 
           <mat-label>
@@ -125,57 +419,122 @@
           <input
             matInput
             id="password"
-            type="password"
             name="password"
+            [type]="hidePassword ? 'password' : 'text'"
             [(ngModel)]="password"
             #passwordControl="ngModel"
-            placeholder="Choose a password"
+            placeholder="Minimum 8 characters"
             autocomplete="new-password"
+            minlength="8"
             required
           />
 
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="
+              hidePassword
+                ? 'Show password'
+                : 'Hide password'
+            "
+            [attr.aria-pressed]="!hidePassword"
+          >
+
+            <mat-icon>
+              {{
+                hidePassword
+                  ? 'visibility_off'
+                  : 'visibility'
+              }}
+            </mat-icon>
+
+          </button>
+
+          <mat-hint>
+            Use at least 8 characters
+          </mat-hint>
+
           @if (
             passwordControl.invalid &&
-            (passwordControl.dirty || passwordControl.touched)
+            (
+              passwordControl.dirty ||
+              passwordControl.touched
+            )
           ) {
             <mat-error>
-              Please enter a password.
+              Password must contain at least
+              8 characters.
             </mat-error>
           }
 
         </mat-form-field>
 
-        <!-- SUBMIT -->
+        <!-- ======================================
+             SUBMIT BUTTON
+             NG8011 WARNING FIXED
+        ======================================= -->
+
         <button
           mat-flat-button
-          color="primary"
+          class="submit-button"
           type="submit"
-          [disabled]="isSubmitting || registrationForm.invalid"
+          [disabled]="
+            isSubmitting ||
+            registrationForm.invalid
+          "
         >
 
-          {{
-            isSubmitting
-              ? 'Creating account...'
-              : 'Create patient account'
-          }}
+          <span>
+            {{
+              isSubmitting
+                ? 'Creating your account...'
+                : 'Create Patient Account'
+            }}
+          </span>
 
-          <span aria-hidden="true">↗</span>
+          <mat-icon>
+            arrow_forward
+          </mat-icon>
 
         </button>
 
+        <!-- ======================================
+             FORM FOOTER
+        ======================================= -->
+
+        <p class="form-footer-note">
+          By creating an account, you can
+          securely manage your dental appointments
+          and update your personal information.
+        </p>
+
       </form>
 
-      <!-- LOGIN LINK -->
+      <!-- ==========================================
+           LOGIN LINK
+      =========================================== -->
+
       <div class="auth-divider">
-        <span>Already a member?</span>
+
+        <span>
+          Already have an account?
+        </span>
+
       </div>
 
       <a
         class="secondary-action"
         routerLink="/login"
       >
+
         Sign in to your account
-        <span aria-hidden="true">→</span>
+
+        <span aria-hidden="true">
+          →
+        </span>
+
       </a>
 
       <a
@@ -189,7 +548,10 @@
 
   </div>
 
-  <!-- FOOTER -->
+  <!-- ==========================================
+       FOOTER
+  =========================================== -->
+
   <footer class="auth-footer">
 
     <span>

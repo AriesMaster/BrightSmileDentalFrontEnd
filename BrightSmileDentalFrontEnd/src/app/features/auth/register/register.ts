@@ -7,7 +7,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import {
   MatSnackBar,
@@ -28,7 +27,6 @@ import {
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule,
     MatButtonModule,
     MatSnackBarModule
   ],
@@ -43,15 +41,20 @@ export class RegisterComponent {
 
   email = '';
   password = '';
-
-  // Retained for compatibility with the current HTML.
-  // Public registration is always Patient-only.
-  role = 'Patient';
-
   isSubmitting = false;
 
+  /**
+   * Register a new Patient account.
+   *
+   * Public registration does not allow
+   * users to choose their own role.
+   *
+   * The ASP.NET Core backend assigns
+   * the Patient role.
+   */
   register(): void {
 
+    // Prevent duplicate requests.
     if (this.isSubmitting) {
       return;
     }
@@ -59,6 +62,7 @@ export class RegisterComponent {
     const email = this.email.trim().toLowerCase();
     const password = this.password;
 
+    // Validate required fields.
     if (!email || !password.trim()) {
       this.showMessage(
         'Please enter both email and password.',
@@ -67,6 +71,7 @@ export class RegisterComponent {
       return;
     }
 
+    // Validate email format.
     if (!this.isValidEmail(email)) {
       this.showMessage(
         'Please enter a valid email address.',
@@ -83,12 +88,13 @@ export class RegisterComponent {
 
         this.isSubmitting = false;
 
-        this.showMessage(
+        const message =
           response.message ||
-          'Registration successful. Please log in.',
-          'success'
-        );
+          'Registration successful. Please log in.';
 
+        this.showMessage(message, 'success');
+
+        // Redirect to login after registration.
         void this.router.navigate(['/login']);
       },
 
@@ -98,38 +104,66 @@ export class RegisterComponent {
 
         console.error('Registration failed:', error);
 
-        let message =
-          'Registration failed. Please try again.';
-
-        if (error.status === 0) {
-          message =
-            'Unable to connect to the server. Please try again.';
-        } else if (error.status === 400) {
-          const backendError = error.error;
-
-          if (
-            backendError &&
-            typeof backendError === 'object' &&
-            typeof backendError.message === 'string'
-          ) {
-            message = backendError.message;
-          } else if (typeof backendError === 'string') {
-            message = backendError;
-          } else {
-            message =
-              'Invalid registration details. Please check your information.';
-          }
-        }
+        const message = this.getErrorMessage(error);
 
         this.showMessage(message, 'error');
       }
     });
   }
 
+  /**
+   * Basic email validation.
+   */
   private isValidEmail(email: string): boolean {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 
+  /**
+   * Convert backend HTTP errors into
+   * user-friendly messages.
+   */
+  private getErrorMessage(
+    error: HttpErrorResponse
+  ): string {
+
+    if (error.status === 0) {
+      return 'Unable to connect to the server. Please try again.';
+    }
+
+    if (error.status === 409) {
+      return 'An account with this email address already exists.';
+    }
+
+    if (error.status === 400) {
+
+      const backendError: unknown = error.error;
+
+      if (typeof backendError === 'string') {
+        return backendError;
+      }
+
+      if (
+        backendError &&
+        typeof backendError === 'object' &&
+        'message' in backendError &&
+        typeof backendError.message === 'string'
+      ) {
+        return backendError.message;
+      }
+
+      return 'Invalid registration details. Please check your information.';
+    }
+
+    if (error.status >= 500) {
+      return 'The server encountered an error. Please try again later.';
+    }
+
+    return 'Registration failed. Please try again.';
+  }
+
+  /**
+   * Display registration feedback.
+   */
   private showMessage(
     message: string,
     type: 'success' | 'error'

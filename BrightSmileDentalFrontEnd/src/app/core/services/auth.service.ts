@@ -1,5 +1,11 @@
 
-import { Injectable, inject, signal, computed } from '@angular/core';
+import {
+  Injectable,
+  computed,
+  inject,
+  signal
+} from '@angular/core';
+
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -8,45 +14,30 @@ import { Observable, tap } from 'rxjs';
 import { environment } from '../../../assets/environments/environment';
 import { LoginResponse } from '../models/login';
 
-/**
- * Supported application roles.
- *
- * Public registration always creates
- * a Patient account on the backend.
- */
+// ==========================================
+// AUTHENTICATION MODELS
+// ==========================================
+
 export type UserRole = 'Admin' | 'Dentist' | 'Patient';
 
-/**
- * Response returned by:
- * POST /api/Auth/register
- */
 export interface RegisterResponse {
   message: string;
 }
 
-/**
- * Authentication session stored locally.
- */
 export interface AuthSession {
   token: string;
   email: string;
   role: UserRole;
 }
 
-/**
- * BrightSmile Dental Authentication Service
- *
- * Responsibilities:
- * - Authenticate users
- * - Register patients
- * - Store and restore sessions
- * - Provide authentication state
- * - Handle logout
- * - Determine dashboard navigation
- *
- * Backend:
- * ASP.NET Core Web API
- */
+interface JwtPayload {
+  exp?: unknown;
+}
+
+// ==========================================
+// AUTHENTICATION SERVICE
+// ==========================================
+
 @Injectable({
   providedIn: 'root'
 })
@@ -57,43 +48,29 @@ export class AuthService {
 
   private readonly apiUrl = `${environment.apiUrl}/Auth`;
 
+  // Preserve existing storage keys for compatibility.
   private readonly tokenKey = 'token';
   private readonly emailKey = 'email';
   private readonly roleKey = 'role';
 
-  /**
-   * Internal authentication state.
-   *
-   * Signals allow components to react
-   * automatically when the session changes.
-   */
+  // ==========================================
+  // REACTIVE SESSION STATE
+  // ==========================================
+
   private readonly sessionState = signal<AuthSession | null>(
     this.restoreSession()
   );
 
-  /**
-   * Read-only session state.
-   */
   readonly session = this.sessionState.asReadonly();
 
-  /**
-   * Indicates whether a valid,
-   * non-expired JWT is available.
-   */
   readonly isAuthenticated = computed(
     () => this.sessionState() !== null
   );
 
-  /**
-   * Currently authenticated user's email.
-   */
   readonly currentUserEmail = computed(
     () => this.sessionState()?.email ?? null
   );
 
-  /**
-   * Currently authenticated user's role.
-   */
   readonly currentUserRole = computed(
     () => this.sessionState()?.role ?? null
   );
@@ -103,8 +80,6 @@ export class AuthService {
   // ==========================================
 
   /**
-   * Authenticate using the existing API.
-   *
    * POST /api/Auth/login
    *
    * The backend returns:
@@ -122,42 +97,33 @@ export class AuthService {
     return this.http.post<LoginResponse>(
       `${this.apiUrl}/login`,
       {
-        email: email.trim(),
+        email: email.trim().toLowerCase(),
         password
       }
     ).pipe(
-      tap(response => {
-        this.saveSession(response);
-      })
+      tap(response => this.saveSession(response))
     );
   }
 
   // ==========================================
-  // REGISTER
+  // PATIENT REGISTRATION
   // ==========================================
 
   /**
-   * Register a new patient.
-   *
    * POST /api/Auth/register
    *
-   * The backend always assigns
-   * the Patient role.
-   *
-   * The optional role parameter is retained
-   * temporarily for compatibility with the
-   * existing registration component.
+   * Public registration is restricted to Patients.
+   * The backend independently enforces this rule.
    */
   register(
     email: string,
-    password: string,
-    role: string = 'Patient'
+    password: string
   ): Observable<RegisterResponse> {
 
     return this.http.post<RegisterResponse>(
       `${this.apiUrl}/register`,
       {
-        email: email.trim(),
+        email: email.trim().toLowerCase(),
         password,
         role: 'Patient'
       }
@@ -165,15 +131,9 @@ export class AuthService {
   }
 
   // ==========================================
-  // SESSION MANAGEMENT
+  // SAVE SESSION
   // ==========================================
 
-  /**
-   * Save authentication details after login.
-   *
-   * Storage keys are preserved for compatibility
-   * with the existing interceptor and guards.
-   */
   private saveSession(response: LoginResponse): void {
 
     const role = this.normalizeRole(response.role);
@@ -184,9 +144,13 @@ export class AuthService {
       );
     }
 
-    if (!this.isTokenValid(response.token)) {
+    if (
+      !response.token ||
+      !response.email ||
+      !this.isTokenValid(response.token)
+    ) {
       throw new Error(
-        'The server returned an invalid or expired authentication token.'
+        'The server returned an invalid authentication session.'
       );
     }
 
@@ -203,10 +167,10 @@ export class AuthService {
     this.sessionState.set(session);
   }
 
-  /**
-   * Restore an existing session when
-   * the Angular application starts.
-   */
+  // ==========================================
+  // RESTORE SESSION
+  // ==========================================
+
   private restoreSession(): AuthSession | null {
 
     const token = localStorage.getItem(this.tokenKey);
@@ -214,6 +178,7 @@ export class AuthService {
     const storedRole = localStorage.getItem(this.roleKey);
 
     if (!token || !email || !storedRole) {
+      this.clearStoredSession();
       return null;
     }
 
@@ -231,11 +196,14 @@ export class AuthService {
     };
   }
 
+  // ==========================================
+  // TOKEN ACCESS
+  // ==========================================
+
   /**
-   * Return the current JWT.
+   * Return a non-expired JWT.
    *
-   * If the token has expired,
-   * clear the session automatically.
+   * Expired tokens are removed from storage.
    */
   getToken(): string | null {
 
@@ -253,31 +221,23 @@ export class AuthService {
     return session.token;
   }
 
-  /**
-   * Return the current authenticated user.
-   */
+  // ==========================================
+  // CURRENT USER
+  // ==========================================
+
   getCurrentUser(): AuthSession | null {
 
-    const token = this.getToken();
-
-    if (!token) {
+    if (!this.getToken()) {
       return null;
     }
 
     return this.sessionState();
   }
 
-  /**
-   * Check authentication status.
-   */
   isLoggedIn(): boolean {
     return this.getToken() !== null;
   }
 
-  /**
-   * Check whether the authenticated user
-   * has a required role.
-   */
   hasRole(role: UserRole): boolean {
 
     const session = this.getCurrentUser();
@@ -285,29 +245,17 @@ export class AuthService {
     return session?.role === role;
   }
 
-  /**
-   * Check whether the authenticated user
-   * has any of the specified roles.
-   */
   hasAnyRole(roles: UserRole[]): boolean {
 
     const session = this.getCurrentUser();
 
-    if (!session) {
-      return false;
-    }
-
-    return roles.includes(session.role);
+    return session !== null && roles.includes(session.role);
   }
 
   // ==========================================
   // LOGOUT
   // ==========================================
 
-  /**
-   * Clear authentication state and
-   * redirect to the login page.
-   */
   logout(): void {
 
     this.clearSession();
@@ -316,19 +264,18 @@ export class AuthService {
   }
 
   /**
-   * Clear the in-memory session
-   * and local storage.
+   * Clear the session without navigating.
+   *
+   * Useful for handling API authentication
+   * failures in the HTTP interceptor.
    */
-  private clearSession(): void {
+  clearSession(): void {
 
     this.clearStoredSession();
 
     this.sessionState.set(null);
   }
 
-  /**
-   * Remove persisted authentication data.
-   */
   private clearStoredSession(): void {
 
     localStorage.removeItem(this.tokenKey);
@@ -337,13 +284,9 @@ export class AuthService {
   }
 
   // ==========================================
-  // ROLE NAVIGATION
+  // DASHBOARD NAVIGATION
   // ==========================================
 
-  /**
-   * Return the dashboard route
-   * associated with a user role.
-   */
   getDashboardRoute(role: UserRole): string {
 
     switch (role) {
@@ -356,16 +299,9 @@ export class AuthService {
 
       case 'Patient':
         return '/patient/dashboard';
-
-      default:
-        return '/login';
     }
   }
 
-  /**
-   * Redirect the authenticated user
-   * to their role-specific dashboard.
-   */
   navigateToDashboard(): void {
 
     const session = this.getCurrentUser();
@@ -375,62 +311,98 @@ export class AuthService {
       return;
     }
 
-    const route = this.getDashboardRoute(session.role);
-
-    void this.router.navigate([route]);
+    void this.router.navigate([
+      this.getDashboardRoute(session.role)
+    ]);
   }
 
   // ==========================================
-  // JWT VALIDATION
+  // JWT EXPIRATION
   // ==========================================
 
   /**
-   * Check whether a JWT has a valid
-   * structure and has not expired.
+   * Return the JWT expiration time
+   * in Unix seconds.
+   */
+  getTokenExpiration(): number | null {
+
+    const session = this.getCurrentUser();
+
+    if (!session) {
+      return null;
+    }
+
+    const payload = this.decodeJwtPayload(session.token);
+
+    return typeof payload?.exp === 'number'
+      ? payload.exp
+      : null;
+  }
+
+  /**
+   * Return remaining session lifetime
+   * in seconds.
+   */
+  getRemainingSessionSeconds(): number {
+
+    const expiration = this.getTokenExpiration();
+
+    if (expiration === null) {
+      return 0;
+    }
+
+    const currentTime = Math.floor(Date.now() / 1000);
+
+    return Math.max(0, expiration - currentTime);
+  }
+
+  /**
+   * Checks JWT structure and expiration.
    *
-   * This is a client-side expiration check,
-   * not cryptographic signature verification.
-   *
-   * The ASP.NET Core backend remains
-   * responsible for JWT validation.
+   * This does not verify the token's signature.
+   * Signature and authorization checks are
+   * enforced by ASP.NET Core.
    */
   private isTokenValid(token: string): boolean {
+
+    if (typeof token !== 'string') {
+      return false;
+    }
+
+    const parts = token.split('.');
+
+    if (parts.length !== 3) {
+      return false;
+    }
+
+    const payload = this.decodeJwtPayload(token);
+
+    if (!payload || typeof payload.exp !== 'number') {
+      return false;
+    }
+
+    const currentTime = Math.floor(Date.now() / 1000);
+
+    return payload.exp > currentTime;
+  }
+
+  // ==========================================
+  // JWT PAYLOAD DECODING
+  // ==========================================
+
+  private decodeJwtPayload(
+    token: string
+  ): JwtPayload | null {
 
     try {
 
       const parts = token.split('.');
 
       if (parts.length !== 3) {
-        return false;
+        return null;
       }
 
-      const payload = this.decodeJwtPayload(parts[1]);
-
-      if (
-        !payload ||
-        typeof payload.exp !== 'number'
-      ) {
-        return false;
-      }
-
-      const currentTime = Math.floor(Date.now() / 1000);
-
-      return payload.exp > currentTime;
-
-    } catch {
-      return false;
-    }
-  }
-
-  /**
-   * Decode a JWT payload using
-   * Base64URL decoding.
-   */
-  private decodeJwtPayload(
-    encodedPayload: string
-  ): { exp?: unknown } | null {
-
-    try {
+      const encodedPayload = parts[1];
 
       const base64 = encodedPayload
         .replace(/-/g, '+')
@@ -453,7 +425,7 @@ export class AuthService {
         return null;
       }
 
-      return parsed as { exp?: unknown };
+      return parsed as JwtPayload;
 
     } catch {
       return null;
@@ -464,10 +436,6 @@ export class AuthService {
   // ROLE NORMALIZATION
   // ==========================================
 
-  /**
-   * Convert backend role values
-   * to supported application roles.
-   */
   private normalizeRole(
     role: string | null | undefined
   ): UserRole | null {

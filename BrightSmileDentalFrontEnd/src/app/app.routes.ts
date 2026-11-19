@@ -1,52 +1,149 @@
+
 import { Routes } from '@angular/router';
+
 import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
-import { LoginComponent } from './features/auth/login/login';
-import { RegisterComponent } from './features/auth/register/register';
-import { DashboardComponent } from './features/admin/dashboard/dashboard';
-import { HomeComponent } from './features/home/home';
-import { ServicesComponent } from './features/services/services';
-import { AboutComponent } from './features/about/about';
-import { DashboardComponent as DentistDashboardComponent } from './features/dentist/dashboard/dashboard';
-import { DashboardComponent as PatientDashboardComponent } from './features/patient/dashboard/dashboard';
 
+/**
+ * BrightSmile Dental Application Routes
+ *
+ * Architecture:
+ * - Public website routes
+ * - Authentication routes
+ * - Role-protected dashboard routes
+ *
+ * Components are lazy-loaded to reduce
+ * the initial application bundle.
+ */
 export const routes: Routes = [
+
+  // ==========================================
+  // PUBLIC WEBSITE
+  // ==========================================
+
   {
     path: '',
-    component: HomeComponent
+    pathMatch: 'full',
+    title: 'BrightSmile Dental | Home',
+
+    loadComponent: () =>
+      import('./features/home/home')
+        .then(m => m.HomeComponent)
   },
+
   {
     path: 'services',
-    component: ServicesComponent
+    title: 'Dental Services | BrightSmile Dental',
+
+    loadComponent: () =>
+      import('./features/services/services')
+        .then(m => m.ServicesComponent)
   },
+
   {
     path: 'about',
-    component: AboutComponent
+    title: 'About Us | BrightSmile Dental',
+
+    loadComponent: () =>
+      import('./features/about/about')
+        .then(m => m.AboutComponent)
   },
+
+  // ==========================================
+  // AUTHENTICATION
+  // ==========================================
+
   {
     path: 'login',
-    component: LoginComponent
+    title: 'Sign In | BrightSmile Dental',
+
+    loadComponent: () =>
+      import('./features/auth/login/login')
+        .then(m => m.LoginComponent)
   },
+
   {
     path: 'register',
-    component: RegisterComponent
+    title: 'Patient Registration | BrightSmile Dental',
+
+    loadComponent: () =>
+      import('./features/auth/register/register')
+        .then(m => m.RegisterComponent)
   },
+
+  // ==========================================
+  // ADMIN DASHBOARD
+  // ==========================================
+
   {
     path: 'dashboard',
-    component: DashboardComponent,
-    canActivate: [authGuard, roleGuard],
-    data: { roles: ['Admin'] }
+    title: 'Admin Dashboard | BrightSmile Dental',
+
+    canActivate: [
+      authGuard,
+      roleGuard
+    ],
+
+    data: {
+      roles: ['Admin']
+    },
+
+    loadComponent: () =>
+      import('./features/admin/dashboard/dashboard')
+        .then(m => m.DashboardComponent)
   },
+
+  // ==========================================
+  // DENTIST DASHBOARD
+  // ==========================================
+
   {
     path: 'dentist/dashboard',
-    component: DentistDashboardComponent,
-    canActivate: [authGuard, roleGuard],
-    data: { roles: ['Dentist'] }
+    title: 'Dentist Dashboard | BrightSmile Dental',
+
+    canActivate: [
+      authGuard,
+      roleGuard
+    ],
+
+    data: {
+      roles: ['Dentist']
+    },
+
+    loadComponent: () =>
+      import('./features/dentist/dashboard/dashboard')
+        .then(m => m.DashboardComponent)
   },
+
+  // ==========================================
+  // PATIENT DASHBOARD
+  // ==========================================
+
   {
     path: 'patient/dashboard',
-    component: PatientDashboardComponent,
-    canActivate: [authGuard, roleGuard],
-    data: { roles: ['Patient'] }
+    title: 'Patient Dashboard | BrightSmile Dental',
+
+    canActivate: [
+      authGuard,
+      roleGuard
+    ],
+
+    data: {
+      roles: ['Patient']
+    },
+
+    loadComponent: () =>
+      import('./features/patient/dashboard/dashboard')
+        .then(m => m.DashboardComponent)
+  },
+
+  // ==========================================
+  // FALLBACK ROUTE
+  // ==========================================
+
+  {
+    path: '**',
+    redirectTo: ''
   }
+
 ];

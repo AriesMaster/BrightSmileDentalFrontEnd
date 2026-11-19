@@ -1,15 +1,24 @@
 
 <div class="dashboard-container">
 
-  <!-- DASHBOARD HEADER -->
+  <!-- =====================================
+       DASHBOARD HEADER
+  ====================================== -->
   <header class="dashboard-header">
 
     <div class="header-content">
+
+      <p class="eyebrow">PATIENT PORTAL</p>
+
       <h1>Patient Dashboard</h1>
+
       <p>Welcome back, {{ patientEmail }}</p>
+
       <span>
-        Manage your dental appointments in one place.
+        Manage your dental appointments and stay
+        up to date with your care.
       </span>
+
     </div>
 
     <div class="header-actions">
@@ -18,8 +27,9 @@
         mat-stroked-button
         type="button"
         (click)="refreshAppointments()"
-        [disabled]="isLoading">
-
+        [disabled]="isLoading"
+        aria-label="Refresh appointments"
+      >
         <mat-icon>refresh</mat-icon>
         Refresh
       </button>
@@ -27,8 +37,9 @@
       <button
         mat-stroked-button
         type="button"
-        (click)="logout()">
-
+        (click)="logout()"
+        aria-label="Sign out of your account"
+      >
         <mat-icon>logout</mat-icon>
         Logout
       </button>
@@ -38,74 +49,84 @@
   </header>
 
 
-  <!-- APPOINTMENT STATISTICS -->
-  <section class="stats-grid">
+  <!-- =====================================
+       DASHBOARD STATISTICS
+  ====================================== -->
+  <section
+    class="stats-grid"
+    aria-label="Appointment statistics"
+  >
 
     <mat-card class="stat-card">
-
       <mat-card-content>
+
         <div class="stat-icon total">
           <mat-icon>event_note</mat-icon>
         </div>
 
         <h2>{{ totalAppointments }}</h2>
         <p>Total Appointments</p>
-      </mat-card-content>
 
+      </mat-card-content>
     </mat-card>
 
-
     <mat-card class="stat-card">
-
       <mat-card-content>
+
         <div class="stat-icon upcoming">
           <mat-icon>event_available</mat-icon>
         </div>
 
         <h2>{{ upcomingAppointments.length }}</h2>
         <p>Upcoming Appointments</p>
-      </mat-card-content>
 
+      </mat-card-content>
     </mat-card>
 
-
     <mat-card class="stat-card">
-
       <mat-card-content>
+
         <div class="stat-icon pending">
           <mat-icon>pending_actions</mat-icon>
         </div>
 
         <h2>{{ pendingAppointments }}</h2>
         <p>Pending Appointments</p>
-      </mat-card-content>
 
+      </mat-card-content>
     </mat-card>
 
-
     <mat-card class="stat-card">
-
       <mat-card-content>
+
         <div class="stat-icon completed">
           <mat-icon>check_circle</mat-icon>
         </div>
 
         <h2>{{ completedAppointments }}</h2>
         <p>Completed Appointments</p>
-      </mat-card-content>
 
+      </mat-card-content>
     </mat-card>
 
   </section>
 
 
-  <!-- UPCOMING APPOINTMENTS -->
-  <section class="appointments-section">
+  <!-- =====================================
+       UPCOMING APPOINTMENTS
+  ====================================== -->
+  <section
+    class="appointments-section"
+    aria-labelledby="upcoming-title"
+  >
 
     <div class="section-header">
 
       <div>
-        <h2>Upcoming Appointments</h2>
+        <h2 id="upcoming-title">
+          Upcoming Appointments
+        </h2>
+
         <p>
           View your scheduled dental visits.
         </p>
@@ -114,14 +135,19 @@
     </div>
 
 
-    <!-- LOADING STATE -->
+    <!-- LOADING -->
     @if (isLoading) {
 
-      <div class="loading-container">
+      <div
+        class="loading-container"
+        role="status"
+        aria-live="polite"
+      >
 
         <mat-spinner
-          diameter="45">
-        </mat-spinner>
+          diameter="45"
+          aria-label="Loading appointments"
+        ></mat-spinner>
 
         <p>Loading your appointments...</p>
 
@@ -129,48 +155,43 @@
 
     }
 
-
-    <!-- ERROR STATE -->
+    <!-- ERROR -->
     @else if (errorMessage) {
 
       <mat-card class="empty-card">
-
         <mat-card-content>
 
           <mat-icon class="error-icon">
             error_outline
           </mat-icon>
 
-          <h3>Something went wrong</h3>
+          <h3>Unable to load appointments</h3>
 
-          <p>{{ errorMessage }}</p>
+          <p role="alert">
+            {{ errorMessage }}
+          </p>
 
           <button
             mat-stroked-button
             type="button"
-            (click)="refreshAppointments()">
-
+            (click)="refreshAppointments()"
+          >
             <mat-icon>refresh</mat-icon>
             Try Again
           </button>
 
         </mat-card-content>
-
       </mat-card>
 
     }
-
 
     <!-- EMPTY STATE -->
     @else if (upcomingAppointments.length === 0) {
 
       <mat-card class="empty-card">
-
         <mat-card-content>
 
-          <mat-icon>
-            event_busy
-          </mat-icon>
+          <mat-icon>event_busy</mat-icon>
 
           <h3>No upcoming appointments</h3>
 
@@ -179,14 +200,18 @@
             appointments at the moment.
           </p>
 
-        </mat-card-content>
+          <p>
+            Ready to take care of your smile?
+            You can schedule your first visit
+            using our booking system.
+          </p>
 
+        </mat-card-content>
       </mat-card>
 
     }
 
-
-    <!-- APPOINTMENT CARDS -->
+    <!-- UPCOMING APPOINTMENT CARDS -->
     @else {
 
       <div class="appointment-grid">
@@ -205,11 +230,10 @@
               </mat-card-title>
 
               <mat-card-subtitle>
-                {{ appointment.doctorName }}
+                With {{ appointment.doctorName }}
               </mat-card-subtitle>
 
             </mat-card-header>
-
 
             <mat-card-content>
 
@@ -217,9 +241,7 @@
 
                 <div class="detail-row">
 
-                  <mat-icon>
-                    calendar_today
-                  </mat-icon>
+                  <mat-icon>calendar_today</mat-icon>
 
                   <span>
                     {{
@@ -230,12 +252,9 @@
 
                 </div>
 
-
                 <div class="detail-row">
 
-                  <mat-icon>
-                    access_time
-                  </mat-icon>
+                  <mat-icon>access_time</mat-icon>
 
                   <span>
                     {{
@@ -246,12 +265,9 @@
 
                 </div>
 
-
                 <div class="detail-row">
 
-                  <mat-icon>
-                    medical_services
-                  </mat-icon>
+                  <mat-icon>medical_services</mat-icon>
 
                   <span>
                     {{ appointment.serviceName }}
@@ -259,12 +275,9 @@
 
                 </div>
 
-
                 <div class="detail-row">
 
-                  <mat-icon>
-                    payments
-                  </mat-icon>
+                  <mat-icon>payments</mat-icon>
 
                   <span>
                     {{
@@ -275,25 +288,20 @@
 
                 </div>
 
-
                 <div class="detail-row">
 
-                  <mat-icon>
-                    info_outline
-                  </mat-icon>
+                  <mat-icon>info_outline</mat-icon>
 
                   <span
                     class="status-badge"
-                    [ngClass]="appointment.status.toLowerCase()">
-
+                    [ngClass]="appointment.status.toLowerCase()"
+                  >
                     {{ appointment.status }}
-
                   </span>
 
                 </div>
 
               </div>
-
 
               @if (appointment.additionalInfo) {
 
@@ -322,42 +330,47 @@
   </section>
 
 
-  <!-- APPOINTMENT HISTORY -->
-  <section class="appointments-section">
+  <!-- =====================================
+       APPOINTMENT HISTORY
+  ====================================== -->
+  <section
+    class="appointments-section"
+    aria-labelledby="history-title"
+  >
 
     <div class="section-header">
 
       <div>
-        <h2>Appointment History</h2>
+
+        <h2 id="history-title">
+          Appointment History
+        </h2>
+
         <p>
           Review your previous and cancelled appointments.
         </p>
+
       </div>
 
     </div>
-
 
     @if (!isLoading && !errorMessage) {
 
       @if (appointmentHistory.length === 0) {
 
         <mat-card class="empty-card">
-
           <mat-card-content>
 
-            <mat-icon>
-              history
-            </mat-icon>
+            <mat-icon>history</mat-icon>
 
             <h3>No appointment history</h3>
 
             <p>
               Your previous appointments will
-              appear here.
+              appear here after your visits.
             </p>
 
           </mat-card-content>
-
         </mat-card>
 
       }
@@ -371,7 +384,9 @@
             track appointment.id
           ) {
 
-            <mat-card class="appointment-card history-card">
+            <mat-card
+              class="appointment-card history-card"
+            >
 
               <mat-card-header>
 
@@ -380,11 +395,10 @@
                 </mat-card-title>
 
                 <mat-card-subtitle>
-                  {{ appointment.doctorName }}
+                  With {{ appointment.doctorName }}
                 </mat-card-subtitle>
 
               </mat-card-header>
-
 
               <mat-card-content>
 
@@ -392,9 +406,7 @@
 
                   <div class="detail-row">
 
-                    <mat-icon>
-                      calendar_today
-                    </mat-icon>
+                    <mat-icon>calendar_today</mat-icon>
 
                     <span>
                       {{
@@ -405,12 +417,9 @@
 
                   </div>
 
-
                   <div class="detail-row">
 
-                    <mat-icon>
-                      access_time
-                    </mat-icon>
+                    <mat-icon>access_time</mat-icon>
 
                     <span>
                       {{
@@ -421,12 +430,9 @@
 
                   </div>
 
-
                   <div class="detail-row">
 
-                    <mat-icon>
-                      payments
-                    </mat-icon>
+                    <mat-icon>payments</mat-icon>
 
                     <span>
                       {{
@@ -437,25 +443,20 @@
 
                   </div>
 
-
                   <div class="detail-row">
 
-                    <mat-icon>
-                      info_outline
-                    </mat-icon>
+                    <mat-icon>info_outline</mat-icon>
 
                     <span
                       class="status-badge"
-                      [ngClass]="appointment.status.toLowerCase()">
-
+                      [ngClass]="appointment.status.toLowerCase()"
+                    >
                       {{ appointment.status }}
-
                     </span>
 
                   </div>
 
                 </div>
-
 
                 @if (appointment.additionalInfo) {
 

@@ -2,16 +2,18 @@
 import {
   Component,
   OnInit,
-  inject
+  DestroyRef,
+  inject,
+  signal
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
 import {
-  catchError,
   finalize,
-  of,
   timeout,
   TimeoutError
 } from 'rxjs';
@@ -66,27 +68,78 @@ export class DashboardComponent implements OnInit {
 
   private readonly snackBar = inject(MatSnackBar);
 
+  private readonly destroyRef = inject(DestroyRef);
+
   // ==========================================
-  // PATIENT INFORMATION
+  // REACTIVE STATE
+  // ==========================================
+
+  private readonly appointmentsState =
+    signal<Appointment[]>([]);
+
+  private readonly upcomingState =
+    signal<Appointment[]>([]);
+
+  private readonly historyState =
+    signal<Appointment[]>([]);
+
+  private readonly loadingState = signal(false);
+
+  private readonly errorState = signal('');
+
+  // ==========================================
+  // TEMPLATE-COMPATIBLE GETTERS
   // ==========================================
 
   get patientEmail(): string {
     return this.authService.currentUserEmail() ?? 'Patient';
   }
 
+  get appointments(): Appointment[] {
+    return this.appointmentsState();
+  }
+
+  get upcomingAppointments(): Appointment[] {
+    return this.upcomingState();
+  }
+
+  get appointmentHistory(): Appointment[] {
+    return this.historyState();
+  }
+
+  get isLoading(): boolean {
+    return this.loadingState();
+  }
+
+  get errorMessage(): string {
+    return this.errorState();
+  }
+
   // ==========================================
-  // APPOINTMENT STATE
+  // DASHBOARD STATISTICS
   // ==========================================
 
-  appointments: Appointment[] = [];
+  get totalAppointments(): number {
+    return this.appointmentsState().length;
+  }
 
-  upcomingAppointments: Appointment[] = [];
+  get completedAppointments(): number {
+    return this.appointmentsState().filter(
+      appointment => appointment.status === 'Completed'
+    ).length;
+  }
 
-  appointmentHistory: Appointment[] = [];
+  get pendingAppointments(): number {
+    return this.appointmentsState().filter(
+      appointment => appointment.status === 'Pending'
+    ).length;
+  }
 
-  isLoading = false;
-
-  errorMessage = '';
+  get cancelledAppointments(): number {
+    return this.appointmentsState().filter(
+      appointment => appointment.status === 'Cancelled'
+    ).length;
+  }
 
   // ==========================================
   // INITIALIZATION
@@ -97,68 +150,64 @@ export class DashboardComponent implements OnInit {
   }
 
   // ==========================================
-  // DASHBOARD STATISTICS
+  // LOAD APPOINTMENTS
   // ==========================================
 
-  get totalAppointments(): number {
-    return this.appointments.length;
-  }
-
-  get completedAppointments(): number {
-    return this.appointments.filter(
-      appointment => appointment.status === 'Completed'
-    ).length;
-  }
-
-  get pendingAppointments(): number {
-    return this.appointments.filter(
-      appointment => appointment.status === 'Pending'
-    ).length;
-  }
-
-  get cancelledAppointments(): number {
-    return this.appointments.filter(
-      appointment => appointment.status === 'Cancelled'
-    ).length;
-  }
-
-  // ==========================================
-  // LOAD PATIENT APPOINTMENTS
-  // ==========================================
-
-  /**
-   * GET /api/Appointments/me
-   *
-   * Retrieves appointments belonging to
-   * the currently authenticated patient.
-   */
   loadAppointments(): void {
 
-    if (this.isLoading) {
+    if (this.loadingState()) {
       return;
     }
 
-    this.isLoading = true;
-    this.errorMessage = '';
+    this.loadingState.set(true);
+    this.errorState.set('');
 
     this.appointmentService
       .getMyAppointments()
       .pipe(
-
-        // Prevent requests from loading indefinitely.
         timeout(20000),
 
-        catchError((error: unknown) => {
+        takeUntilDestroyed(this.destroyRef),
+
+        finalize(() => {
+          this.loadingState.set(false);
+        })
+      )
+      .subscribe({
+
+        next: (response: Appointment[]) => {
+
+          if (!Array.isArray(response)) {
+
+            this.clearAppointments();
+
+            this.errorState.set(
+              'The server returned an unexpected response.'
+            );
+
+            return;
+          }
+
+          this.appointmentsState.set(response);
+
+          this.organizeAppointments(response);
+        },
+
+        error: (error: unknown) => {
 
           console.error(
-            'Failed to load patient appointments:',
+            'Failed to load appointments:',
             error
           );
 
-          this.errorMessage = this.getErrorMessage(error);
+          this.clearAppointments();
+
+          const message = this.getErrorMessage(error);
+
+          this.errorState.set(message);
 
           this.snackBar.open(
-            this.errorMessage,
+            message,
             'Close',
             {
               duration: 5000,
@@ -166,31 +215,7 @@ export class DashboardComponent implements OnInit {
               verticalPosition: 'bottom'
             }
           );
-
-          return of(null);
-        }),
-
-        finalize(() => {
-          this.isLoading = false;
-        })
-      )
-      .subscribe((appointments: Appointment[] | null) => {
-
-        if (appointments === null) {
-          return;
         }
-
-        if (!Array.isArray(appointments)) {
-
-          this.errorMessage =
-            'The server returned an unexpected appointment response.';
-
-          return;
-        }
-
-        this.appointments = appointments;
-
-        this.organizeAppointments();
       });
   }
 
@@ -198,15 +223,13 @@ export class DashboardComponent implements OnInit {
   // ORGANIZE APPOINTMENTS
   // ==========================================
 
-  /**
-   * Separate future active appointments
-   * from appointment history.
-   */
-  private organizeAppointments(): void {
+  private organizeAppointments(
+    appointments: Appointment[]
+  ): void {
 
     const now = new Date();
 
-    this.upcomingAppointments = this.appointments
+    const upcoming = appointments
       .filter(appointment => {
 
         const appointmentDate =
@@ -224,12 +247,10 @@ export class DashboardComponent implements OnInit {
       );
 
     const upcomingIds = new Set(
-      this.upcomingAppointments.map(
-        appointment => appointment.id
-      )
+      upcoming.map(appointment => appointment.id)
     );
 
-    this.appointmentHistory = this.appointments
+    const history = appointments
       .filter(
         appointment => !upcomingIds.has(appointment.id)
       )
@@ -237,6 +258,23 @@ export class DashboardComponent implements OnInit {
         new Date(b.appointmentDate).getTime() -
         new Date(a.appointmentDate).getTime()
       );
+
+    this.upcomingState.set(upcoming);
+
+    this.historyState.set(history);
+  }
+
+  // ==========================================
+  // CLEAR APPOINTMENTS
+  // ==========================================
+
+  private clearAppointments(): void {
+
+    this.appointmentsState.set([]);
+
+    this.upcomingState.set([]);
+
+    this.historyState.set([]);
   }
 
   // ==========================================
@@ -246,7 +284,7 @@ export class DashboardComponent implements OnInit {
   private getErrorMessage(error: unknown): string {
 
     if (error instanceof TimeoutError) {
-      return 'The request took too long. Please try again.';
+      return 'The request timed out. Please try again.';
     }
 
     if (error instanceof HttpErrorResponse) {
@@ -254,20 +292,20 @@ export class DashboardComponent implements OnInit {
       switch (error.status) {
 
         case 0:
-          return 'Unable to connect to the server. Please check your connection.';
+          return 'Cannot connect to the server. Please check your connection.';
 
         case 401:
-          return 'Your session has expired. Please sign in again.';
+          return 'Your session has expired. Please log in again.';
 
         case 403:
           return 'You do not have permission to view these appointments.';
 
         case 404:
-          return 'The appointment service could not be found.';
+          return 'The appointment endpoint could not be found.';
 
         default:
           if (error.status >= 500) {
-            return 'The server is temporarily unavailable. Please try again later.';
+            return 'The server is temporarily unavailable.';
           }
       }
     }

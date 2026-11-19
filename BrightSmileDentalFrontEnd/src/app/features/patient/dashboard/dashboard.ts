@@ -10,6 +10,8 @@ import {
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 
+import { RouterLink } from '@angular/router';
+
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import {
@@ -49,6 +51,7 @@ import {
 
   imports: [
     CommonModule,
+    RouterLink,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
@@ -328,4 +331,5 @@ export class DashboardComponent implements OnInit {
   logout(): void {
     this.authService.logout();
   }
+
 }

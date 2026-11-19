@@ -1,352 +1,421 @@
 
-/* ==========================================
+/* =====================================================
    BRIGHTSMILE DENTAL
    PATIENT DASHBOARD
-   Consistent with existing project styling
-========================================== */
+   MODERN BLACK & WHITE DESIGN
+   ===================================================== */
 
 :host {
-  --primary: #111111;
-  --accent: #3b82f6;
-  --background: #ffffff;
-  --text: #111111;
-  --muted: #666666;
-  --border: #e5e5e5;
-  --card-bg: rgba(255, 255, 255, 0.94);
+  /* Colours */
+  --page-bg: #f5f5f5;
+  --surface: #ffffff;
+  --surface-soft: #f8f8f8;
+
+  --text-primary: #171717;
+  --text-secondary: #525252;
+  --text-muted: #737373;
+
+  --border: #d9dce1;
+  --border-light: #e7e9ec;
+
+  --primary: #171717;
+  --primary-hover: #343434;
+
+  /* Shadows */
+  --shadow-sm:
+    0 2px 5px rgba(0, 0, 0, 0.035),
+    0 8px 18px rgba(0, 0, 0, 0.035);
+
+  --shadow-md:
+    0 4px 10px rgba(0, 0, 0, 0.045),
+    0 14px 32px rgba(0, 0, 0, 0.065);
+
+  --shadow-hover:
+    0 8px 18px rgba(0, 0, 0, 0.07),
+    0 20px 42px rgba(0, 0, 0, 0.085);
 
   display: block;
   min-height: 100vh;
 
-  background-color: var(--background);
+  /* DOTTED BACKGROUND */
+  background-color: var(--page-bg);
+
   background-image: radial-gradient(
     circle,
-    #d0d0d0 1px,
-    transparent 1px
+    #c5c5c5 0.8px,
+    transparent 0.8px
   );
-  background-size: 24px 24px;
 
-  color: var(--text);
+  background-size: 24px 24px;
+  background-position: 0 0;
+
+  color: var(--text-primary);
   font-family: "Poppins", sans-serif;
 }
 
-/* ==========================================
-   DASHBOARD CONTAINER
-========================================== */
+/* =====================================================
+   PAGE CONTAINER
+   ===================================================== */
 
 .dashboard-container {
-  width: min(1180px, calc(100% - 2rem));
+  width: min(1360px, calc(100% - 64px));
   margin: 0 auto;
-  padding: 48px 0 80px;
+  padding: 42px 0 72px;
 }
 
-/* ==========================================
+/* =====================================================
    DASHBOARD HEADER
-========================================== */
+   ===================================================== */
 
 .dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   gap: 24px;
-  margin-bottom: 40px;
+
+  margin-bottom: 32px;
+  padding: 30px 32px;
+
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+
+  box-shadow: var(--shadow-sm);
 }
 
 .header-content {
+  flex: 1 1 340px;
+  min-width: 0;
+
+  .eyebrow {
+    margin: 0 0 9px;
+
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
   h1 {
-    margin: 0 0 10px;
-    color: var(--primary);
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 600;
+    margin: 0 0 12px;
+
+    color: var(--text-primary);
+    font-size: clamp(28px, 3vw, 38px);
+    font-weight: 700;
     letter-spacing: -0.05em;
     line-height: 1.2;
   }
 
-  p {
-    margin: 0 0 8px;
-    color: #333333;
-    font-size: 16px;
+  p:not(.eyebrow) {
+    margin: 0 0 6px;
+
+    color: var(--text-primary);
+    font-size: 14px;
     font-weight: 500;
+    line-height: 1.6;
+
+    overflow-wrap: anywhere;
   }
 
   span {
     display: block;
-    color: var(--muted);
-    font-size: 14px;
+
+    color: var(--text-secondary);
+    font-size: 13px;
     line-height: 1.7;
   }
 }
 
-/* ==========================================
-   HEADER ACTIONS
-========================================== */
+/* =====================================================
+   HEADER ACTION BUTTONS
+   ===================================================== */
 
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
 
-  button {
+  > a,
+  > button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
     min-height: 44px;
-    padding: 0 18px;
+    padding: 0 17px;
 
     border: 1px solid var(--primary);
-    border-radius: 8px;
-
-    background: var(--primary);
-    color: #ffffff;
+    border-radius: 10px;
 
     font-family: "Poppins", sans-serif;
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+    text-decoration: none;
+    white-space: nowrap;
 
     transition:
-      background 180ms ease,
-      transform 180ms ease,
-      box-shadow 180ms ease;
-
-    &:hover:not(:disabled) {
-      background: #333333;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-      transform: translateY(-2px);
-    }
-
-    &:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-    }
+      background-color 180ms ease,
+      color 180ms ease,
+      box-shadow 180ms ease,
+      transform 180ms ease;
   }
 
   mat-icon {
-    margin-right: 6px;
+    width: 19px;
+    height: 19px;
+    margin: 0;
+
     color: inherit;
+    font-size: 19px;
   }
 
-  button:first-child {
+  /* PRIMARY ACTION */
+  > a[mat-flat-button] {
+    background: var(--primary);
+    color: #ffffff;
+
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+
+    &:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+  }
+
+  /* SECONDARY ACTIONS */
+  > button[mat-stroked-button] {
     background: #ffffff;
     color: var(--primary);
 
     &:hover:not(:disabled) {
-      background: #f5f5f5;
+      background: #f1f1f1;
+      transform: translateY(-2px);
     }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  > a:focus-visible,
+  > button:focus-visible {
+    outline: 3px solid #777777;
+    outline-offset: 3px;
   }
 }
 
-/* ==========================================
+/* =====================================================
    STATISTICS GRID
-========================================== */
+   ===================================================== */
 
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 20px;
-  margin-bottom: 48px;
+  gap: 18px;
+
+  margin-bottom: 42px;
 }
 
-/* ==========================================
+/* =====================================================
    STATISTICS CARDS
-========================================== */
+   ===================================================== */
 
 .stat-card {
+  min-width: 0;
+
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 22px;
+  border-radius: 18px;
 
-  background: var(--card-bg);
-
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-
-  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-sm);
 
   transition:
     transform 180ms ease,
-    box-shadow 180ms ease,
-    border-color 180ms ease;
+    border-color 180ms ease,
+    box-shadow 180ms ease;
 
   &:hover {
-    transform: translateY(-4px);
-
-    border-color: rgba(59, 130, 246, 0.45);
-
-    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
+    transform: translateY(-3px);
+    border-color: #b3b6bc;
+    box-shadow: var(--shadow-hover);
   }
 
   mat-card-content {
-    padding: 26px !important;
+    padding: 24px !important;
   }
 
   h2 {
-    margin: 18px 0 6px;
+    margin: 18px 0 5px;
 
-    color: var(--primary);
-
+    color: var(--text-primary);
     font-size: 34px;
-    font-weight: 600;
-    letter-spacing: -0.05em;
-    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.055em;
+    line-height: 1.15;
   }
 
   p {
     margin: 0;
 
-    color: var(--muted);
-
-    font-size: 13px;
+    color: var(--text-secondary);
+    font-size: 12px;
     font-weight: 500;
     line-height: 1.6;
   }
 }
 
-/* ==========================================
+/* =====================================================
    STATISTICS ICONS
-========================================== */
+   ===================================================== */
 
 .stat-icon {
   display: flex;
   align-items: center;
   justify-content: center;
 
-  width: 52px;
-  height: 52px;
+  width: 50px;
+  height: 50px;
 
-  border: 1px solid #dbeafe;
-  border-radius: 16px;
+  background: #f0f1f3;
+  border: 1px solid #e0e2e5;
+  border-radius: 13px;
 
-  background: #eff6ff;
-  color: var(--accent);
+  color: #262626;
 
   mat-icon {
-    width: 26px;
-    height: 26px;
-
-    font-size: 26px;
+    width: 24px;
+    height: 24px;
+    font-size: 24px;
   }
 
   &.total,
   &.upcoming,
   &.pending,
   &.completed {
-    background: #eff6ff;
-    color: var(--accent);
-    border-color: #dbeafe;
+    background: #f0f1f3;
+    border-color: #e0e2e5;
+    color: #262626;
   }
 }
 
-/* ==========================================
+/* =====================================================
    APPOINTMENT SECTIONS
-========================================== */
+   ===================================================== */
 
 .appointments-section {
-  margin-bottom: 48px;
+  margin-bottom: 36px;
 }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
 
-  gap: 20px;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
 
   h2 {
-    margin: 0 0 8px;
+    margin: 0 0 5px;
 
-    color: var(--primary);
-
-    font-size: 24px;
-    font-weight: 600;
+    color: var(--text-primary);
+    font-size: clamp(21px, 2.5vw, 25px);
+    font-weight: 700;
     letter-spacing: -0.04em;
   }
 
   p {
     margin: 0;
 
-    color: var(--muted);
-
-    font-size: 14px;
-    line-height: 1.7;
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.6;
   }
 }
 
-/* ==========================================
+/* =====================================================
    APPOINTMENT GRID
-========================================== */
+   ===================================================== */
 
 .appointment-grid {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
 
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(min(100%, 320px), 1fr)
-  );
-
-  gap: 22px;
+  align-items: stretch;
 }
 
-/* ==========================================
+/* =====================================================
    APPOINTMENT CARDS
-========================================== */
+   ===================================================== */
 
 .appointment-card {
+  min-width: 0;
   overflow: hidden;
 
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 22px;
+  border-radius: 18px;
 
-  background: var(--card-bg);
-
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-
-  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-md);
 
   transition:
     transform 180ms ease,
-    box-shadow 180ms ease,
-    border-color 180ms ease;
+    border-color 180ms ease,
+    box-shadow 180ms ease;
 
   &:hover {
-    transform: translateY(-4px);
-
-    border-color: rgba(59, 130, 246, 0.5);
-
-    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.13);
+    transform: translateY(-3px);
+    border-color: #b3b6bc;
+    box-shadow: var(--shadow-hover);
   }
 
   mat-card-header {
-    padding: 24px 24px 18px;
+    padding: 22px 24px 18px;
 
-    border-bottom: 1px solid var(--border);
+    background: #fafafa;
+    border-bottom: 1px solid var(--border-light);
   }
 
   mat-card-title {
-    margin-bottom: 8px;
+    margin-bottom: 7px;
 
-    color: var(--primary);
-
+    color: var(--text-primary);
     font-family: "Poppins", sans-serif;
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 17px;
+    font-weight: 700;
     line-height: 1.5;
   }
 
   mat-card-subtitle {
-    color: var(--muted);
-
+    color: var(--text-secondary);
     font-family: "Poppins", sans-serif;
-    font-size: 13px;
+    font-size: 12px;
+    line-height: 1.6;
+
+    overflow-wrap: anywhere;
   }
 
   mat-card-content {
-    padding: 24px !important;
+    padding: 22px 24px !important;
   }
 }
 
-/* ==========================================
+/* =====================================================
    APPOINTMENT DETAILS
-========================================== */
+   ===================================================== */
 
 .appointment-details {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
 .detail-row {
@@ -359,10 +428,9 @@
   mat-icon {
     width: 20px;
     height: 20px;
-
     flex-shrink: 0;
 
-    color: var(--accent);
+    color: #4b4b4b;
     font-size: 20px;
   }
 
@@ -370,7 +438,6 @@
     min-width: 0;
 
     color: #333333;
-
     font-size: 13px;
     line-height: 1.7;
 
@@ -378,17 +445,16 @@
   }
 }
 
-/* ==========================================
-   APPOINTMENT STATUS
-========================================== */
+/* =====================================================
+   STATUS BADGES
+   ===================================================== */
 
 .status-badge {
   display: inline-flex;
   align-items: center;
-
   width: fit-content;
 
-  padding: 6px 12px;
+  padding: 5px 12px;
 
   border: 1px solid transparent;
   border-radius: 999px;
@@ -396,113 +462,112 @@
   font-family: "Poppins", sans-serif;
   font-size: 12px !important;
   font-weight: 600;
-  line-height: 1.5;
 
   &.pending {
-    background: #fef3c7;
-    border-color: #fde68a;
-    color: #92400e;
+    color: #805b00;
+    background: #fff5d6;
+    border-color: #eedb9b;
   }
 
   &.confirmed {
-    background: #dbeafe;
-    border-color: #bfdbfe;
-    color: #1d4ed8;
+    color: #28529a;
+    background: #edf3ff;
+    border-color: #cbdcfb;
   }
 
   &.completed {
-    background: #dcfce7;
-    border-color: #bbf7d0;
-    color: #166534;
+    color: #21643b;
+    background: #e8f7ec;
+    border-color: #c5e7cf;
   }
 
   &.cancelled {
-    background: #fee2e2;
-    border-color: #fecaca;
-    color: #991b1b;
+    color: #a12e2e;
+    background: #fff0f0;
+    border-color: #f1caca;
   }
 }
 
-/* ==========================================
+/* =====================================================
    ADDITIONAL INFORMATION
-========================================== */
+   ===================================================== */
 
 .additional-info {
-  margin-top: 22px;
-  padding: 16px;
+  margin-top: 20px;
+  padding: 15px 17px;
 
-  border: 1px solid var(--border);
+  background: var(--surface-soft);
+  border: 1px solid var(--border-light);
   border-radius: 12px;
-
-  background: #fafafa;
 
   strong {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 7px;
 
-    color: var(--primary);
-
-    font-size: 13px;
+    color: var(--text-primary);
+    font-size: 12px;
     font-weight: 600;
   }
 
   p {
     margin: 0;
 
-    color: var(--muted);
-
-    font-size: 13px;
-    line-height: 1.8;
+    color: var(--text-secondary);
+    font-size: 12px;
+    line-height: 1.7;
 
     overflow-wrap: anywhere;
   }
 }
 
-/* ==========================================
+/* =====================================================
    APPOINTMENT HISTORY
-========================================== */
+   ===================================================== */
 
 .history-card {
   mat-card-header {
-    background: rgba(248, 248, 248, 0.7);
+    background: #f7f7f7;
   }
 }
 
-/* ==========================================
+/* =====================================================
    LOADING STATE
-========================================== */
+   ===================================================== */
 
 .loading-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 18px;
 
-  gap: 20px;
+  min-height: 220px;
+  padding: 36px 20px;
 
-  min-height: 260px;
-  padding: 50px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+
+  box-shadow: var(--shadow-sm);
 
   p {
     margin: 0;
 
-    color: var(--muted);
-
-    font-size: 14px;
+    color: var(--text-secondary);
+    font-size: 13px;
   }
 }
 
-/* ==========================================
-   EMPTY AND ERROR STATES
-========================================== */
+/* =====================================================
+   EMPTY / ERROR STATES
+   ===================================================== */
 
 .empty-card {
-  border: 1px dashed #d1d5db;
-  border-radius: 22px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
 
-  background: rgba(255, 255, 255, 0.95);
-
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
 
   mat-card-content {
     display: flex;
@@ -510,152 +575,200 @@
     align-items: center;
     justify-content: center;
 
-    padding: 55px 24px !important;
-
+    padding: 40px 24px !important;
     text-align: center;
   }
 
   mat-icon {
-    width: 52px;
-    height: 52px;
+    width: 42px;
+    height: 42px;
 
-    margin-bottom: 20px;
+    margin-bottom: 14px;
 
-    color: var(--accent);
-    font-size: 52px;
+    color: #555555;
+    font-size: 42px;
   }
 
   .error-icon {
-    color: #dc2626;
+    color: #a12e2e;
   }
 
   h3 {
-    margin: 0 0 12px;
+    margin: 0 0 8px;
 
-    color: var(--primary);
-
-    font-size: 19px;
-    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 17px;
+    font-weight: 700;
   }
 
   p {
-    max-width: 420px;
+    max-width: 440px;
+    margin: 0 0 12px;
 
-    margin: 0 0 22px;
-
-    color: var(--muted);
-
-    font-size: 14px;
-    line-height: 1.8;
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.7;
   }
 
-  button {
-    min-height: 42px;
+  a[mat-flat-button],
+  button[mat-stroked-button] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    min-height: 43px;
+    margin-top: 10px;
     padding: 0 18px;
 
     border: 1px solid var(--primary);
-    border-radius: 8px;
+    border-radius: 10px;
 
     background: var(--primary);
     color: #ffffff;
 
     font-family: "Poppins", sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-  }
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
 
-  button:hover {
-    background: #333333;
+    transition:
+      background-color 180ms ease,
+      transform 180ms ease;
+
+    &:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+    }
+
+    &:focus-visible {
+      outline: 3px solid #777777;
+      outline-offset: 3px;
+    }
+
+    mat-icon {
+      width: 19px;
+      height: 19px;
+      margin: 0;
+
+      color: inherit;
+      font-size: 19px;
+    }
   }
 }
 
-/* ==========================================
+/* =====================================================
    TABLET
-========================================== */
+   ===================================================== */
 
-@media (max-width: 1024px) {
+@media (max-width: 1100px) {
+  .dashboard-container {
+    width: calc(100% - 48px);
+  }
+
+  .dashboard-header {
+    align-items: flex-start;
+  }
+
+  .header-actions {
+    justify-content: flex-start;
+  }
+
   .stats-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
-  .dashboard-container {
-    padding-top: 36px;
-  }
 }
 
-/* ==========================================
+/* =====================================================
    MOBILE
-========================================== */
+   ===================================================== */
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
   .dashboard-container {
-    width: calc(100% - 2rem);
-    padding: 28px 0 48px;
+    width: calc(100% - 28px);
+    padding: 20px 0 44px;
   }
 
   .dashboard-header {
     flex-direction: column;
     align-items: stretch;
-    gap: 24px;
+    gap: 22px;
 
-    margin-bottom: 30px;
+    padding: 24px 20px;
+    border-radius: 16px;
   }
 
   .header-content {
-    h1 {
-      font-size: 27px;
-    }
+    flex: initial;
 
-    p {
-      font-size: 14px;
+    h1 {
+      font-size: 28px;
     }
   }
 
   .header-actions {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
 
-    button {
+    width: 100%;
+
+    > a,
+    > button {
       width: 100%;
       min-width: 0;
       padding: 0 10px;
-
       font-size: 12px;
+    }
+
+    > a[mat-flat-button] {
+      grid-column: 1 / -1;
     }
   }
 
   .stats-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
-    margin-bottom: 36px;
+    margin-bottom: 32px;
   }
 
   .stat-card {
-    border-radius: 16px;
+    border-radius: 15px;
 
     mat-card-content {
       padding: 18px !important;
     }
 
     h2 {
-      font-size: 28px;
+      font-size: 29px;
     }
 
     p {
-      font-size: 12px;
+      font-size: 11px;
     }
   }
 
   .stat-icon {
-    width: 44px;
-    height: 44px;
-
-    border-radius: 12px;
+    width: 43px;
+    height: 43px;
 
     mat-icon {
-      width: 22px;
-      height: 22px;
-      font-size: 22px;
+      width: 21px;
+      height: 21px;
+      font-size: 21px;
+    }
+  }
+
+  .appointment-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .appointment-card {
+    mat-card-header {
+      padding: 20px;
+    }
+
+    mat-card-content {
+      padding: 20px !important;
     }
   }
 
@@ -663,37 +776,18 @@
     h2 {
       font-size: 21px;
     }
-
-    p {
-      font-size: 13px;
-    }
   }
 
-  .appointment-grid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 16px;
-  }
-
-  .appointment-card {
-    border-radius: 16px;
-
-    mat-card-header {
-      padding: 20px 18px 16px;
-    }
-
+  .empty-card {
     mat-card-content {
-      padding: 20px 18px !important;
+      padding: 32px 18px !important;
     }
-  }
-
-  .appointments-section {
-    margin-bottom: 36px;
   }
 }
 
-/* ==========================================
-   SMALL SCREENS
-========================================== */
+/* =====================================================
+   SMALL MOBILE
+   ===================================================== */
 
 @media (max-width: 380px) {
   .stats-grid {
@@ -702,23 +796,33 @@
 
   .header-actions {
     grid-template-columns: minmax(0, 1fr);
+
+    > a[mat-flat-button] {
+      grid-column: auto;
+    }
   }
 }
 
-/* ==========================================
+/* =====================================================
    ACCESSIBILITY
-========================================== */
+   ===================================================== */
 
 @media (prefers-reduced-motion: reduce) {
   .stat-card,
   .appointment-card,
-  .header-actions button {
+  .header-actions > a,
+  .header-actions > button,
+  .empty-card a,
+  .empty-card button {
     transition: none;
   }
 
   .stat-card:hover,
   .appointment-card:hover,
-  .header-actions button:hover {
+  .header-actions > a:hover,
+  .header-actions > button:hover,
+  .empty-card a:hover,
+  .empty-card button:hover {
     transform: none;
   }
 }

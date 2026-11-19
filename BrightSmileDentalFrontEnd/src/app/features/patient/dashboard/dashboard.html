@@ -23,6 +23,17 @@
 
     <div class="header-actions">
 
+      <!-- BOOK APPOINTMENT -->
+      <a
+        mat-flat-button
+        routerLink="/patient/book-appointment"
+        aria-label="Book a new dental appointment"
+      >
+        <mat-icon>add_circle_outline</mat-icon>
+        Book Appointment
+      </a>
+
+      <!-- REFRESH -->
       <button
         mat-stroked-button
         type="button"
@@ -34,6 +45,7 @@
         Refresh
       </button>
 
+      <!-- LOGOUT -->
       <button
         mat-stroked-button
         type="button"
@@ -47,7 +59,6 @@
     </div>
 
   </header>
-
 
   <!-- =====================================
        DASHBOARD STATISTICS
@@ -111,7 +122,6 @@
 
   </section>
 
-
   <!-- =====================================
        UPCOMING APPOINTMENTS
   ====================================== -->
@@ -133,7 +143,6 @@
       </div>
 
     </div>
-
 
     <!-- LOADING -->
     @if (isLoading) {
@@ -202,9 +211,18 @@
 
           <p>
             Ready to take care of your smile?
-            You can schedule your first visit
-            using our booking system.
+            Schedule your first visit using
+            our booking system.
           </p>
+
+          <!-- BOOK FIRST APPOINTMENT -->
+          <a
+            mat-flat-button
+            routerLink="/patient/book-appointment"
+          >
+            <mat-icon>event_available</mat-icon>
+            Book Your First Appointment
+          </a>
 
         </mat-card-content>
       </mat-card>
@@ -328,7 +346,6 @@
     }
 
   </section>
-
 
   <!-- =====================================
        APPOINTMENT HISTORY

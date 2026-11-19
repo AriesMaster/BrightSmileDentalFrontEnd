@@ -6,73 +6,55 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../assets/environments/environment';
 
 /**
- * Dentist information returned by
- * the BrightSmile Dental backend.
+ * Represents a dental treatment returned
+ * by the BrightSmile Dental API.
+ *
+ * Matches the backend ServiceDto.
  */
-export interface Dentist {
+export interface DentalService {
   id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  fullName: string;
+  name: string;
+  description: string;
+  price: number;
 }
 
 /**
- * Handles dentist-related API requests.
+ * Handles dental service API requests.
  *
- * Endpoints:
- * GET /api/Dentists
- * GET /api/Dentists/{id}
+ * Backend endpoints:
+ * GET /api/Services
+ * GET /api/Services/{id}
  */
 @Injectable({
   providedIn: 'root'
 })
-export class DentistService {
+export class DentalServiceService {
 
   private readonly http = inject(HttpClient);
 
   private readonly apiUrl =
-    `${environment.apiUrl}/Dentists`;
+    `${environment.apiUrl}/Services`;
 
   /**
-   * Retrieve all dentists.
+   * Retrieve all dental treatments.
    *
-   * Used to populate the dentist dropdown
-   * in the appointment booking form.
+   * Used to populate the treatment
+   * dropdown on the booking page.
    */
-  getDentists(): Observable<Dentist[]> {
-
-    return this.http.get<Dentist[]>(
+  getServices(): Observable<DentalService[]> {
+    return this.http.get<DentalService[]>(
       this.apiUrl
     );
   }
 
   /**
-   * Retrieve a dentist by ID.
+   * Retrieve one dental treatment by ID.
    */
-  getDentistById(
+  getServiceById(
     id: number
-  ): Observable<Dentist> {
-
-    return this.http.get<Dentist>(
+  ): Observable<DentalService> {
+    return this.http.get<DentalService>(
       `${this.apiUrl}/${id}`
     );
-  }
-
-  /**
-   * Return a readable dentist name.
-   *
-   * If a profile hasn't been completed,
-   * use the email address as a fallback.
-   */
-  getDisplayName(dentist: Dentist): string {
-
-    const fullName = dentist.fullName?.trim();
-
-    if (fullName) {
-      return `Dr. ${fullName}`;
-    }
-
-    return dentist.email;
   }
 }

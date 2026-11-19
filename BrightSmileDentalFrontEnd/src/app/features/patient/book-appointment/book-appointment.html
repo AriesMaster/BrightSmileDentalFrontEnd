@@ -1,0 +1,483 @@
+
+<div class="booking-page">
+
+  <!-- PAGE HEADER -->
+  <header class="booking-header">
+
+    <div class="header-content">
+      <span class="eyebrow">PATIENT PORTAL</span>
+
+      <h1>Book an Appointment</h1>
+
+      <p>
+        Choose your dental treatment, preferred dentist,
+        and appointment date.
+      </p>
+    </div>
+
+    <button
+      mat-stroked-button
+      type="button"
+      (click)="goBack()"
+    >
+      <mat-icon>arrow_back</mat-icon>
+      Back to Dashboard
+    </button>
+
+  </header>
+
+  <!-- LOADING STATE -->
+  @if (isLoading()) {
+
+    <div class="loading-container">
+
+      <mat-spinner diameter="44"></mat-spinner>
+
+      <p>Loading available treatments and dentists...</p>
+
+    </div>
+
+  } @else {
+
+    <div class="booking-layout">
+
+      <!-- BOOKING FORM -->
+      <mat-card class="booking-card">
+
+        <mat-card-header>
+          <mat-card-title>
+            Appointment Details
+          </mat-card-title>
+
+          <mat-card-subtitle>
+            Complete the form below to request your appointment.
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+
+          <!-- ERROR MESSAGE -->
+          @if (errorMessage()) {
+
+            <div class="alert alert-error" role="alert">
+
+              <mat-icon>error_outline</mat-icon>
+
+              <span>{{ errorMessage() }}</span>
+
+            </div>
+
+            @if (services().length === 0 || dentists().length === 0) {
+
+              <button
+                mat-stroked-button
+                type="button"
+                (click)="loadBookingOptions()"
+              >
+                <mat-icon>refresh</mat-icon>
+                Retry Loading
+              </button>
+
+            }
+
+          }
+
+          <!-- SUCCESS MESSAGE -->
+          @if (successMessage()) {
+
+            <div class="alert alert-success" role="status">
+
+              <mat-icon>check_circle</mat-icon>
+
+              <span>{{ successMessage() }}</span>
+
+            </div>
+
+          }
+
+          <form
+            [formGroup]="bookingForm"
+            (ngSubmit)="submitBooking()"
+            class="booking-form"
+          >
+
+            <!-- SERVICE SELECTION -->
+            <section class="form-section">
+
+              <div class="section-heading">
+
+                <span class="step-number">1</span>
+
+                <div>
+                  <h2>Select a Treatment</h2>
+                  <p>Choose the dental service you need.</p>
+                </div>
+
+              </div>
+
+              <mat-form-field
+                appearance="outline"
+                class="full-width"
+              >
+
+                <mat-label>Dental Treatment</mat-label>
+
+                <mat-select formControlName="serviceId">
+
+                  @for (service of services(); track service.id) {
+
+                    <mat-option [value]="service.id">
+                      {{ service.name }}
+                      — R{{ service.price | number:'1.2-2' }}
+                    </mat-option>
+
+                  }
+
+                </mat-select>
+
+                <mat-icon matSuffix>
+                  medical_services
+                </mat-icon>
+
+                @if (
+                  bookingForm.controls.serviceId.hasError('required') ||
+                  bookingForm.controls.serviceId.hasError('min')
+                ) {
+
+                  <mat-error>
+                    Please select a dental treatment.
+                  </mat-error>
+
+                }
+
+              </mat-form-field>
+
+            </section>
+
+            <!-- DENTIST SELECTION -->
+            <section class="form-section">
+
+              <div class="section-heading">
+
+                <span class="step-number">2</span>
+
+                <div>
+                  <h2>Choose Your Dentist</h2>
+                  <p>Select your preferred dental professional.</p>
+                </div>
+
+              </div>
+
+              <mat-form-field
+                appearance="outline"
+                class="full-width"
+              >
+
+                <mat-label>Preferred Dentist</mat-label>
+
+                <mat-select formControlName="doctorId">
+
+                  @for (dentist of dentists(); track dentist.id) {
+
+                    <mat-option [value]="dentist.id">
+                      {{ getDentistName(dentist) }}
+                    </mat-option>
+
+                  }
+
+                </mat-select>
+
+                <mat-icon matSuffix>
+                  person
+                </mat-icon>
+
+                @if (
+                  bookingForm.controls.doctorId.hasError('required') ||
+                  bookingForm.controls.doctorId.hasError('min')
+                ) {
+
+                  <mat-error>
+                    Please select a dentist.
+                  </mat-error>
+
+                }
+
+              </mat-form-field>
+
+            </section>
+
+            <!-- DATE AND TIME -->
+            <section class="form-section">
+
+              <div class="section-heading">
+
+                <span class="step-number">3</span>
+
+                <div>
+                  <h2>Select Date &amp; Time</h2>
+
+                  <p>
+                    Choose a future appointment date and a
+                    30-minute time slot.
+                  </p>
+                </div>
+
+              </div>
+
+              <div class="date-time-grid">
+
+                <!-- DATE -->
+                <div class="native-field">
+
+                  <label for="appointmentDate">
+                    Appointment Date
+                  </label>
+
+                  <input
+                    id="appointmentDate"
+                    type="date"
+                    formControlName="appointmentDate"
+                    [min]="minDate"
+                    [max]="maxDate"
+                    [attr.aria-invalid]="
+                      bookingForm.controls.appointmentDate.invalid &&
+                      bookingForm.controls.appointmentDate.touched
+                    "
+                  />
+
+                  @if (
+                    bookingForm.controls.appointmentDate.invalid &&
+                    bookingForm.controls.appointmentDate.touched
+                  ) {
+
+                    <span class="field-error">
+                      Please select an appointment date.
+                    </span>
+
+                  }
+
+                </div>
+
+                <!-- TIME -->
+                <div class="native-field">
+
+                  <label for="appointmentTime">
+                    Appointment Time
+                  </label>
+
+                  <input
+                    id="appointmentTime"
+                    type="time"
+                    formControlName="appointmentTime"
+                    step="1800"
+                    [attr.aria-invalid]="
+                      bookingForm.controls.appointmentTime.invalid &&
+                      bookingForm.controls.appointmentTime.touched
+                    "
+                  />
+
+                  @if (
+                    bookingForm.controls.appointmentTime.invalid &&
+                    bookingForm.controls.appointmentTime.touched
+                  ) {
+
+                    <span class="field-error">
+                      Please select an appointment time.
+                    </span>
+
+                  }
+
+                </div>
+
+              </div>
+
+              <p class="field-hint">
+
+                <mat-icon>info_outline</mat-icon>
+
+                Appointment times are subject to dentist availability.
+                A booking is initially marked as pending.
+
+              </p>
+
+            </section>
+
+            <!-- ADDITIONAL INFORMATION -->
+            <section class="form-section">
+
+              <div class="section-heading">
+
+                <span class="step-number">4</span>
+
+                <div>
+                  <h2>Additional Information</h2>
+
+                  <p>
+                    Tell us anything relevant to your visit.
+                    This field is optional.
+                  </p>
+                </div>
+
+              </div>
+
+              <mat-form-field
+                appearance="outline"
+                class="full-width"
+              >
+
+                <mat-label>Notes for the Dentist</mat-label>
+
+                <textarea
+                  matInput
+                  formControlName="additionalInfo"
+                  rows="4"
+                  maxlength="1000"
+                  placeholder="Describe any symptoms, concerns or special requests..."
+                ></textarea>
+
+                <mat-hint align="end">
+                  {{ bookingForm.controls.additionalInfo.value.length }}/1000
+                </mat-hint>
+
+                @if (
+                  bookingForm.controls.additionalInfo.hasError('maxlength')
+                ) {
+
+                  <mat-error>
+                    Notes cannot exceed 1000 characters.
+                  </mat-error>
+
+                }
+
+              </mat-form-field>
+
+            </section>
+
+            <!-- FORM ACTIONS -->
+            <div class="form-actions">
+
+              <button
+                mat-stroked-button
+                type="button"
+                (click)="goBack()"
+                [disabled]="isSubmitting()"
+              >
+                Cancel
+              </button>
+
+              <!-- CONFIRM BOOKING -->
+              <button
+                mat-flat-button
+                type="submit"
+                [disabled]="!canSubmit() || bookingForm.invalid"
+              >
+
+                @if (isSubmitting()) {
+
+                  <mat-spinner diameter="20"></mat-spinner>
+
+                  <span>Booking...</span>
+
+                } @else {
+
+                  <!-- FIX: Angular Material icon projection -->
+                  <ng-container>
+                    <mat-icon>event_available</mat-icon>
+                  </ng-container>
+
+                  <span>Confirm Booking</span>
+
+                }
+
+              </button>
+
+            </div>
+
+          </form>
+
+        </mat-card-content>
+
+      </mat-card>
+
+      <!-- BOOKING SUMMARY -->
+      <aside class="booking-sidebar">
+
+        <mat-card class="summary-card">
+
+          <mat-card-header>
+
+            <mat-card-title>
+              Booking Summary
+            </mat-card-title>
+
+          </mat-card-header>
+
+          <mat-card-content>
+
+            <div class="summary-icon">
+              <mat-icon>dentistry</mat-icon>
+            </div>
+
+            @if (selectedService(); as service) {
+
+              <div class="summary-details">
+
+                <span class="summary-label">
+                  SELECTED TREATMENT
+                </span>
+
+                <h3>{{ service.name }}</h3>
+
+                <p>{{ service.description }}</p>
+
+                <div class="summary-price">
+
+                  <span>Treatment Price</span>
+
+                  <strong>
+                    R{{ service.price | number:'1.2-2' }}
+                  </strong>
+
+                </div>
+
+              </div>
+
+            } @else {
+
+              <p class="summary-placeholder">
+                Select a dental treatment to see
+                its details and price.
+              </p>
+
+            }
+
+          </mat-card-content>
+
+        </mat-card>
+
+        <!-- BOOKING NOTICE -->
+        <div class="booking-notice">
+
+          <mat-icon>verified_user</mat-icon>
+
+          <div>
+
+            <h3>Appointment Request</h3>
+
+            <p>
+              Your appointment will initially have a
+              Pending status. You can track its status
+              from your patient dashboard.
+            </p>
+
+          </div>
+
+        </div>
+
+      </aside>
+
+    </div>
+
+  }
+
+</div>

@@ -11,6 +11,7 @@ import { roleGuard } from './core/guards/role.guard';
  * - Public website routes
  * - Authentication routes
  * - Role-protected dashboard routes
+ * - Patient appointment booking
  *
  * Components are lazy-loaded to reduce
  * the initial application bundle.
@@ -135,6 +136,28 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/patient/dashboard/dashboard')
         .then(m => m.DashboardComponent)
+  },
+
+  // ==========================================
+  // PATIENT APPOINTMENT BOOKING
+  // ==========================================
+
+  {
+    path: 'patient/book-appointment',
+    title: 'Book Appointment | BrightSmile Dental',
+
+    canActivate: [
+      authGuard,
+      roleGuard
+    ],
+
+    data: {
+      roles: ['Patient']
+    },
+
+    loadComponent: () =>
+      import('./features/patient/book-appointment/book-appointment')
+        .then(m => m.BookAppointmentComponent)
   },
 
   // ==========================================

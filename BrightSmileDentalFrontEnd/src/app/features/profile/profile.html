@@ -1,0 +1,413 @@
+
+<div class="profile-page">
+
+  <!-- ===================================== -->
+  <!-- PAGE HEADER -->
+  <!-- ===================================== -->
+
+  <header class="profile-header">
+
+    <div class="header-content">
+
+      <a
+        class="back-link"
+        [routerLink]="getDashboardRoute()"
+      >
+        <span aria-hidden="true">←</span>
+        Back to Dashboard
+      </a>
+
+      <div class="header-text">
+        <h1>My Profile</h1>
+        <p>
+          Manage your personal information and
+          keep your account details up to date.
+        </p>
+      </div>
+
+    </div>
+
+  </header>
+
+  <!-- ===================================== -->
+  <!-- MAIN CONTENT -->
+  <!-- ===================================== -->
+
+  <main class="profile-container">
+
+    <!-- LOADING STATE -->
+
+    <div
+      *ngIf="isLoading()"
+      class="loading-container"
+      role="status"
+      aria-live="polite"
+    >
+      <div class="loading-spinner"></div>
+      <p>Loading your profile...</p>
+    </div>
+
+    <!-- PROFILE CONTENT -->
+
+    <ng-container *ngIf="!isLoading()">
+
+      <!-- NOTIFICATIONS -->
+
+      <div
+        *ngIf="successMessage()"
+        class="alert alert-success"
+        role="status"
+      >
+        <span aria-hidden="true">✓</span>
+        <p>{{ successMessage() }}</p>
+      </div>
+
+      <div
+        *ngIf="errorMessage()"
+        class="alert alert-error"
+        role="alert"
+      >
+        <span aria-hidden="true">!</span>
+        <p>{{ errorMessage() }}</p>
+      </div>
+
+      <!-- ================================= -->
+      <!-- ACCOUNT OVERVIEW -->
+      <!-- ================================= -->
+
+      <section class="profile-card account-card">
+
+        <div class="account-avatar" aria-hidden="true">
+          {{
+            profile()?.firstName?.charAt(0)?.toUpperCase()
+            || currentUserEmail()?.charAt(0)?.toUpperCase()
+            || 'U'
+          }}
+        </div>
+
+        <div class="account-details">
+
+          <h2>
+            {{
+              profile()
+                ? profile()!.firstName + ' ' + profile()!.lastName
+                : 'Complete Your Profile'
+            }}
+          </h2>
+
+          <p class="account-email">
+            {{ currentUserEmail() }}
+          </p>
+
+          <span class="role-badge">
+            {{ currentUserRole() }}
+          </span>
+
+        </div>
+
+      </section>
+
+      <!-- ================================= -->
+      <!-- PERSONAL INFORMATION -->
+      <!-- ================================= -->
+
+      <section class="profile-card details-card">
+
+        <div class="card-header">
+
+          <div>
+            <h2>Personal Information</h2>
+            <p>
+              Your contact and personal details.
+            </p>
+          </div>
+
+          <button
+            *ngIf="!isEditing()"
+            type="button"
+            class="btn btn-outline"
+            (click)="editProfile()"
+          >
+            Edit Profile
+          </button>
+
+        </div>
+
+        <!-- VIEW MODE -->
+
+        <div
+          *ngIf="!isEditing() && profile()"
+          class="profile-details"
+        >
+
+          <div class="detail-item">
+            <span class="detail-label">First Name</span>
+            <span class="detail-value">
+              {{ profile()?.firstName || 'Not provided' }}
+            </span>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Last Name</span>
+            <span class="detail-value">
+              {{ profile()?.lastName || 'Not provided' }}
+            </span>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Phone Number</span>
+            <span class="detail-value">
+              {{ profile()?.phoneNumber || 'Not provided' }}
+            </span>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Date of Birth</span>
+            <span class="detail-value">
+              {{
+                profile()?.dateOfBirth
+                  ? (profile()?.dateOfBirth | date:'dd MMMM yyyy':'UTC')
+                  : 'Not provided'
+              }}
+            </span>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Gender</span>
+            <span class="detail-value">
+              {{ profile()?.gender || 'Not provided' }}
+            </span>
+          </div>
+
+        </div>
+
+        <!-- ================================= -->
+        <!-- EDIT MODE -->
+        <!-- ================================= -->
+
+        <form
+          *ngIf="isEditing()"
+          class="profile-form"
+          [formGroup]="profileForm"
+          (ngSubmit)="saveProfile()"
+          novalidate
+        >
+
+          <div class="form-grid">
+
+            <!-- FIRST NAME -->
+
+            <div class="form-group">
+
+              <label for="firstName">
+                First Name
+                <span class="required">*</span>
+              </label>
+
+              <input
+                id="firstName"
+                type="text"
+                formControlName="firstName"
+                placeholder="Enter your first name"
+                autocomplete="given-name"
+                [class.input-error]="isFieldInvalid('firstName')"
+              />
+
+              <small
+                *ngIf="isFieldInvalid('firstName')"
+                class="field-error"
+              >
+                First name must contain between
+                2 and 100 characters.
+              </small>
+
+            </div>
+
+            <!-- LAST NAME -->
+
+            <div class="form-group">
+
+              <label for="lastName">
+                Last Name
+                <span class="required">*</span>
+              </label>
+
+              <input
+                id="lastName"
+                type="text"
+                formControlName="lastName"
+                placeholder="Enter your last name"
+                autocomplete="family-name"
+                [class.input-error]="isFieldInvalid('lastName')"
+              />
+
+              <small
+                *ngIf="isFieldInvalid('lastName')"
+                class="field-error"
+              >
+                Last name must contain between
+                2 and 100 characters.
+              </small>
+
+            </div>
+
+            <!-- PHONE NUMBER -->
+
+            <div class="form-group">
+
+              <label for="phoneNumber">
+                Phone Number
+              </label>
+
+              <input
+                id="phoneNumber"
+                type="tel"
+                formControlName="phoneNumber"
+                placeholder="e.g. 0821234567"
+                autocomplete="tel"
+                [class.input-error]="isFieldInvalid('phoneNumber')"
+              />
+
+              <small
+                *ngIf="isFieldInvalid('phoneNumber')"
+                class="field-error"
+              >
+                Enter a valid phone number
+                (maximum 20 characters).
+              </small>
+
+            </div>
+
+            <!-- DATE OF BIRTH -->
+
+            <div class="form-group">
+
+              <label for="dateOfBirth">
+                Date of Birth
+              </label>
+
+              <input
+                id="dateOfBirth"
+                type="date"
+                formControlName="dateOfBirth"
+              />
+
+            </div>
+
+            <!-- GENDER -->
+
+            <div class="form-group">
+
+              <label for="gender">
+                Gender
+              </label>
+
+              <select
+                id="gender"
+                formControlName="gender"
+              >
+                <option value="">
+                  Prefer not to specify
+                </option>
+
+                <option value="Male">
+                  Male
+                </option>
+
+                <option value="Female">
+                  Female
+                </option>
+
+                <option value="Other">
+                  Other
+                </option>
+
+              </select>
+
+            </div>
+
+          </div>
+
+          <!-- FORM ACTIONS -->
+
+          <div class="form-actions">
+
+            <button
+              *ngIf="profile()"
+              type="button"
+              class="btn btn-outline"
+              (click)="cancelEditing()"
+              [disabled]="isSaving()"
+            >
+              Cancel
+            </button>
+
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="isSaving()"
+            >
+              <span
+                *ngIf="isSaving()"
+                class="button-spinner"
+                aria-hidden="true"
+              ></span>
+
+              {{
+                isSaving()
+                  ? 'Saving Changes...'
+                  : 'Save Changes'
+              }}
+            </button>
+
+          </div>
+
+        </form>
+
+      </section>
+
+      <!-- ================================= -->
+      <!-- ACCOUNT INFORMATION -->
+      <!-- ================================= -->
+
+      <section class="profile-card account-info-card">
+
+        <div class="card-header">
+          <div>
+            <h2>Account Information</h2>
+            <p>
+              Your BrightSmileDental account details.
+            </p>
+          </div>
+        </div>
+
+        <div class="profile-details">
+
+          <div class="detail-item">
+            <span class="detail-label">Email Address</span>
+            <span class="detail-value">
+              {{ currentUserEmail() }}
+            </span>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Account Role</span>
+            <span class="detail-value">
+              {{ currentUserRole() }}
+            </span>
+          </div>
+
+        </div>
+
+        <p class="account-note">
+          Your email address and account role
+          cannot currently be changed from this page.
+        </p>
+
+      </section>
+
+    </ng-container>
+
+  </main>
+
+</div>

@@ -12,6 +12,7 @@ import { roleGuard } from './core/guards/role.guard';
  * - Authentication routes
  * - Role-protected dashboard routes
  * - Patient appointment booking
+ * - Shared authenticated profile management
  *
  * Components are lazy-loaded to reduce
  * the initial application bundle.
@@ -70,6 +71,32 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/auth/register/register')
         .then(m => m.RegisterComponent)
+  },
+
+  // ==========================================
+  // SHARED PROFILE MANAGEMENT
+  // ==========================================
+
+  {
+    path: 'profile',
+    title: 'My Profile | BrightSmile Dental',
+
+    canActivate: [
+      authGuard,
+      roleGuard
+    ],
+
+    data: {
+      roles: [
+        'Admin',
+        'Dentist',
+        'Patient'
+      ]
+    },
+
+    loadComponent: () =>
+      import('./features/profile/profile')
+        .then(m => m.ProfileComponent)
   },
 
   // ==========================================

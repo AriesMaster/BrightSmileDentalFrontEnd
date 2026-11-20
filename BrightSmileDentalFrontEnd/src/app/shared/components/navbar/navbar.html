@@ -24,39 +24,8 @@
         aria-label="BrightSmile Dental home"
       >
 
-        <span class="brand-icon" aria-hidden="true">
-          <svg
-            viewBox="0 0 48 48"
-            width="38"
-            height="38"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle
-              cx="24"
-              cy="24"
-              r="22"
-              stroke="currentColor"
-              stroke-width="2"
-            />
-
-            <path
-              d="M13 26C18 34 30 34 35 26"
-              stroke="currentColor"
-              stroke-width="2.5"
-              stroke-linecap="round"
-            />
-
-            <path
-              d="M17 17H17.1M31 17H31.1"
-              stroke="currentColor"
-              stroke-width="4"
-              stroke-linecap="round"
-            />
-          </svg>
-        </span>
-
         <span class="brand-text">
+
           <span class="brand-name">
             BrightSmile
           </span>
@@ -64,6 +33,7 @@
           <span class="brand-subtitle">
             DENTAL
           </span>
+
         </span>
 
       </a>
@@ -73,8 +43,6 @@
       ======================================= -->
 
       <div class="desktop-navigation">
-
-        <!-- PUBLIC LINKS -->
 
         <div class="nav-links">
 
@@ -100,7 +68,7 @@
             About Us
           </a>
 
-          <!-- AUTHENTICATED NAVIGATION -->
+          <!-- AUTHENTICATED LINKS -->
 
           @if (isAuthenticated()) {
 
@@ -142,16 +110,12 @@
 
           @if (!isAuthenticated()) {
 
-            <!-- LOGIN -->
-
             <a
               class="btn btn-outline"
               routerLink="/login"
             >
               Login
             </a>
-
-            <!-- REGISTER -->
 
             <a
               class="btn btn-primary"
@@ -162,16 +126,12 @@
 
           } @else {
 
-            <!-- USER ROLE -->
-
             <span
               class="user-role"
               aria-label="Account role"
             >
               {{ currentUserRole() }}
             </span>
-
-            <!-- LOGOUT -->
 
             <button
               class="btn btn-outline logout-button"
@@ -260,8 +220,6 @@
 
       <div class="mobile-nav-links">
 
-        <!-- HOME -->
-
         <a
           routerLink="/"
           routerLinkActive="active"
@@ -271,8 +229,6 @@
           Home
         </a>
 
-        <!-- SERVICES -->
-
         <a
           routerLink="/services"
           routerLinkActive="active"
@@ -280,8 +236,6 @@
         >
           Services
         </a>
-
-        <!-- ABOUT -->
 
         <a
           routerLink="/about"
@@ -291,13 +245,9 @@
           About Us
         </a>
 
-        <!-- ======================================
-             AUTHENTICATED MOBILE LINKS
-        ======================================= -->
+        <!-- AUTHENTICATED MOBILE LINKS -->
 
         @if (isAuthenticated()) {
-
-          <!-- DASHBOARD -->
 
           <a
             [routerLink]="dashboardRoute()"
@@ -307,8 +257,6 @@
           >
             Dashboard
           </a>
-
-          <!-- PATIENT BOOKING -->
 
           @if (isPatient()) {
 
@@ -322,8 +270,6 @@
 
           }
 
-          <!-- PROFILE -->
-
           <a
             routerLink="/profile"
             routerLinkActive="active"
@@ -332,7 +278,7 @@
             My Profile
           </a>
 
-          <!-- ACCOUNT ROLE -->
+          <!-- MOBILE ACCOUNT INFORMATION -->
 
           <div class="mobile-account-info">
 
@@ -350,8 +296,6 @@
 
           </div>
 
-          <!-- LOGOUT -->
-
           <button
             class="btn btn-outline mobile-logout"
             type="button"
@@ -362,9 +306,7 @@
 
         } @else {
 
-          <!-- ======================================
-               GUEST MOBILE ACTIONS
-          ======================================= -->
+          <!-- GUEST MOBILE ACTIONS -->
 
           <div class="mobile-auth-actions">
 

@@ -2,6 +2,7 @@
 /* ==========================================
    BRIGHTSMILE DENTAL
    SHARED FOOTER STYLES
+   WHITE / BLACK / BLUE THEME
 ========================================== */
 
 :host {
@@ -17,14 +18,26 @@
 }
 
 /* ==========================================
-   FOOTER CONTAINER
+   THEME VARIABLES
 ========================================== */
 
 .site-footer {
+  --footer-background: #ffffff;
+  --footer-text: #111111;
+  --footer-muted: #555555;
+  --footer-blue: #2563eb;
+  --footer-blue-dark: #1d4ed8;
+  --footer-border: #e5e7eb;
+
   width: 100%;
-  background: #0f172a;
-  color: #cbd5e1;
+  background: var(--footer-background);
+  color: var(--footer-text);
+  border-top: 1px solid var(--footer-border);
 }
+
+/* ==========================================
+   FOOTER CONTAINER
+========================================== */
 
 .footer-container {
   width: 100%;
@@ -52,30 +65,19 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  min-width: 0;
 }
 
 .footer-logo {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
   margin-bottom: 24px;
-  color: #ffffff;
+  color: var(--footer-text);
   text-decoration: none;
   transition: opacity 0.2s ease;
 
   &:hover {
-    opacity: 0.85;
-  }
-}
-
-.brand-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: #60a5fa;
-
-  svg {
-    display: block;
+    opacity: 0.75;
   }
 }
 
@@ -86,7 +88,7 @@
 }
 
 .brand-name {
-  color: #ffffff;
+  color: #111111;
   font-size: 22px;
   font-weight: 800;
   letter-spacing: -0.8px;
@@ -94,23 +96,24 @@
 }
 
 .brand-subtitle {
-  color: #60a5fa;
+  color: var(--footer-blue);
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: 3px;
+  letter-spacing: 3.5px;
+  line-height: 1.3;
 }
 
 .brand-description {
   max-width: 320px;
   margin: 0 0 18px;
-  color: #94a3b8;
+  color: var(--footer-muted);
   font-size: 14px;
   line-height: 1.9;
 }
 
 .brand-tagline {
   margin: 0;
-  color: #e2e8f0;
+  color: #111111;
   font-size: 13px;
   font-weight: 600;
 }
@@ -129,7 +132,7 @@
     position: relative;
     margin: 0 0 26px;
     padding-bottom: 14px;
-    color: #ffffff;
+    color: #111111;
     font-size: 16px;
     font-weight: 700;
     letter-spacing: -0.2px;
@@ -140,9 +143,9 @@
       bottom: 0;
       left: 0;
       width: 32px;
-      height: 3px;
-      border-radius: 3px;
-      background: #3b82f6;
+      height: 2px;
+      border-radius: 2px;
+      background: var(--footer-blue);
     }
   }
 }
@@ -167,18 +170,44 @@
   a {
     display: inline-flex;
     align-items: center;
-    color: #94a3b8;
+    color: var(--footer-muted);
     font-size: 14px;
     line-height: 1.5;
     text-decoration: none;
+
     transition:
       color 0.2s ease,
       transform 0.2s ease;
 
     &:hover {
-      color: #60a5fa;
+      color: var(--footer-blue);
       transform: translateX(3px);
     }
+  }
+}
+
+/* ==========================================
+   VIEW ALL SERVICES LINK
+========================================== */
+
+.services-more-link {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 20px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--footer-blue);
+  color: var(--footer-blue);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+
+  &:hover {
+    color: var(--footer-blue-dark);
+    border-color: var(--footer-blue-dark);
   }
 }
 
@@ -192,7 +221,7 @@
 
 .contact-description {
   margin: 0 0 22px;
-  color: #94a3b8;
+  color: var(--footer-muted);
   font-size: 14px;
   line-height: 1.8;
 }
@@ -201,14 +230,15 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  color: #cbd5e1;
+  color: #333333;
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
+
   transition: color 0.2s ease;
 
   &:hover {
-    color: #60a5fa;
+    color: var(--footer-blue);
   }
 }
 
@@ -219,9 +249,10 @@
   width: 36px;
   height: 36px;
   flex-shrink: 0;
+  border: 1px solid #dbeafe;
   border-radius: 9px;
-  background: rgba(59, 130, 246, 0.12);
-  color: #60a5fa;
+  background: #eff6ff;
+  color: var(--footer-blue);
 }
 
 /* ==========================================
@@ -236,21 +267,24 @@
   min-height: 44px;
   margin-top: 24px;
   padding: 11px 16px;
-  border: 1px solid #3b82f6;
+  border: 1px solid var(--footer-blue);
   border-radius: 9px;
-  background: #2563eb;
+  background: var(--footer-blue);
   color: #ffffff;
   font-size: 13px;
   font-weight: 600;
   text-decoration: none;
+
   transition:
     background-color 0.2s ease,
     border-color 0.2s ease,
+    box-shadow 0.2s ease,
     transform 0.2s ease;
 
   &:hover {
-    background: #1d4ed8;
-    border-color: #2563eb;
+    background: var(--footer-blue-dark);
+    border-color: var(--footer-blue-dark);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
     transform: translateY(-2px);
   }
 
@@ -271,13 +305,13 @@
   flex-wrap: wrap;
   gap: 16px;
   padding-top: 24px;
-  border-top: 1px solid rgba(148, 163, 184, 0.2);
+  border-top: 1px solid var(--footer-border);
 }
 
 .copyright,
 .footer-credit {
   margin: 0;
-  color: #94a3b8;
+  color: #666666;
   font-size: 13px;
   line-height: 1.6;
 }
@@ -287,7 +321,7 @@
 ========================================== */
 
 .site-footer a:focus-visible {
-  outline: 2px solid #93c5fd;
+  outline: 2px solid var(--footer-blue);
   outline-offset: 4px;
   border-radius: 3px;
 }

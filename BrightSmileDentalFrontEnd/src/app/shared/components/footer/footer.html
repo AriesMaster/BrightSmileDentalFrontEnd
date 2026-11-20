@@ -26,42 +26,6 @@
           aria-label="BrightSmile Dental home"
         >
 
-          <span class="brand-icon" aria-hidden="true">
-
-            <svg
-              viewBox="0 0 48 48"
-              width="42"
-              height="42"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-
-              <circle
-                cx="24"
-                cy="24"
-                r="22"
-                stroke="currentColor"
-                stroke-width="2"
-              />
-
-              <path
-                d="M13 26C18 34 30 34 35 26"
-                stroke="currentColor"
-                stroke-width="2.5"
-                stroke-linecap="round"
-              />
-
-              <path
-                d="M17 17H17.1M31 17H31.1"
-                stroke="currentColor"
-                stroke-width="4"
-                stroke-linecap="round"
-              />
-
-            </svg>
-
-          </span>
-
           <span class="brand-text">
 
             <span class="brand-name">
@@ -78,10 +42,11 @@
 
         <p class="brand-description">
           Your smile deserves exceptional care.
-          BrightSmileDental is a modern dental
+
+          BrightSmile Dental is a modern dental
           appointment platform designed to make
-          managing dental visits simple and
-          convenient.
+          managing dental visits simple,
+          accessible and convenient.
         </p>
 
         <p class="brand-tagline">
@@ -120,6 +85,8 @@
               </a>
             </li>
 
+            <!-- AUTHENTICATED NAVIGATION -->
+
             @if (isAuthenticated()) {
 
               <li>
@@ -145,6 +112,8 @@
               }
 
             } @else {
+
+              <!-- GUEST NAVIGATION -->
 
               <li>
                 <a routerLink="/login">
@@ -191,10 +160,17 @@
 
         </ul>
 
+        <a
+          class="services-more-link"
+          routerLink="/services"
+        >
+          View All Services
+        </a>
+
       </div>
 
       <!-- ======================================
-           CONTACT INFORMATION
+           CONTACT & SUPPORT
       ======================================= -->
 
       <div class="footer-column contact-column">
@@ -202,16 +178,23 @@
         <h2>Contact & Support</h2>
 
         <p class="contact-description">
-          Have a question about BrightSmileDental?
-          Visit our About page for more information
-          about the platform.
+          Have a question about BrightSmile Dental
+          or need help getting started?
+
+          Explore our website to learn more
+          about our dental services and
+          appointment booking platform.
         </p>
 
         <a
           class="contact-link"
           routerLink="/about"
         >
-          <span class="contact-icon" aria-hidden="true">
+
+          <span
+            class="contact-icon"
+            aria-hidden="true"
+          >
 
             <svg
               viewBox="0 0 24 24"
@@ -230,8 +213,11 @@
 
           </span>
 
-          About BrightSmileDental
+          About BrightSmile Dental
+
         </a>
+
+        <!-- GUEST CALL TO ACTION -->
 
         @if (!isAuthenticated()) {
 
@@ -248,6 +234,8 @@
           </a>
 
         } @else if (isPatient()) {
+
+          <!-- PATIENT CALL TO ACTION -->
 
           <a
             class="footer-cta"
@@ -274,7 +262,7 @@
     <div class="footer-bottom">
 
       <p class="copyright">
-        &copy; {{ currentYear }} BrightSmileDental.
+        &copy; {{ currentYear }} BrightSmile Dental.
         All rights reserved.
       </p>
 

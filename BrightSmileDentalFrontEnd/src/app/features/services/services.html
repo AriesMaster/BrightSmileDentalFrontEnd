@@ -1,65 +1,327 @@
+
+<!-- ==========================================
+     BRIGHTSMILE DENTAL
+     SERVICES PAGE
+========================================== -->
+
 <div class="info-page">
-  <mat-toolbar class="page-toolbar">
-    <a class="brand" routerLink="/">BrightSmile Dental</a>
-    <span class="spacer"></span>
-    <nav aria-label="Main navigation">
-      <a mat-button routerLink="/">Home</a>
-      <a mat-button routerLink="/services" aria-current="page">Services</a>
-      <a mat-button routerLink="/about">About</a>
-    </nav>
-    <a mat-flat-button color="primary" routerLink="/register">Book a visit</a>
-  </mat-toolbar>
 
-  <main class="content">
+  <div class="content">
+
+    <!-- ======================================
+         INTRODUCTION
+    ======================================= -->
+
     <section class="intro">
-      <p class="eyebrow">Care for every smile</p>
-      <h1>Thoughtful dental care, all in one place.</h1>
-      <p class="lead">
-        From routine checkups to restoring your smile, our services are designed around your comfort and long-term oral health.
+
+      <p class="eyebrow">
+        OUR DENTAL SERVICES
       </p>
-      <a mat-flat-button color="primary" routerLink="/register">Request an appointment</a>
+
+      <h1>
+        Complete dental care for every smile.
+      </h1>
+
+      <p class="lead">
+        Explore our range of dental treatments,
+        from routine checkups and preventive care
+        to cosmetic and restorative dentistry.
+        Your comfort and oral health come first.
+      </p>
+
+      <a
+        mat-flat-button
+        routerLink="/register"
+      >
+        Book an Appointment
+      </a>
+
     </section>
 
-    <section class="service-grid" aria-label="Dental services">
+    <!-- ======================================
+         DENTAL SERVICES GRID
+    ======================================= -->
+
+    <section
+      class="service-grid"
+      aria-label="Our dental treatments"
+    >
+
+      <!-- 01: GENERAL CONSULTATION -->
+
       <mat-card class="service-card">
-        <span class="service-icon" aria-hidden="true">01</span>
-        <h2>Preventive care</h2>
-        <p>Regular exams, professional cleanings, and guidance to help keep your teeth and gums healthy.</p>
+        <span class="service-icon">01</span>
+
+        <h2>Dental Consultation</h2>
+
+        <p>
+          A comprehensive dental examination
+          to assess your oral health, identify
+          concerns and recommend appropriate
+          treatment options.
+        </p>
       </mat-card>
+
+      <!-- 02: TEETH CLEANING -->
+
       <mat-card class="service-card">
-        <span class="service-icon" aria-hidden="true">02</span>
-        <h2>Cosmetic dentistry</h2>
-        <p>Personalized options to help you feel more confident about the appearance of your smile.</p>
+        <span class="service-icon">02</span>
+
+        <h2>Professional Teeth Cleaning</h2>
+
+        <p>
+          Professional scaling and polishing
+          to remove plaque, tartar and surface
+          stains while supporting healthy
+          teeth and gums.
+        </p>
       </mat-card>
+
+      <!-- 03: TEETH WHITENING -->
+
       <mat-card class="service-card">
-        <span class="service-icon" aria-hidden="true">03</span>
-        <h2>Restorative dentistry</h2>
-        <p>Care focused on restoring the function and comfort of teeth affected by damage or decay.</p>
+        <span class="service-icon">03</span>
+
+        <h2>Teeth Whitening</h2>
+
+        <p>
+          Cosmetic whitening treatments
+          designed to reduce tooth
+          discoloration and improve
+          the brightness of your smile.
+        </p>
       </mat-card>
+
+      <!-- 04: TOOTH EXTRACTION -->
+
       <mat-card class="service-card">
-        <span class="service-icon" aria-hidden="true">04</span>
-        <h2>Family dentistry</h2>
-        <p>Supportive dental visits for every age, with care tailored to each patient's needs.</p>
+        <span class="service-icon">04</span>
+
+        <h2>Tooth Extraction</h2>
+
+        <p>
+          Assessment and removal of teeth
+          that cannot be preserved, with
+          appropriate pain management
+          and aftercare guidance.
+        </p>
       </mat-card>
+
+      <!-- 05: DENTAL FILLINGS -->
+
       <mat-card class="service-card">
-        <span class="service-icon" aria-hidden="true">05</span>
-        <h2>Urgent dental care</h2>
-        <p>Help assessing sudden dental discomfort and advice on the next steps for your care.</p>
+        <span class="service-icon">05</span>
+
+        <h2>Dental Fillings</h2>
+
+        <p>
+          Restore teeth affected by cavities
+          or minor damage using suitable
+          filling materials to protect
+          tooth structure and function.
+        </p>
       </mat-card>
+
+      <!-- 06: ROOT CANAL -->
+
       <mat-card class="service-card">
-        <span class="service-icon" aria-hidden="true">06</span>
-        <h2>Personalized consultations</h2>
-        <p>Time to discuss your goals, explore treatment options, and make a plan that works for you.</p>
+        <span class="service-icon">06</span>
+
+        <h2>Root Canal Treatment</h2>
+
+        <p>
+          Treatment for infected or inflamed
+          dental pulp, helping relieve
+          discomfort and preserve the
+          natural tooth where possible.
+        </p>
       </mat-card>
+
+      <!-- 07: DENTAL CROWNS -->
+
+      <mat-card class="service-card">
+        <span class="service-icon">07</span>
+
+        <h2>Dental Crowns</h2>
+
+        <p>
+          Custom dental restorations
+          designed to protect weakened
+          or damaged teeth and restore
+          their appearance and function.
+        </p>
+      </mat-card>
+
+      <!-- 08: DENTAL BRIDGES -->
+
+      <mat-card class="service-card">
+        <span class="service-icon">08</span>
+
+        <h2>Dental Bridges</h2>
+
+        <p>
+          Replace one or more missing
+          teeth with fixed restorations
+          that help improve chewing,
+          appearance and dental function.
+        </p>
+      </mat-card>
+
+      <!-- 09: DENTURES -->
+
+      <mat-card class="service-card">
+        <span class="service-icon">09</span>
+
+        <h2>Dentures</h2>
+
+        <p>
+          Removable tooth replacement
+          solutions designed to restore
+          comfort, appearance and
+          everyday oral function.
+        </p>
+      </mat-card>
+
+      <!-- 10: ORTHODONTICS -->
+
+      <mat-card class="service-card">
+        <span class="service-icon">10</span>
+
+        <h2>Orthodontic Consultation</h2>
+
+        <p>
+          Assessment of tooth alignment
+          and bite concerns, with guidance
+          on suitable orthodontic
+          treatment options.
+        </p>
+      </mat-card>
+
+      <!-- 11: CHILDREN'S DENTISTRY -->
+
+      <mat-card class="service-card">
+        <span class="service-icon">11</span>
+
+        <h2>Children's Dentistry</h2>
+
+        <p>
+          Gentle dental examinations,
+          preventive treatments and
+          oral hygiene education
+          tailored to younger patients.
+        </p>
+      </mat-card>
+
+      <!-- 12: EMERGENCY CARE -->
+
+      <mat-card class="service-card">
+        <span class="service-icon">12</span>
+
+        <h2>Emergency Dental Care</h2>
+
+        <p>
+          Assessment of urgent dental
+          problems such as severe toothache,
+          broken teeth and dental injuries,
+          with appropriate treatment guidance.
+        </p>
+      </mat-card>
+
+      <!-- 13: GUM CARE -->
+
+      <mat-card class="service-card">
+        <span class="service-icon">13</span>
+
+        <h2>Gum Disease Treatment</h2>
+
+        <p>
+          Evaluation and management of
+          gum inflammation and periodontal
+          concerns to support long-term
+          gum and dental health.
+        </p>
+      </mat-card>
+
+      <!-- 14: DENTAL IMPLANTS -->
+
+      <mat-card class="service-card">
+        <span class="service-icon">14</span>
+
+        <h2>Dental Implant Consultation</h2>
+
+        <p>
+          An assessment of suitable
+          tooth replacement options,
+          including dental implants,
+          based on individual oral health needs.
+        </p>
+      </mat-card>
+
+      <!-- 15: VENEERS -->
+
+      <mat-card class="service-card">
+        <span class="service-icon">15</span>
+
+        <h2>Dental Veneers</h2>
+
+        <p>
+          Cosmetic restorations that can
+          improve the appearance of teeth
+          affected by discoloration,
+          chips or minor shape concerns.
+        </p>
+      </mat-card>
+
+      <!-- 16: PREVENTIVE CARE -->
+
+      <mat-card class="service-card">
+        <span class="service-icon">16</span>
+
+        <h2>Preventive Dental Care</h2>
+
+        <p>
+          Routine examinations, preventive
+          treatments and personalized advice
+          to help maintain healthy teeth
+          and gums over time.
+        </p>
+      </mat-card>
+
     </section>
+
+    <!-- ======================================
+         CLOSING CALL TO ACTION
+    ======================================= -->
 
     <section class="closing">
+
       <div>
-        <p class="eyebrow">Your smile, your care plan</p>
-        <h2>Not sure where to start?</h2>
-        <p>Book a visit and talk with our team about the care that is right for you.</p>
+
+        <p class="eyebrow">
+          YOUR SMILE MATTERS
+        </p>
+
+        <h2>
+          Ready to take the next step?
+        </h2>
+
+        <p>
+          Create an account to request
+          a dental appointment and begin
+          your journey toward better oral health.
+        </p>
+
       </div>
-      <a mat-flat-button color="primary" routerLink="/register">Get started</a>
+
+      <a
+        mat-flat-button
+        routerLink="/register"
+      >
+        Get Started
+      </a>
+
     </section>
-  </main>
+
+  </div>
+
 </div>

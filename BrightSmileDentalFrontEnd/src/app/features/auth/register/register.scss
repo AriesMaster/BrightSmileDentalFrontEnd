@@ -2,18 +2,13 @@
 /* ==========================================
    BRIGHTSMILE DENTAL
    PATIENT REGISTRATION
+   COMPACT RESPONSIVE DESIGN
 ========================================== */
-
-/*
-  Preserve the existing authentication
-  styling, including the dotted background,
-  branding, welcome panel and animations.
-*/
 
 @use "../login/login";
 
 /* ==========================================
-   REGISTRATION DESIGN TOKENS
+   DESIGN TOKENS
 ========================================== */
 
 :host {
@@ -21,19 +16,13 @@
   --register-text: #171717;
   --register-secondary: #626262;
   --register-muted: #858585;
-
   --register-surface: #ffffff;
   --register-surface-soft: #f8f8f8;
-
   --register-border: #dedede;
   --register-border-light: #eaeaea;
 
-  --register-shadow:
-    0 4px 12px rgba(0, 0, 0, 0.035),
-    0 18px 48px rgba(0, 0, 0, 0.075);
-
   display: block;
-  min-height: 100vh;
+  min-height: 0;
 }
 
 /* ==========================================
@@ -41,20 +30,15 @@
 ========================================== */
 
 .auth-shell {
-  min-height: 100vh;
-  overflow-x: hidden;
+  min-height: 0;
+  padding: 36px 24px 56px;
 }
 
-/*
-  Registration requires more horizontal
-  space than the login page.
-*/
-
 .auth-layout {
-  width: min(100%, 1320px);
-  max-width: 1320px;
+  width: min(100%, 1100px);
+  max-width: 1100px;
 
-  margin-inline: auto;
+  margin: 0 auto;
 
   display: grid;
   grid-template-columns:
@@ -62,8 +46,7 @@
     minmax(0, 1.15fr);
 
   align-items: start;
-
-  gap: clamp(24px, 4vw, 64px);
+  gap: clamp(24px, 4vw, 52px);
 }
 
 /* ==========================================
@@ -73,19 +56,93 @@
 .welcome-panel {
   min-width: 0;
   position: relative;
+  padding-top: 38px;
+}
+
+.welcome-panel .eyebrow {
+  margin-bottom: 14px;
 }
 
 .welcome-panel h1 {
-  max-width: 540px;
+  max-width: 460px;
+
+  margin: 0 0 18px;
+
+  color: var(--register-text);
+  font-size: clamp(30px, 3vw, 42px);
+  font-weight: 700;
+  letter-spacing: -1.2px;
+  line-height: 1.2;
 }
 
 .welcome-copy {
-  max-width: 470px;
-  line-height: 1.85;
+  max-width: 420px;
+
+  margin: 0 0 22px;
+
+  color: var(--register-secondary);
+  font-size: 13px;
+  line-height: 1.8;
 }
 
 .welcome-note {
-  max-width: 440px;
+  max-width: 400px;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  color: var(--register-secondary);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.note-indicator {
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+
+  background: var(--register-primary);
+  border-radius: 50%;
+}
+
+/* ==========================================
+   DECORATIVE ART
+========================================== */
+
+.orbit-art {
+  position: relative;
+
+  width: 230px;
+  height: 230px;
+
+  margin: 32px auto 0;
+}
+
+.orbit {
+  position: absolute;
+  border: 1px solid #dedede;
+  border-radius: 50%;
+}
+
+.orbit-one {
+  inset: 14px;
+}
+
+.orbit-two {
+  inset: 48px;
+}
+
+.orbit-core {
+  position: absolute;
+  inset: 0;
+
+  display: grid;
+  place-items: center;
+
+  color: #171717;
+  font-size: 44px;
+  font-weight: 300;
 }
 
 /* ==========================================
@@ -94,20 +151,20 @@
 
 .auth-card {
   width: 100%;
-  max-width: 720px;
+  max-width: 640px;
   min-width: 0;
 
-  margin-inline: auto;
-
-  padding: clamp(24px, 3.5vw, 44px);
+  margin: 0 auto;
+  padding: 30px;
 
   background: var(--register-surface);
 
   border: 1px solid var(--register-border);
+  border-radius: 16px;
 
-  border-radius: 22px;
-
-  box-shadow: var(--register-shadow);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.025),
+    0 14px 36px rgba(0, 0, 0, 0.055);
 
   overflow: visible;
 }
@@ -117,71 +174,69 @@
 ========================================== */
 
 .form-heading {
-  margin-bottom: 30px;
+  margin-bottom: 24px;
 }
 
 .form-heading .eyebrow {
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .form-heading h2 {
-  margin: 0 0 12px;
+  margin: 0 0 8px;
 
   color: var(--register-text);
 
-  font-size: clamp(26px, 2.4vw, 34px);
+  font-size: 27px;
   font-weight: 700;
 
-  letter-spacing: -0.9px;
-  line-height: 1.2;
+  letter-spacing: -0.7px;
+  line-height: 1.25;
 }
 
 .form-heading > p:last-child {
   margin: 0;
 
-  max-width: 480px;
+  max-width: 460px;
 
   color: var(--register-secondary);
 
-  font-size: 14px;
-  line-height: 1.8;
+  font-size: 12px;
+  line-height: 1.7;
 }
 
 /* ==========================================
-   REGISTRATION FORM
+   FORM LAYOUT
 ========================================== */
 
 .auth-form {
+  width: 100%;
+  min-width: 0;
+
   display: flex;
   flex-direction: column;
 
-  gap: 18px;
-
-  width: 100%;
-  min-width: 0;
+  gap: 13px;
 }
 
 .auth-form mat-form-field {
   display: block;
-
   width: 100%;
   min-width: 0;
 }
 
 /* ==========================================
-   FORM SECTION HEADINGS
+   SECTION HEADINGS
 ========================================== */
 
 .form-section-heading {
   display: flex;
   flex-direction: column;
+  gap: 4px;
 
-  gap: 5px;
+  margin-top: 10px;
+  margin-bottom: 0;
 
-  margin-top: 14px;
-  margin-bottom: 2px;
-
-  padding-bottom: 14px;
+  padding-bottom: 10px;
 
   border-bottom:
     1px solid var(--register-border-light);
@@ -196,10 +251,9 @@
 
   color: var(--register-text);
 
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 650;
 
-  letter-spacing: -0.2px;
   line-height: 1.5;
 }
 
@@ -208,8 +262,8 @@
 
   color: var(--register-secondary);
 
-  font-size: 12px;
-  line-height: 1.7;
+  font-size: 11px;
+  line-height: 1.6;
 }
 
 /* ==========================================
@@ -217,15 +271,14 @@
 ========================================== */
 
 .form-row {
-  display: grid;
+  width: 100%;
+  min-width: 0;
 
+  display: grid;
   grid-template-columns:
     repeat(2, minmax(0, 1fr));
 
-  gap: 16px;
-
-  width: 100%;
-  min-width: 0;
+  gap: 12px;
 
   align-items: start;
 }
@@ -235,7 +288,7 @@
 }
 
 /* ==========================================
-   ANGULAR MATERIAL INPUT FIELDS
+   ANGULAR MATERIAL INPUTS
 ========================================== */
 
 .auth-form {
@@ -260,17 +313,13 @@
     --mdc-outlined-text-field-label-text-color:
       #666666;
 
-    --mat-form-field-container-text-size: 14px;
+    --mat-form-field-container-text-size: 13px;
   }
 
-  input {
-    font-size: 14px;
-    color: var(--register-text);
-  }
-
+  input,
   mat-select {
-    font-size: 14px;
     color: var(--register-text);
+    font-size: 13px;
   }
 
   mat-icon {
@@ -288,8 +337,8 @@
   align-items: center;
   justify-content: center;
 
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
 
   padding: 0;
 
@@ -303,12 +352,12 @@
 }
 
 .auth-form button[mat-icon-button]:hover {
-  background-color: #f1f1f1;
+  background: #f1f1f1;
   color: var(--register-primary);
 }
 
 .auth-form button[mat-icon-button] mat-icon {
-  font-size: 21px;
+  font-size: 20px;
 }
 
 /* ==========================================
@@ -324,19 +373,16 @@
 ========================================== */
 
 .auth-form .submit-button {
-  display: inline-flex;
+  width: 100%;
+  min-height: 50px;
 
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
 
-  gap: 12px;
-
-  width: 100%;
-  min-height: 52px;
-
-  margin-top: 12px;
-
-  padding: 12px 22px;
+  margin-top: 8px;
+  padding: 12px 20px;
 
   background: var(--register-primary);
   color: #ffffff;
@@ -344,14 +390,9 @@
   border: 1px solid var(--register-primary);
   border-radius: 12px;
 
-  box-shadow:
-    0 4px 10px rgba(0, 0, 0, 0.08);
-
   font-family: inherit;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-
-  letter-spacing: 0.1px;
 
   cursor: pointer;
 
@@ -365,29 +406,20 @@
   background: #333333;
 
   box-shadow:
-    0 7px 18px rgba(0, 0, 0, 0.13);
+    0 6px 16px rgba(0, 0, 0, 0.12);
 
   transform: translateY(-1px);
-}
-
-.auth-form .submit-button:not(:disabled):active {
-  transform: translateY(0);
 }
 
 .auth-form .submit-button:disabled {
   opacity: 0.55;
   cursor: not-allowed;
-
-  box-shadow: none;
   transform: none;
 }
 
 .auth-form .submit-button mat-icon {
   color: #ffffff;
-
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
+  font-size: 19px;
 }
 
 /* ==========================================
@@ -396,13 +428,12 @@
 
 .form-footer-note {
   margin: 0;
-
-  padding: 0 8px;
+  padding: 0 6px;
 
   color: var(--register-muted);
 
   font-size: 11px;
-  line-height: 1.8;
+  line-height: 1.7;
 
   text-align: center;
 }
@@ -412,8 +443,8 @@
 ========================================== */
 
 .auth-divider {
-  margin-top: 26px;
-  margin-bottom: 20px;
+  margin-top: 22px;
+  margin-bottom: 16px;
 }
 
 .auth-divider span {
@@ -426,47 +457,38 @@
 ========================================== */
 
 .secondary-action {
-  display: flex;
+  width: 100%;
+  min-height: 46px;
 
+  display: flex;
   align-items: center;
   justify-content: center;
-
   gap: 12px;
 
-  width: 100%;
-  min-height: 48px;
+  padding: 12px 16px;
 
-  padding: 12px 18px;
+  background: #ffffff;
+  color: var(--register-text);
 
   border: 1px solid var(--register-border);
   border-radius: 12px;
 
-  background: #ffffff;
-
-  color: var(--register-text);
-
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
-
   text-decoration: none;
 
   transition:
     background-color 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    border-color 0.2s ease;
 }
 
 .secondary-action:hover {
   background: var(--register-surface-soft);
-
   border-color: #bcbcbc;
-
-  box-shadow:
-    0 3px 10px rgba(0, 0, 0, 0.04);
 }
 
 .secondary-action span {
-  font-size: 18px;
+  font-size: 17px;
 }
 
 /* ==========================================
@@ -475,19 +497,15 @@
 
 .home-link {
   display: inline-flex;
-
   align-items: center;
 
-  margin-top: 22px;
+  margin-top: 18px;
 
   color: var(--register-secondary);
 
   font-size: 12px;
   font-weight: 500;
-
   text-decoration: none;
-
-  transition: color 0.2s ease;
 }
 
 .home-link:hover {
@@ -509,11 +527,11 @@
   }
 
   .auth-card {
-    padding: 28px;
+    padding: 26px;
   }
 
-  .form-row {
-    gap: 12px;
+  .welcome-panel {
+    padding-top: 24px;
   }
 
 }
@@ -524,28 +542,36 @@
 
 @media (max-width: 850px) {
 
+  .auth-shell {
+    padding: 30px 20px 48px;
+  }
+
   .auth-layout {
     grid-template-columns: 1fr;
 
-    max-width: 680px;
+    width: 100%;
+    max-width: 620px;
 
-    gap: 28px;
+    gap: 24px;
   }
 
   .welcome-panel {
     width: 100%;
+    padding-top: 0;
   }
 
-  .welcome-panel h1 {
-    max-width: 600px;
-  }
-
+  .welcome-panel h1,
   .welcome-copy {
-    max-width: 600px;
+    max-width: 100%;
+  }
+
+  .orbit-art {
+    display: none;
   }
 
   .auth-card {
-    max-width: 680px;
+    width: 100%;
+    max-width: 620px;
   }
 
 }
@@ -556,32 +582,43 @@
 
 @media (max-width: 600px) {
 
-  .auth-layout {
-    grid-template-columns: 1fr;
+  .auth-shell {
+    padding: 24px 14px 40px;
+  }
 
+  .auth-layout {
     width: 100%;
-    gap: 22px;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .welcome-panel h1 {
+    font-size: 30px;
+  }
+
+  .welcome-copy {
+    font-size: 12px;
   }
 
   .auth-card {
     width: 100%;
     max-width: 100%;
 
-    padding: 24px 18px;
+    padding: 22px 18px;
 
-    border-radius: 18px;
+    border-radius: 14px;
   }
 
   .form-heading {
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
 
   .form-heading h2 {
-    font-size: 27px;
+    font-size: 25px;
   }
 
   .auth-form {
-    gap: 14px;
+    gap: 12px;
   }
 
   .form-row {
@@ -590,20 +627,12 @@
   }
 
   .form-section-heading {
-    margin-top: 10px;
-    padding-bottom: 12px;
-  }
-
-  .form-section-heading h3 {
-    font-size: 14px;
+    margin-top: 8px;
+    padding-bottom: 10px;
   }
 
   .auth-form .submit-button {
-    min-height: 50px;
-  }
-
-  .form-footer-note {
-    font-size: 11px;
+    min-height: 48px;
   }
 
 }
@@ -619,11 +648,11 @@
   }
 
   .form-heading h2 {
-    font-size: 24px;
+    font-size: 23px;
   }
 
   .auth-form {
-    gap: 12px;
+    gap: 10px;
   }
 
 }

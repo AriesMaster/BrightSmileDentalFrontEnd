@@ -1,105 +1,193 @@
-<div class="home-shell">
-  <mat-toolbar color="primary" class="home-toolbar">
-    <div class="brand-wrap">
-      <span class="brand">BrightSmile Dental</span>
-    </div>
-    <span class="spacer"></span>
-    <nav class="top-nav" aria-label="Main navigation">
-      <a mat-button routerLink="/" class="mat-button">Home</a>
-      <a mat-button routerLink="/services" class="mat-button">Services</a>
-      <a mat-button routerLink="/about" class="mat-button">About</a>
-    </nav>
-    <a mat-raised-button color="accent" routerLink="/login" class="mat-button">Login</a>
-    <a mat-raised-button color="accent" routerLink="/register" class="mat-button">Register</a>
-  </mat-toolbar>
 
-  <main class="page-content">
+<!-- ==========================================
+     BRIGHTSMILE DENTAL
+     HOME PAGE
+========================================== -->
+
+<div class="home-shell">
+
+  <!-- ======================================
+       MAIN PAGE CONTENT
+  ======================================= -->
+
+  <div class="page-content">
+
+    <!-- ======================================
+         HERO SECTION
+    ======================================= -->
+
     <section class="hero-section">
+
+      <!-- HERO TEXT -->
+
       <div class="hero-copy">
-        <p class="eyebrow">Trusted dental care</p>
-        <h1>Modern dentistry for a brighter, healthier smile.</h1>
-        <p class="subheading">
-          Personalized treatments, compassionate specialists, and a patient-first experience designed to make every visit feel easy.
+
+        <p class="eyebrow">
+          Trusted dental care
         </p>
 
+        <h1>
+          Modern dentistry for a brighter,
+          healthier smile.
+        </h1>
+
+        <p class="subheading">
+          Personalized treatments, compassionate
+          specialists, and a patient-first
+          experience designed to make every
+          visit feel easy.
+        </p>
+
+        <!-- HERO ACTIONS -->
+
         <div class="hero-actions">
-          <a mat-raised-button color="primary" routerLink="/register">Book an appointment</a>
+
+          <a
+            mat-raised-button
+            color="primary"
+            routerLink="/register"
+          >
+            Book an Appointment
+          </a>
+
         </div>
+
+        <!-- TRUST INDICATORS -->
 
         <ul class="hero-trust">
-          <li>Same-day appointments</li>
-          <li>Friendly care for all ages</li>
-          <li>Digital, stress-free visits</li>
+
+          <li>
+            Same-day appointments
+          </li>
+
+          <li>
+            Friendly care for all ages
+          </li>
+
+          <li>
+            Digital, stress-free visits
+          </li>
+
         </ul>
+
       </div>
 
-      <div class="hero-visual" aria-label="Dental care overview">
+      <!-- ======================================
+           HERO VISUAL
+      ======================================= -->
+
+      <div
+        class="hero-visual"
+        aria-label="Dental appointment preview"
+      >
+
+        <!-- PATIENT RATING -->
+
         <div class="rating-badge">
-          <span class="star">★</span>
+
+          <span class="star" aria-hidden="true">
+            ★
+          </span>
+
           4.9 patient rating
+
         </div>
 
+        <!-- ==================================
+             APPOINTMENT PREVIEW CARD
+        =================================== -->
+
         <mat-card class="visual-card appointment-card">
+
           <div class="card-header">
-            <span class="mini-label">Upcoming visit</span>
-            <span class="status-dot">●</span>
+
+            <span class="mini-label">
+              Upcoming visit
+            </span>
+
+            <span
+              class="status-dot"
+              aria-hidden="true"
+            >
+              ●
+            </span>
+
           </div>
-          <h2>Smile Care Checkup</h2>
+
+          <h2>
+            Smile Care Checkup
+          </h2>
+
           <div class="appointment-meta">
-            <span>Tue, 10:30 AM</span>
-            <span>Dr. Gomez</span>
+
+            <span>
+              Tue, 10:30 AM
+            </span>
+
+            <span>
+              Dr. Gomez
+            </span>
+
           </div>
+
+          <!-- APPOINTMENT PROGRESS -->
+
           <div class="progress-row">
-            <span>Consultation</span>
-            <strong>85%</strong>
+
+            <span>
+              Consultation
+            </span>
+
+            <strong>
+              85%
+            </strong>
+
           </div>
-          <div class="progress-bar"><span></span></div>
+
+          <div class="progress-bar">
+
+            <span></span>
+
+          </div>
+
         </mat-card>
+
+        <!-- ==================================
+             PRACTICE STATISTICS
+        =================================== -->
 
         <mat-card class="visual-card stats-card">
+
           <div class="stat-item">
-            <strong>2.5k+</strong>
-            <span>happy patients</span>
+
+            <strong>
+              2.5k+
+            </strong>
+
+            <span>
+              happy patients
+            </span>
+
           </div>
+
           <div class="stat-item">
-            <strong>18 yrs</strong>
-            <span>of experience</span>
+
+            <strong>
+              18 yrs
+            </strong>
+
+            <span>
+              of experience
+            </span>
+
           </div>
+
         </mat-card>
+
       </div>
+
     </section>
-  </main>
 
-  <footer class="home-footer">
-    <div class="footer-main">
-      <div class="footer-brand">
-        <a class="footer-logo" routerLink="/">BrightSmile <span>Dental</span></a>
-        <p>Thoughtful dental care for healthier, more confident smiles.</p>
-      </div>
+  </div>
 
-      <nav class="footer-links" aria-label="Footer navigation">
-        <h2>Explore</h2>
-        <a routerLink="/">Home</a>
-        <a routerLink="/services">Services</a>
-        <a routerLink="/about">About us</a>
-      </nav>
-
-      <nav class="footer-links" aria-label="Account links">
-        <h2>Your account</h2>
-        <a routerLink="/login">Log in</a>
-        <a routerLink="/register">Create an account</a>
-      </nav>
-
-      <div class="footer-visit">
-        <p class="eyebrow">Start here</p>
-        <h2>Ready to take care of your smile?</h2>
-        <a mat-flat-button routerLink="/register">Book an appointment <span aria-hidden="true">↗</span></a>
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <span>© BrightSmile Dental</span>
-      <a routerLink="/">Back to top ↑</a>
-    </div>
-  </footer>
 </div>

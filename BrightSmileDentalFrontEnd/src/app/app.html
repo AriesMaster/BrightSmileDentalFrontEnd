@@ -1,1 +1,33 @@
-<router-outlet></router-outlet>
+
+<!-- ==========================================
+     BRIGHTSMILE DENTAL
+     ROOT APPLICATION LAYOUT
+========================================== -->
+
+<div class="app-shell">
+
+  <!-- ======================================
+       SHARED NAVIGATION BAR
+  ======================================= -->
+
+  <app-navbar></app-navbar>
+
+  <!-- ======================================
+       MAIN APPLICATION CONTENT
+  ======================================= -->
+
+  <main class="app-main" id="main-content">
+
+    <!-- Angular renders the active route here -->
+
+    <router-outlet></router-outlet>
+
+  </main>
+
+  <!-- ======================================
+       SHARED FOOTER
+  ======================================= -->
+
+  <app-footer></app-footer>
+
+</div>

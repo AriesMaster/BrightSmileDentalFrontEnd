@@ -1,0 +1,161 @@
+
+/* ==========================================
+   BRIGHTSMILE DENTAL
+   ROOT APPLICATION STYLES
+========================================== */
+
+/*
+ * Root component
+ *
+ * Provides a consistent layout for:
+ * - Shared navbar
+ * - Angular routed pages
+ * - Shared footer
+ */
+
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* ==========================================
+   APPLICATION SHELL
+========================================== */
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+/* ==========================================
+   SHARED NAVIGATION
+========================================== */
+
+app-navbar {
+  display: block;
+  width: 100%;
+
+  flex-shrink: 0;
+
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* ==========================================
+   MAIN APPLICATION CONTENT
+========================================== */
+
+.app-main {
+  display: block;
+
+  flex: 1 0 auto;
+
+  width: 100%;
+  min-width: 0;
+
+  /*
+   * Each routed page manages its own
+   * internal content width and padding.
+   *
+   * This allows full-width hero sections,
+   * dashboards and authentication pages.
+   */
+
+  background-color: #f8fafc;
+}
+
+/* ==========================================
+   ANGULAR ROUTER OUTLET
+========================================== */
+
+/*
+ * router-outlet is an Angular routing
+ * placeholder rather than a visual container.
+ *
+ * The routed component is inserted
+ * immediately after this element.
+ */
+
+router-outlet {
+  display: none;
+}
+
+/* ==========================================
+   SHARED FOOTER
+========================================== */
+
+app-footer {
+  display: block;
+  width: 100%;
+
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+/* ==========================================
+   ACCESSIBILITY
+========================================== */
+
+:host {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================
+   RESPONSIVE LAYOUT
+========================================== */
+
+@media (max-width: 768px) {
+
+  .app-main {
+    width: 100%;
+    min-width: 0;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .app-shell {
+    min-width: 0;
+  }
+
+  .app-main {
+    overflow-wrap: break-word;
+  }
+
+}
+
+/* ==========================================
+   PRINT STYLES
+========================================== */
+
+@media print {
+
+  app-navbar,
+  app-footer {
+    display: none !important;
+  }
+
+  .app-shell {
+    display: block;
+    min-height: auto;
+    background: #ffffff;
+  }
+
+  .app-main {
+    display: block;
+    background: #ffffff;
+  }
+
+}

@@ -6,78 +6,50 @@
 
 <main class="auth-shell">
 
-  <!-- ========================================
-       PAGE HEADER
-  ========================================= -->
-
-  <header class="auth-header">
-
-    <a
-      routerLink="/"
-      class="auth-brand"
-      aria-label="BrightSmile Dental Home"
-    >
-      BrightSmile<span>Dental</span>
-    </a>
-
-    <a
-      routerLink="/"
-      class="header-home-link"
-    >
-      Back to website
-      <span aria-hidden="true">→</span>
-    </a>
-
-  </header>
-
-
-  <!-- ========================================
-       INTRODUCTION
-  ========================================= -->
 
   <section class="auth-intro">
 
-    <p class="eyebrow">
-      BRIGHTSMILE DENTAL PORTAL
-    </p>
-
     <h1>
-      Welcome to BrightSmile Dental
+      Welcome Back
     </h1>
 
     <p>
-      Sign in to your account or explore
-      the application using our demo accounts.
+      Sign in to access your dental dashboard.
     </p>
 
   </section>
 
 
   <!-- ========================================
-       TWO-COLUMN LOGIN LAYOUT
+       LOGIN LAYOUT
   ========================================= -->
 
   <div class="auth-layout">
 
     <!-- ======================================
-         LEFT: LOGIN FORM
+         LOGIN CARD
     ======================================= -->
 
     <mat-card class="auth-card">
 
       <div class="form-heading">
 
+        <p class="eyebrow">
+          Account access
+        </p>
+
         <h2>
           Sign In
         </h2>
 
         <p>
-          Enter your credentials to access
-          your dashboard.
+          Enter your account details below.
         </p>
 
       </div>
 
+
+      <!-- LOGIN FORM -->
 
       <form
         class="auth-form"
@@ -96,8 +68,8 @@
           <input
             matInput
             id="email"
-            type="email"
             name="email"
+            type="email"
             [(ngModel)]="email"
             #emailControl="ngModel"
             placeholder="you@example.com"
@@ -131,8 +103,8 @@
           <input
             matInput
             id="password"
-            type="password"
             name="password"
+            type="password"
             [(ngModel)]="password"
             #passwordControl="ngModel"
             placeholder="Enter your password"
@@ -196,12 +168,11 @@
           <div>
 
             <strong>
-              {{ selectedDemoRole }} Demo Selected
+              {{ selectedDemoRole }} account selected
             </strong>
 
             <p>
-              Your login details are ready.
-              Click Sign In to continue.
+              Your login details have been filled in.
             </p>
 
           </div>
@@ -211,7 +182,7 @@
             class="clear-selection"
             (click)="clearDemoSelection()"
             [disabled]="isSubmitting"
-            aria-label="Clear demo account selection"
+            aria-label="Clear selected demo account"
           >
             ×
           </button>
@@ -224,15 +195,10 @@
       <!-- REGISTRATION -->
 
       <div class="auth-divider">
-        <span>New to BrightSmile?</span>
+        <span>Don't have an account?</span>
       </div>
 
       <div class="registration-section">
-
-        <p>
-          Create a patient account to book
-          appointments and manage your visits.
-        </p>
 
         <a
           routerLink="/register"
@@ -251,31 +217,30 @@
 
 
     <!-- ======================================
-         RIGHT: DEMO ACCESS CARD
+         DEMO LOGIN DETAILS CARD
     ======================================= -->
 
     <mat-card class="demo-card">
 
       <div class="demo-heading">
 
-        <span class="demo-badge">
-          INTERACTIVE PORTFOLIO DEMO
-        </span>
+        <p class="eyebrow">
+          DEMONSTRATION ACCESS
+        </p>
 
         <h2>
-          Explore Demo Accounts
+          Demo Login Details
         </h2>
 
         <p>
-          Want to see how the system works?
-          Select an account below to fill
-          in the login form automatically.
+          Select an account to automatically
+          fill in the login form.
         </p>
 
       </div>
 
 
-      <!-- DEMO ROLE ACCOUNTS -->
+      <!-- DEMO ACCOUNT EMAILS -->
 
       <div class="demo-accounts">
 
@@ -303,10 +268,6 @@
                 {{ account.email }}
               </span>
 
-              <span class="account-description">
-                {{ account.description }}
-              </span>
-
             </span>
 
             <span
@@ -323,18 +284,18 @@
       </div>
 
 
-      <!-- SHARED DEMO PASSWORD -->
+      <!-- DEMO PASSWORD -->
 
       <div class="demo-password-box">
 
         <div class="password-heading">
 
           <span>
-            Demo Password
+            Password
           </span>
 
           <span class="password-label">
-            ALL ACCOUNTS
+            All demo accounts
           </span>
 
         </div>
@@ -343,219 +304,11 @@
           Demo@1234
         </code>
 
-        <p>
-          All three demo accounts use
-          this password.
-        </p>
-
       </div>
-
-
-      <!-- HOW IT WORKS -->
-
-      <div class="demo-instructions">
-
-        <h3>
-          How to explore
-        </h3>
-
-        <p>
-          Choose an account, then click
-          Sign In to explore its dashboard
-          and available features.
-        </p>
-
-      </div>
-
-
-      <!-- PROJECT INFORMATION -->
-
-      <div class="demo-project-info">
-
-        <strong>
-          About this project
-        </strong>
-
-        <p>
-          BrightSmile Dental demonstrates
-          secure authentication, role-based
-          authorization, and dental appointment
-          management using Angular,
-          ASP.NET Core, and PostgreSQL.
-        </p>
-
-      </div>
-
-
-      <!-- DEMO DISCLAIMER -->
-
-      <p class="demo-disclaimer">
-        This is a demonstration application.
-        Please use fictional information
-        only. Do not enter real patient
-        or medical information.
-      </p>
-
-
-      <button
-        type="button"
-        class="demo-info-button"
-        (click)="openWelcomeDialog()"
-      >
-        More about this demo
-        <span aria-hidden="true">→</span>
-      </button>
 
     </mat-card>
 
   </div>
 
 
-  <!-- ========================================
-       FOOTER
-  ========================================= -->
-
-  <footer class="auth-footer">
-
-    <span>
-      © 2026 BrightSmile Dental
-    </span>
-
-    <span>
-      Full-Stack Portfolio Demonstration
-    </span>
-
-  </footer>
-
 </main>
-
-
-<!-- ==========================================
-     COMPACT WELCOME POPUP
-========================================== -->
-
-@if (showWelcomeDialog) {
-
-  <div class="demo-modal-backdrop">
-
-    <section
-      class="demo-modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="demo-modal-title"
-      aria-describedby="demo-modal-description"
-      cdkTrapFocus
-      [cdkTrapFocusAutoCapture]="true"
-    >
-
-      <!-- POPUP HEADER -->
-
-      <div class="demo-modal-header">
-
-        <span class="demo-modal-badge">
-          BRIGHTSMILE DENTAL DEMO
-        </span>
-
-        <h2 id="demo-modal-title">
-          Welcome! Explore the Demo
-        </h2>
-
-        <p id="demo-modal-description">
-          This is a full-stack dental
-          management application.
-
-          You can explore the system using
-          these ready-to-use demo accounts.
-        </p>
-
-      </div>
-
-
-      <!-- LOGIN DETAILS -->
-
-      <div class="demo-modal-accounts">
-
-        <h3>
-          Demo Login Details
-        </h3>
-
-        <div class="modal-account-list">
-
-          @for (
-            account of demoAccounts;
-            track account.role
-          ) {
-
-            <div class="modal-account-row">
-
-              <strong>
-                {{ account.role }}
-              </strong>
-
-              <span>
-                {{ account.email }}
-              </span>
-
-            </div>
-
-          }
-
-        </div>
-
-      </div>
-
-
-      <!-- SHARED PASSWORD -->
-
-      <div class="demo-modal-password">
-
-        <span>
-          Password for all accounts
-        </span>
-
-        <strong>
-          Demo@1234
-        </strong>
-
-      </div>
-
-
-      <!-- PATIENT REGISTRATION -->
-
-      <p class="demo-modal-registration">
-        You can also register as a new
-        Patient and explore appointment
-        booking using sample information.
-      </p>
-
-
-      <!-- SAFETY NOTICE -->
-
-      <p class="demo-modal-notice">
-        Demo environment — please do not
-        enter real patient or medical details.
-      </p>
-
-
-      <!-- DISMISS BUTTON -->
-
-      <button
-        type="button"
-        class="demo-modal-dismiss"
-        (click)="dismissWelcomeDialog()"
-        cdkFocusInitial
-      >
-
-        Okay, Explore the Demo
-
-        <span aria-hidden="true">
-          →
-        </span>
-
-      </button>
-
-    </section>
-
-  </div>
-
-}

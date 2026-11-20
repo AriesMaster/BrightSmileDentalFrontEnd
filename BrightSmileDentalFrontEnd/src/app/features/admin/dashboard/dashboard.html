@@ -1,5 +1,261 @@
-<h1>Admin Dashboard</h1>
 
-<p>Welcome {{ email }}</p>
+<!-- ==========================================
+     BRIGHTSMILE DENTAL
+     ADMIN DASHBOARD
+========================================== -->
 
-<p>Your role is {{ role }}</p>
+<div class="dashboard-shell">
+
+  <main class="dashboard-container">
+
+    <!-- ======================================
+         DASHBOARD HEADER
+    ======================================= -->
+
+    <header class="dashboard-header">
+
+      <div class="header-content">
+
+        <p class="eyebrow">
+          ADMINISTRATION PORTAL
+        </p>
+
+        <h1>Admin Dashboard</h1>
+
+        <p class="header-description">
+          Manage your dental practice, users,
+          services and appointments from one
+          central workspace.
+        </p>
+
+      </div>
+
+      <!-- HEADER ACTIONS -->
+
+      <div class="header-actions">
+
+        <!-- MY PROFILE -->
+
+        <a
+          mat-stroked-button
+          routerLink="/profile"
+          aria-label="View and edit your administrator profile"
+        >
+          <mat-icon>account_circle</mat-icon>
+          My Profile
+        </a>
+
+        <!-- LOGOUT -->
+
+        <button
+          mat-stroked-button
+          type="button"
+          (click)="logout()"
+          aria-label="Sign out of your administrator account"
+        >
+          <mat-icon>logout</mat-icon>
+          Logout
+        </button>
+
+      </div>
+
+    </header>
+
+    <!-- ======================================
+         ADMIN ACCOUNT OVERVIEW
+    ======================================= -->
+
+    <section
+      class="welcome-section"
+      aria-labelledby="welcome-title"
+    >
+
+      <mat-card class="dashboard-card">
+
+        <mat-card-content>
+
+          <div class="welcome-icon">
+            <mat-icon>admin_panel_settings</mat-icon>
+          </div>
+
+          <p class="welcome-eyebrow">
+            ADMINISTRATOR WORKSPACE
+          </p>
+
+          <h2 id="welcome-title">
+            Welcome to BrightSmileDental
+          </h2>
+
+          <p class="welcome-description">
+            Your central administration workspace
+            for overseeing dental practice operations,
+            managing accounts and maintaining
+            dental services.
+          </p>
+
+          <!-- ACCOUNT DETAILS -->
+
+          <div class="account-overview">
+
+            <div class="account-detail">
+
+              <span class="account-label">
+                Signed in as
+              </span>
+
+              <span class="account-value">
+                {{ email() || 'Administrator' }}
+              </span>
+
+            </div>
+
+            <div class="account-detail">
+
+              <span class="account-label">
+                Account Role
+              </span>
+
+              <span class="role-badge">
+                {{ role() || 'Admin' }}
+              </span>
+
+            </div>
+
+          </div>
+
+          <!-- PROFILE ACTION -->
+
+          <div class="dashboard-actions">
+
+            <a
+              mat-flat-button
+              routerLink="/profile"
+              aria-label="Manage your administrator profile"
+            >
+              <mat-icon>manage_accounts</mat-icon>
+              Manage My Profile
+            </a>
+
+          </div>
+
+        </mat-card-content>
+
+      </mat-card>
+
+    </section>
+
+    <!-- ======================================
+         ADMIN MANAGEMENT FEATURES
+    ======================================= -->
+
+    <section
+      class="management-section"
+      aria-labelledby="management-title"
+    >
+
+      <div class="section-header">
+
+        <div>
+
+          <h2 id="management-title">
+            Practice Management
+          </h2>
+
+          <p>
+            Administration tools for managing
+            BrightSmileDental operations.
+          </p>
+
+        </div>
+
+      </div>
+
+      <!-- MANAGEMENT CARDS -->
+
+      <div class="management-grid">
+
+        @for (
+          feature of dashboardFeatures;
+          track feature.title
+        ) {
+
+          <mat-card class="management-card">
+
+            <mat-card-content>
+
+              <!-- FEATURE ICON -->
+
+              <div class="management-icon">
+
+                <mat-icon>
+                  {{ feature.icon }}
+                </mat-icon>
+
+              </div>
+
+              <!-- FEATURE INFORMATION -->
+
+              <h3>
+                {{ feature.title }}
+              </h3>
+
+              <p>
+                {{ feature.description }}
+              </p>
+
+              <!-- FEATURE STATUS -->
+
+              <span class="feature-status">
+                {{ feature.status }}
+              </span>
+
+            </mat-card-content>
+
+          </mat-card>
+
+        }
+
+      </div>
+
+    </section>
+
+    <!-- ======================================
+         ADMINISTRATION INFORMATION
+    ======================================= -->
+
+    <section
+      class="information-section"
+      aria-labelledby="information-title"
+    >
+
+      <div class="information-content">
+
+        <div class="information-icon">
+          <mat-icon>info_outline</mat-icon>
+        </div>
+
+        <div>
+
+          <h2 id="information-title">
+            Administration Workspace
+          </h2>
+
+          <p>
+            Your administrator account provides
+            access to the management features
+            being developed for BrightSmileDental.
+            User management, dentist management,
+            dental services and appointment
+            oversight will be introduced as
+            these modules are implemented.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>

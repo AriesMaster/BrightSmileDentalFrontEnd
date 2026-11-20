@@ -1,0 +1,215 @@
+
+<!-- ==========================================
+     BRIGHTSMILE DENTAL
+     DENTIST DASHBOARD
+========================================== -->
+
+<div class="dashboard-shell">
+
+  <main class="dashboard-container">
+
+    <!-- ======================================
+         DASHBOARD HEADER
+    ======================================= -->
+
+    <header class="dashboard-header">
+
+      <div class="header-content">
+
+        <p class="eyebrow">
+          DENTIST PORTAL
+        </p>
+
+        <h1>Dentist Dashboard</h1>
+
+        <p class="header-description">
+          Welcome to your BrightSmileDental
+          dentist workspace.
+        </p>
+
+      </div>
+
+      <!-- HEADER ACTIONS -->
+
+      <div class="header-actions">
+
+        <!-- MY PROFILE -->
+
+        <a
+          mat-stroked-button
+          routerLink="/profile"
+          aria-label="View and edit your profile"
+        >
+          <mat-icon>account_circle</mat-icon>
+          My Profile
+        </a>
+
+        <!-- LOGOUT -->
+
+        <button
+          mat-stroked-button
+          type="button"
+          (click)="logout()"
+          aria-label="Sign out of your account"
+        >
+          <mat-icon>logout</mat-icon>
+          Logout
+        </button>
+
+      </div>
+
+    </header>
+
+    <!-- ======================================
+         WELCOME SECTION
+    ======================================= -->
+
+    <section
+      class="welcome-section"
+      aria-labelledby="welcome-title"
+    >
+
+      <mat-card class="dashboard-card">
+
+        <mat-card-content>
+
+          <div class="welcome-icon">
+            <mat-icon>medical_services</mat-icon>
+          </div>
+
+          <h2 id="welcome-title">
+            Welcome to Your Workspace
+          </h2>
+
+          <p class="welcome-description">
+            Your central workspace for managing
+            dental appointments, reviewing patient
+            bookings and keeping your professional
+            information up to date.
+          </p>
+
+          <div class="dashboard-actions">
+
+            <a
+              mat-flat-button
+              routerLink="/profile"
+              aria-label="Manage your personal profile"
+            >
+              <mat-icon>person</mat-icon>
+              Manage My Profile
+            </a>
+
+          </div>
+
+        </mat-card-content>
+
+      </mat-card>
+
+    </section>
+
+    <!-- ======================================
+         WORKSPACE OVERVIEW
+    ======================================= -->
+
+    <section
+      class="workspace-section"
+      aria-labelledby="workspace-title"
+    >
+
+      <div class="section-header">
+
+        <h2 id="workspace-title">
+          Workspace Overview
+        </h2>
+
+        <p>
+          Your dental practice management tools.
+        </p>
+
+      </div>
+
+      <div class="workspace-grid">
+
+        <!-- APPOINTMENTS -->
+
+        <mat-card class="workspace-card">
+
+          <mat-card-content>
+
+            <div class="workspace-icon appointments-icon">
+              <mat-icon>event_note</mat-icon>
+            </div>
+
+            <h3>Appointments</h3>
+
+            <p>
+              View your scheduled appointments
+              and manage upcoming dental visits.
+            </p>
+
+            <span class="feature-status">
+              Coming Soon
+            </span>
+
+          </mat-card-content>
+
+        </mat-card>
+
+        <!-- PATIENTS -->
+
+        <mat-card class="workspace-card">
+
+          <mat-card-content>
+
+            <div class="workspace-icon patients-icon">
+              <mat-icon>groups</mat-icon>
+            </div>
+
+            <h3>Patients</h3>
+
+            <p>
+              Access relevant patient information
+              associated with your appointments.
+            </p>
+
+            <span class="feature-status">
+              Coming Soon
+            </span>
+
+          </mat-card-content>
+
+        </mat-card>
+
+        <!-- SCHEDULE -->
+
+        <mat-card class="workspace-card">
+
+          <mat-card-content>
+
+            <div class="workspace-icon schedule-icon">
+              <mat-icon>calendar_month</mat-icon>
+            </div>
+
+            <h3>My Schedule</h3>
+
+            <p>
+              Organize your availability
+              and review your upcoming
+              appointment schedule.
+            </p>
+
+            <span class="feature-status">
+              Coming Soon
+            </span>
+
+          </mat-card-content>
+
+        </mat-card>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>

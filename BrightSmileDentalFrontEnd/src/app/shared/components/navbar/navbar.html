@@ -1,0 +1,397 @@
+
+<!-- ==========================================
+     BRIGHTSMILE DENTAL
+     SHARED NAVIGATION BAR
+========================================== -->
+
+<header class="site-header">
+
+  <nav
+    class="navbar"
+    aria-label="Main navigation"
+  >
+
+    <div class="navbar-container">
+
+      <!-- ======================================
+           BRAND / LOGO
+      ======================================= -->
+
+      <a
+        class="navbar-brand"
+        routerLink="/"
+        (click)="closeMobileMenu()"
+        aria-label="BrightSmile Dental home"
+      >
+
+        <span class="brand-icon" aria-hidden="true">
+          <svg
+            viewBox="0 0 48 48"
+            width="38"
+            height="38"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="24"
+              cy="24"
+              r="22"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+
+            <path
+              d="M13 26C18 34 30 34 35 26"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+            />
+
+            <path
+              d="M17 17H17.1M31 17H31.1"
+              stroke="currentColor"
+              stroke-width="4"
+              stroke-linecap="round"
+            />
+          </svg>
+        </span>
+
+        <span class="brand-text">
+          <span class="brand-name">
+            BrightSmile
+          </span>
+
+          <span class="brand-subtitle">
+            DENTAL
+          </span>
+        </span>
+
+      </a>
+
+      <!-- ======================================
+           DESKTOP NAVIGATION
+      ======================================= -->
+
+      <div class="desktop-navigation">
+
+        <!-- PUBLIC LINKS -->
+
+        <div class="nav-links">
+
+          <a
+            routerLink="/"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            Home
+          </a>
+
+          <a
+            routerLink="/services"
+            routerLinkActive="active"
+          >
+            Services
+          </a>
+
+          <a
+            routerLink="/about"
+            routerLinkActive="active"
+          >
+            About Us
+          </a>
+
+          <!-- AUTHENTICATED NAVIGATION -->
+
+          @if (isAuthenticated()) {
+
+            <a
+              [routerLink]="dashboardRoute()"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+            >
+              Dashboard
+            </a>
+
+            @if (isPatient()) {
+
+              <a
+                routerLink="/patient/book-appointment"
+                routerLinkActive="active"
+              >
+                Book Appointment
+              </a>
+
+            }
+
+            <a
+              routerLink="/profile"
+              routerLinkActive="active"
+            >
+              My Profile
+            </a>
+
+          }
+
+        </div>
+
+        <!-- ======================================
+             DESKTOP ACCOUNT ACTIONS
+        ======================================= -->
+
+        <div class="nav-actions">
+
+          @if (!isAuthenticated()) {
+
+            <!-- LOGIN -->
+
+            <a
+              class="btn btn-outline"
+              routerLink="/login"
+            >
+              Login
+            </a>
+
+            <!-- REGISTER -->
+
+            <a
+              class="btn btn-primary"
+              routerLink="/register"
+            >
+              Get Started
+            </a>
+
+          } @else {
+
+            <!-- USER ROLE -->
+
+            <span
+              class="user-role"
+              aria-label="Account role"
+            >
+              {{ currentUserRole() }}
+            </span>
+
+            <!-- LOGOUT -->
+
+            <button
+              class="btn btn-outline logout-button"
+              type="button"
+              (click)="logout()"
+            >
+              Logout
+            </button>
+
+          }
+
+        </div>
+
+      </div>
+
+      <!-- ======================================
+           MOBILE MENU TOGGLE
+      ======================================= -->
+
+      <button
+        class="mobile-menu-toggle"
+        type="button"
+        (click)="toggleMobileMenu()"
+        [attr.aria-expanded]="isMobileMenuOpen()"
+        aria-controls="mobile-navigation"
+        [attr.aria-label]="
+          isMobileMenuOpen()
+            ? 'Close navigation menu'
+            : 'Open navigation menu'
+        "
+      >
+
+        @if (!isMobileMenuOpen()) {
+
+          <!-- HAMBURGER ICON -->
+
+          <svg
+            viewBox="0 0 24 24"
+            width="26"
+            height="26"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M4 6H20" />
+            <path d="M4 12H20" />
+            <path d="M4 18H20" />
+          </svg>
+
+        } @else {
+
+          <!-- CLOSE ICON -->
+
+          <svg
+            viewBox="0 0 24 24"
+            width="26"
+            height="26"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M6 6L18 18" />
+            <path d="M18 6L6 18" />
+          </svg>
+
+        }
+
+      </button>
+
+    </div>
+
+    <!-- ======================================
+         MOBILE NAVIGATION
+    ======================================= -->
+
+    <div
+      id="mobile-navigation"
+      class="mobile-navigation"
+      [class.mobile-open]="isMobileMenuOpen()"
+      [attr.inert]="isMobileMenuOpen() ? null : ''"
+    >
+
+      <div class="mobile-nav-links">
+
+        <!-- HOME -->
+
+        <a
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="closeMobileMenu()"
+        >
+          Home
+        </a>
+
+        <!-- SERVICES -->
+
+        <a
+          routerLink="/services"
+          routerLinkActive="active"
+          (click)="closeMobileMenu()"
+        >
+          Services
+        </a>
+
+        <!-- ABOUT -->
+
+        <a
+          routerLink="/about"
+          routerLinkActive="active"
+          (click)="closeMobileMenu()"
+        >
+          About Us
+        </a>
+
+        <!-- ======================================
+             AUTHENTICATED MOBILE LINKS
+        ======================================= -->
+
+        @if (isAuthenticated()) {
+
+          <!-- DASHBOARD -->
+
+          <a
+            [routerLink]="dashboardRoute()"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="closeMobileMenu()"
+          >
+            Dashboard
+          </a>
+
+          <!-- PATIENT BOOKING -->
+
+          @if (isPatient()) {
+
+            <a
+              routerLink="/patient/book-appointment"
+              routerLinkActive="active"
+              (click)="closeMobileMenu()"
+            >
+              Book Appointment
+            </a>
+
+          }
+
+          <!-- PROFILE -->
+
+          <a
+            routerLink="/profile"
+            routerLinkActive="active"
+            (click)="closeMobileMenu()"
+          >
+            My Profile
+          </a>
+
+          <!-- ACCOUNT ROLE -->
+
+          <div class="mobile-account-info">
+
+            <span class="account-label">
+              Signed in as
+            </span>
+
+            <span class="account-email">
+              {{ currentUserEmail() }}
+            </span>
+
+            <span class="mobile-role-badge">
+              {{ currentUserRole() }}
+            </span>
+
+          </div>
+
+          <!-- LOGOUT -->
+
+          <button
+            class="btn btn-outline mobile-logout"
+            type="button"
+            (click)="logout()"
+          >
+            Logout
+          </button>
+
+        } @else {
+
+          <!-- ======================================
+               GUEST MOBILE ACTIONS
+          ======================================= -->
+
+          <div class="mobile-auth-actions">
+
+            <a
+              class="btn btn-outline"
+              routerLink="/login"
+              (click)="closeMobileMenu()"
+            >
+              Login
+            </a>
+
+            <a
+              class="btn btn-primary"
+              routerLink="/register"
+              (click)="closeMobileMenu()"
+            >
+              Get Started
+            </a>
+
+          </div>
+
+        }
+
+      </div>
+
+    </div>
+
+  </nav>
+
+</header>

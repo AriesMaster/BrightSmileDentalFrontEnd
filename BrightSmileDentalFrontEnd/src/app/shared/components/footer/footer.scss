@@ -1,0 +1,413 @@
+
+/* ==========================================
+   BRIGHTSMILE DENTAL
+   SHARED FOOTER STYLES
+========================================== */
+
+:host {
+  display: block;
+  width: 100%;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ==========================================
+   FOOTER CONTAINER
+========================================== */
+
+.site-footer {
+  width: 100%;
+  background: #0f172a;
+  color: #cbd5e1;
+}
+
+.footer-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 64px 24px 24px;
+}
+
+/* ==========================================
+   FOOTER GRID
+========================================== */
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+  gap: 48px;
+  padding-bottom: 48px;
+}
+
+/* ==========================================
+   BRANDING
+========================================== */
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.footer-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  color: #ffffff;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.85;
+  }
+}
+
+.brand-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #60a5fa;
+
+  svg {
+    display: block;
+  }
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.brand-name {
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  line-height: 1.1;
+}
+
+.brand-subtitle {
+  color: #60a5fa;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+}
+
+.brand-description {
+  max-width: 320px;
+  margin: 0 0 18px;
+  color: #94a3b8;
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.brand-tagline {
+  margin: 0;
+  color: #e2e8f0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ==========================================
+   FOOTER COLUMNS
+========================================== */
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+
+  h2 {
+    position: relative;
+    margin: 0 0 26px;
+    padding-bottom: 14px;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 32px;
+      height: 3px;
+      border-radius: 3px;
+      background: #3b82f6;
+    }
+  }
+}
+
+/* ==========================================
+   FOOTER NAVIGATION LINKS
+========================================== */
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    margin: 0;
+    padding: 0;
+  }
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    color: #94a3b8;
+    font-size: 14px;
+    line-height: 1.5;
+    text-decoration: none;
+    transition:
+      color 0.2s ease,
+      transform 0.2s ease;
+
+    &:hover {
+      color: #60a5fa;
+      transform: translateX(3px);
+    }
+  }
+}
+
+/* ==========================================
+   CONTACT INFORMATION
+========================================== */
+
+.contact-column {
+  min-width: 0;
+}
+
+.contact-description {
+  margin: 0 0 22px;
+  color: #94a3b8;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #cbd5e1;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #60a5fa;
+  }
+}
+
+.contact-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 9px;
+  background: rgba(59, 130, 246, 0.12);
+  color: #60a5fa;
+}
+
+/* ==========================================
+   FOOTER CALL TO ACTION
+========================================== */
+
+.footer-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 44px;
+  margin-top: 24px;
+  padding: 11px 16px;
+  border: 1px solid #3b82f6;
+  border-radius: 9px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+
+  &:hover {
+    background: #1d4ed8;
+    border-color: #2563eb;
+    transform: translateY(-2px);
+  }
+
+  span {
+    font-size: 18px;
+    line-height: 1;
+  }
+}
+
+/* ==========================================
+   FOOTER BOTTOM
+========================================== */
+
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.copyright,
+.footer-credit {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ==========================================
+   KEYBOARD ACCESSIBILITY
+========================================== */
+
+.site-footer a:focus-visible {
+  outline: 2px solid #93c5fd;
+  outline-offset: 4px;
+  border-radius: 3px;
+}
+
+/* ==========================================
+   MEDIUM DESKTOP
+========================================== */
+
+@media (max-width: 1100px) {
+
+  .footer-grid {
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 36px;
+  }
+
+  .contact-column {
+    grid-column: 1 / -1;
+    max-width: 480px;
+  }
+
+}
+
+/* ==========================================
+   TABLET RESPONSIVENESS
+========================================== */
+
+@media (max-width: 768px) {
+
+  .footer-container {
+    padding: 48px 24px 24px;
+  }
+
+  .footer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px 28px;
+    padding-bottom: 40px;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+
+  .brand-description {
+    max-width: 480px;
+  }
+
+  .contact-column {
+    grid-column: auto;
+    max-width: none;
+  }
+
+}
+
+/* ==========================================
+   MOBILE RESPONSIVENESS
+========================================== */
+
+@media (max-width: 560px) {
+
+  .footer-container {
+    padding: 40px 20px 24px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 34px;
+    padding-bottom: 36px;
+  }
+
+  .footer-brand,
+  .contact-column {
+    grid-column: auto;
+  }
+
+  .footer-logo {
+    margin-bottom: 18px;
+  }
+
+  .brand-name {
+    font-size: 21px;
+  }
+
+  .brand-description {
+    max-width: 100%;
+    font-size: 13px;
+  }
+
+  .footer-column h2 {
+    margin-bottom: 20px;
+  }
+
+  .footer-links {
+    gap: 13px;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .footer-cta {
+    width: 100%;
+    max-width: 320px;
+  }
+
+}
+
+/* ==========================================
+   REDUCED MOTION
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+}

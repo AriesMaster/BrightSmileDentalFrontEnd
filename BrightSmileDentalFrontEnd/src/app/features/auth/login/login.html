@@ -1,71 +1,84 @@
 
+<!-- ==========================================
+     BRIGHTSMILE DENTAL
+     LOGIN PAGE
+========================================== -->
+
 <main class="auth-shell">
 
+  <!-- ========================================
+       PAGE HEADER
+  ========================================= -->
+
+  <header class="auth-header">
+
+    <a
+      routerLink="/"
+      class="auth-brand"
+      aria-label="BrightSmile Dental Home"
+    >
+      BrightSmile<span>Dental</span>
+    </a>
+
+    <a
+      routerLink="/"
+      class="header-home-link"
+    >
+      Back to website
+      <span aria-hidden="true">→</span>
+    </a>
+
+  </header>
+
+
+  <!-- ========================================
+       INTRODUCTION
+  ========================================= -->
+
+  <section class="auth-intro">
+
+    <p class="eyebrow">
+      BRIGHTSMILE DENTAL PORTAL
+    </p>
+
+    <h1>
+      Welcome to BrightSmile Dental
+    </h1>
+
+    <p>
+      Sign in to your account or explore
+      the application using our demo accounts.
+    </p>
+
+  </section>
+
+
+  <!-- ========================================
+       TWO-COLUMN LOGIN LAYOUT
+  ========================================= -->
 
   <div class="auth-layout">
 
-    <!-- WELCOME PANEL -->
-    <section
-      class="welcome-panel"
-      aria-labelledby="welcome-title"
-    >
+    <!-- ======================================
+         LEFT: LOGIN FORM
+    ======================================= -->
 
-      <p class="eyebrow">
-        Your care, in sync
-      </p>
-
-      <h1 id="welcome-title">
-        A brighter smile starts with you.
-      </h1>
-
-      <p class="welcome-copy">
-        Sign in to manage your visits,
-        stay connected with your care team,
-        and keep your smile moving forward.
-      </p>
-
-      <div class="welcome-note">
-
-        <span
-          class="note-indicator"
-          aria-hidden="true"
-        ></span>
-
-        <span>
-          Thoughtful dental care, made simple.
-        </span>
-
-      </div>
-
-      <!-- DECORATIVE ART -->
-      <div class="orbit-art" aria-hidden="true">
-        <span class="orbit orbit-one"></span>
-        <span class="orbit orbit-two"></span>
-        <span class="orbit-core">+</span>
-      </div>
-
-    </section>
-
-    <!-- LOGIN CARD -->
     <mat-card class="auth-card">
 
       <div class="form-heading">
 
-        <p class="eyebrow">
-          BrightSmile portal
-        </p>
-
         <h2>
-          Welcome back
+          Sign In
         </h2>
 
         <p>
-          Sign in to access your BrightSmile account.
+          Enter your credentials to access
+          your dashboard.
         </p>
 
       </div>
 
-      <!-- LOGIN FORM -->
+
       <form
         class="auth-form"
         (ngSubmit)="login()"
@@ -73,6 +86,7 @@
       >
 
         <!-- EMAIL -->
+
         <mat-form-field appearance="outline">
 
           <mat-label>
@@ -96,14 +110,18 @@
             emailControl.invalid &&
             (emailControl.dirty || emailControl.touched)
           ) {
+
             <mat-error>
               Please enter a valid email address.
             </mat-error>
+
           }
 
         </mat-form-field>
 
+
         <!-- PASSWORD -->
+
         <mat-form-field appearance="outline">
 
           <mat-label>
@@ -126,68 +144,418 @@
             passwordControl.invalid &&
             (passwordControl.dirty || passwordControl.touched)
           ) {
+
             <mat-error>
               Please enter your password.
             </mat-error>
+
           }
 
         </mat-form-field>
 
-        <!-- SUBMIT -->
+
+        <!-- SIGN IN BUTTON -->
+
         <button
           mat-flat-button
-          color="primary"
           type="submit"
+          class="sign-in-button"
           [disabled]="isSubmitting || loginForm.invalid"
         >
 
-          {{
-            isSubmitting
-              ? 'Signing in...'
-              : 'Sign in'
-          }}
+          <span>
+            {{
+              isSubmitting
+                ? 'Signing in...'
+                : 'Sign In'
+            }}
+          </span>
 
-          <span aria-hidden="true">↗</span>
+          <span aria-hidden="true">
+            →
+          </span>
 
         </button>
 
       </form>
 
-      <!-- REGISTRATION LINK -->
+
+      <!-- SELECTED DEMO ACCOUNT -->
+
+      @if (selectedDemoRole) {
+
+        <div
+          class="selected-account"
+          role="status"
+        >
+
+          <span class="selected-icon">
+            ✓
+          </span>
+
+          <div>
+
+            <strong>
+              {{ selectedDemoRole }} Demo Selected
+            </strong>
+
+            <p>
+              Your login details are ready.
+              Click Sign In to continue.
+            </p>
+
+          </div>
+
+          <button
+            type="button"
+            class="clear-selection"
+            (click)="clearDemoSelection()"
+            [disabled]="isSubmitting"
+            aria-label="Clear demo account selection"
+          >
+            ×
+          </button>
+
+        </div>
+
+      }
+
+
+      <!-- REGISTRATION -->
+
       <div class="auth-divider">
         <span>New to BrightSmile?</span>
       </div>
 
-      <a
-        class="secondary-action"
-        routerLink="/register"
-      >
-        Create a patient account
-        <span aria-hidden="true">→</span>
-      </a>
+      <div class="registration-section">
 
-      <a
-        class="home-link"
-        routerLink="/"
+        <p>
+          Create a patient account to book
+          appointments and manage your visits.
+        </p>
+
+        <a
+          routerLink="/register"
+          class="secondary-action"
+        >
+          Create Patient Account
+
+          <span aria-hidden="true">
+            →
+          </span>
+        </a>
+
+      </div>
+
+    </mat-card>
+
+
+    <!-- ======================================
+         RIGHT: DEMO ACCESS CARD
+    ======================================= -->
+
+    <mat-card class="demo-card">
+
+      <div class="demo-heading">
+
+        <span class="demo-badge">
+          INTERACTIVE PORTFOLIO DEMO
+        </span>
+
+        <h2>
+          Explore Demo Accounts
+        </h2>
+
+        <p>
+          Want to see how the system works?
+          Select an account below to fill
+          in the login form automatically.
+        </p>
+
+      </div>
+
+
+      <!-- DEMO ROLE ACCOUNTS -->
+
+      <div class="demo-accounts">
+
+        @for (
+          account of demoAccounts;
+          track account.role
+        ) {
+
+          <button
+            type="button"
+            class="demo-account"
+            [class.active]="selectedDemoRole === account.role"
+            [attr.aria-pressed]="selectedDemoRole === account.role"
+            [disabled]="isSubmitting"
+            (click)="selectDemoAccount(account.role)"
+          >
+
+            <span class="account-details">
+
+              <strong class="account-role">
+                {{ account.role }}
+              </strong>
+
+              <span class="account-email">
+                {{ account.email }}
+              </span>
+
+              <span class="account-description">
+                {{ account.description }}
+              </span>
+
+            </span>
+
+            <span
+              class="account-arrow"
+              aria-hidden="true"
+            >
+              →
+            </span>
+
+          </button>
+
+        }
+
+      </div>
+
+
+      <!-- SHARED DEMO PASSWORD -->
+
+      <div class="demo-password-box">
+
+        <div class="password-heading">
+
+          <span>
+            Demo Password
+          </span>
+
+          <span class="password-label">
+            ALL ACCOUNTS
+          </span>
+
+        </div>
+
+        <code>
+          Demo@1234
+        </code>
+
+        <p>
+          All three demo accounts use
+          this password.
+        </p>
+
+      </div>
+
+
+      <!-- HOW IT WORKS -->
+
+      <div class="demo-instructions">
+
+        <h3>
+          How to explore
+        </h3>
+
+        <p>
+          Choose an account, then click
+          Sign In to explore its dashboard
+          and available features.
+        </p>
+
+      </div>
+
+
+      <!-- PROJECT INFORMATION -->
+
+      <div class="demo-project-info">
+
+        <strong>
+          About this project
+        </strong>
+
+        <p>
+          BrightSmile Dental demonstrates
+          secure authentication, role-based
+          authorization, and dental appointment
+          management using Angular,
+          ASP.NET Core, and PostgreSQL.
+        </p>
+
+      </div>
+
+
+      <!-- DEMO DISCLAIMER -->
+
+      <p class="demo-disclaimer">
+        This is a demonstration application.
+        Please use fictional information
+        only. Do not enter real patient
+        or medical information.
+      </p>
+
+
+      <button
+        type="button"
+        class="demo-info-button"
+        (click)="openWelcomeDialog()"
       >
-        ← Back to home
-      </a>
+        More about this demo
+        <span aria-hidden="true">→</span>
+      </button>
 
     </mat-card>
 
   </div>
 
-  <!-- FOOTER -->
+
+  <!-- ========================================
+       FOOTER
+  ========================================= -->
+
   <footer class="auth-footer">
 
     <span>
-      BRIGHTSMILE DENTAL
+      © 2026 BrightSmile Dental
     </span>
 
     <span>
-      Care that moves with you.
+      Full-Stack Portfolio Demonstration
     </span>
 
   </footer>
 
 </main>
+
+
+<!-- ==========================================
+     COMPACT WELCOME POPUP
+========================================== -->
+
+@if (showWelcomeDialog) {
+
+  <div class="demo-modal-backdrop">
+
+    <section
+      class="demo-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="demo-modal-title"
+      aria-describedby="demo-modal-description"
+      cdkTrapFocus
+      [cdkTrapFocusAutoCapture]="true"
+    >
+
+      <!-- POPUP HEADER -->
+
+      <div class="demo-modal-header">
+
+        <span class="demo-modal-badge">
+          BRIGHTSMILE DENTAL DEMO
+        </span>
+
+        <h2 id="demo-modal-title">
+          Welcome! Explore the Demo
+        </h2>
+
+        <p id="demo-modal-description">
+          This is a full-stack dental
+          management application.
+
+          You can explore the system using
+          these ready-to-use demo accounts.
+        </p>
+
+      </div>
+
+
+      <!-- LOGIN DETAILS -->
+
+      <div class="demo-modal-accounts">
+
+        <h3>
+          Demo Login Details
+        </h3>
+
+        <div class="modal-account-list">
+
+          @for (
+            account of demoAccounts;
+            track account.role
+          ) {
+
+            <div class="modal-account-row">
+
+              <strong>
+                {{ account.role }}
+              </strong>
+
+              <span>
+                {{ account.email }}
+              </span>
+
+            </div>
+
+          }
+
+        </div>
+
+      </div>
+
+
+      <!-- SHARED PASSWORD -->
+
+      <div class="demo-modal-password">
+
+        <span>
+          Password for all accounts
+        </span>
+
+        <strong>
+          Demo@1234
+        </strong>
+
+      </div>
+
+
+      <!-- PATIENT REGISTRATION -->
+
+      <p class="demo-modal-registration">
+        You can also register as a new
+        Patient and explore appointment
+        booking using sample information.
+      </p>
+
+
+      <!-- SAFETY NOTICE -->
+
+      <p class="demo-modal-notice">
+        Demo environment — please do not
+        enter real patient or medical details.
+      </p>
+
+
+      <!-- DISMISS BUTTON -->
+
+      <button
+        type="button"
+        class="demo-modal-dismiss"
+        (click)="dismissWelcomeDialog()"
+        cdkFocusInitial
+      >
+
+        Okay, Explore the Demo
+
+        <span aria-hidden="true">
+          →
+        </span>
+
+      </button>
+
+    </section>
+
+  </div>
+
+}

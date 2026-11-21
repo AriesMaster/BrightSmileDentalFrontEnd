@@ -8,208 +8,14 @@
 
   <main class="dashboard-container">
 
-    <!-- ======================================
-         DASHBOARD HEADER
-    ======================================= -->
-
-    <header class="dashboard-header">
-
-      <div class="header-content">
-
-        <p class="eyebrow">
-          DENTIST PORTAL
-        </p>
-
-        <h1>Dentist Dashboard</h1>
-
-        <p class="header-description">
-          Welcome to your BrightSmileDental
-          dentist workspace.
-        </p>
-
-      </div>
-
-      <!-- HEADER ACTIONS -->
-
-      <div class="header-actions">
-
-        <!-- MY PROFILE -->
-
-        <a
-          mat-stroked-button
-          routerLink="/profile"
-          aria-label="View and edit your profile"
-        >
-          <mat-icon>account_circle</mat-icon>
-          My Profile
-        </a>
-
-        <!-- LOGOUT -->
-
-        <button
-          mat-stroked-button
-          type="button"
-          (click)="logout()"
-          aria-label="Sign out of your account"
-        >
-          <mat-icon>logout</mat-icon>
-          Logout
-        </button>
-
-      </div>
-
-    </header>
-
-    <!-- ======================================
-         WELCOME SECTION
-    ======================================= -->
-
-    <section
-      class="welcome-section"
-      aria-labelledby="welcome-title"
-    >
-
-      <mat-card class="dashboard-card">
-
-        <mat-card-content>
-
-          <div class="welcome-icon">
-            <mat-icon>medical_services</mat-icon>
-          </div>
-
-          <h2 id="welcome-title">
-            Welcome to Your Workspace
-          </h2>
-
-          <p class="welcome-description">
-            Your central workspace for managing
-            dental appointments, reviewing patient
-            bookings and keeping your professional
-            information up to date.
-          </p>
-
-          <div class="dashboard-actions">
-
-            <a
-              mat-flat-button
-              routerLink="/profile"
-              aria-label="Manage your personal profile"
-            >
-              <mat-icon>person</mat-icon>
-              Manage My Profile
-            </a>
-
-          </div>
-
-        </mat-card-content>
-
-      </mat-card>
-
+    <section class="workspace-section" aria-labelledby="workspace-title">
+      <div class="section-header"><h2 id="workspace-title">Your Workspace</h2><p>Choose a task to jump to its section.</p></div>
+      <nav class="workspace-grid" aria-label="Dentist dashboard shortcuts">
+        <a class="workspace-card workspace-shortcut" href="#dentist-appointments-title"><span class="workspace-icon appointments-icon"><mat-icon>event_note</mat-icon></span><strong>Manage Appointments</strong><span>Review, confirm, decline and complete bookings.</span><span class="workspace-link">View appointments →</span></a>
+        <a class="workspace-card workspace-shortcut" href="#dentist-patients-title"><span class="workspace-icon patients-icon"><mat-icon>groups</mat-icon></span><strong>My Patients</strong><span>Search patients and review their booking history.</span><span class="workspace-link">View patients →</span></a>
+        <a class="workspace-card workspace-shortcut" href="#dentist-schedule-title"><span class="workspace-icon schedule-icon"><mat-icon>calendar_month</mat-icon></span><strong>My Schedule</strong><span>See your bookings organized by date and time.</span><span class="workspace-link">Open schedule →</span></a>
+      </nav>
     </section>
-
-    <!-- ======================================
-         WORKSPACE OVERVIEW
-    ======================================= -->
-
-    <section
-      class="workspace-section"
-      aria-labelledby="workspace-title"
-    >
-
-      <div class="section-header">
-
-        <h2 id="workspace-title">
-          Workspace Overview
-        </h2>
-
-        <p>
-          Your dental practice management tools.
-        </p>
-
-      </div>
-
-      <div class="workspace-grid">
-
-        <!-- APPOINTMENTS -->
-
-        <mat-card class="workspace-card">
-
-          <mat-card-content>
-
-            <div class="workspace-icon appointments-icon">
-              <mat-icon>event_note</mat-icon>
-            </div>
-
-            <h3>Appointments</h3>
-
-            <p>
-              View your scheduled appointments
-              and manage upcoming dental visits.
-            </p>
-
-            <span class="feature-status">
-              Live API
-            </span>
-
-          </mat-card-content>
-
-        </mat-card>
-
-        <!-- PATIENTS -->
-
-        <mat-card class="workspace-card">
-
-          <mat-card-content>
-
-            <div class="workspace-icon patients-icon">
-              <mat-icon>groups</mat-icon>
-            </div>
-
-            <h3>Patients</h3>
-
-            <p>
-              Access relevant patient information
-              associated with your appointments.
-            </p>
-
-            <span class="feature-status">
-              Live Summary
-            </span>
-
-          </mat-card-content>
-
-        </mat-card>
-
-        <!-- SCHEDULE -->
-
-        <mat-card class="workspace-card">
-
-          <mat-card-content>
-
-            <div class="workspace-icon schedule-icon">
-              <mat-icon>calendar_month</mat-icon>
-            </div>
-
-            <h3>My Schedule</h3>
-
-            <p>
-              Organize your availability
-              and review your upcoming
-              appointment schedule.
-            </p>
-
-            <span class="feature-status">
-              Daily View
-            </span>
-
-          </mat-card-content>
-
-        </mat-card>
-
-      </div>
-
-    </section>
-
 
     <!-- LIVE DENTIST APPOINTMENTS -->
     <section class="dentist-appointments" aria-labelledby="dentist-appointments-title">
@@ -223,6 +29,14 @@
         </button>
       </div>
 
+      <div class="dentist-help">
+        <button mat-stroked-button type="button" [attr.aria-expanded]="showHelp()" (click)="showHelp.set(!showHelp())"><mat-icon>help_outline</mat-icon> How to use this dashboard</button>
+        @if (showHelp()) { <div class="dentist-help-panel">
+          <p><strong>Appointments:</strong> Confirm or decline Pending requests. Cancel Confirmed bookings or mark them Completed after the appointment time.</p>
+          <p><strong>Schedule:</strong> Choose a day to see active bookings. This does not set your availability.</p>
+          <p><strong>Patients:</strong> Select a patient to review their bookings. Cancelled appointments stay in history.</p>
+        </div> }
+      </div>
       <div class="dentist-stats" aria-label="Appointment statistics">
         <mat-card class="dentist-stat"><mat-card-content><strong>{{ appointments().length }}</strong><span>Total appointments</span></mat-card-content></mat-card>
         <mat-card class="dentist-stat"><mat-card-content><strong>{{ pendingCount() }}</strong><span>Pending</span></mat-card-content></mat-card>
@@ -232,9 +46,9 @@
 
       <div class="dentist-filter-row" aria-label="Filter appointments by status">
         <span>Filter:</span>
-        @for (filter of ['All', 'Pending', 'Confirmed', 'Completed', 'Cancelled']; track filter) {
+        @for (filter of statusOptions; track filter) {
           <button type="button" class="dentist-filter" [class.active]="statusFilter() === filter" [attr.aria-pressed]="statusFilter() === filter"
-            (click)="setFilter(filter)">{{ filter }}</button>
+            (click)="setFilter(filter)">{{ filter }} ({{ filterCount(filter) }})</button>
         }
       </div>
       @if (actionMessage()) {
@@ -335,16 +149,22 @@
     <section class="dentist-secondary-section" aria-labelledby="dentist-schedule-title">
       <div class="section-header">
         <h2 id="dentist-schedule-title">My Schedule</h2>
-        <p>View assigned active bookings for a selected day. Times are shown in your local timezone.</p>
+        <p>Choose a date to see Pending and Confirmed bookings in time order. Times are local.</p>
       </div>
-      <label class="dentist-field-label" for="dentist-schedule-date">Schedule date</label>
+      <div class="dentist-schedule-controls">
+        <button mat-stroked-button type="button" (click)="shiftScheduleDate(-1)">Previous day</button>
+        <button mat-stroked-button type="button" (click)="selectToday()">Today</button>
+        <button mat-stroked-button type="button" (click)="shiftScheduleDate(1)">Next day</button>
+        <button mat-stroked-button type="button" (click)="selectNextAppointment()" [disabled]="upcomingAppointments().length === 0">Next Appointment</button>
+      </div>
+      <label class="dentist-field-label" for="dentist-schedule-date">Choose a date</label>
       <input id="dentist-schedule-date" class="dentist-field" type="date" [value]="selectedScheduleDate()" (change)="setScheduleDate($any($event.target).value)" />
       @if (isLoading()) {
         <p>Loading schedule...</p>
       } @else if (errorMessage()) {
         <p>Schedule unavailable until appointments can be loaded.</p>
       } @else if (scheduleAppointments().length === 0) {
-        <mat-card class="dentist-empty"><mat-card-content>No active bookings for this date.</mat-card-content></mat-card>
+        <mat-card class="dentist-empty"><mat-card-content>No active bookings on this day. Choose another date or select Next Appointment.</mat-card-content></mat-card>
       } @else {
         <div class="dentist-daily-list">
           @for (appointment of scheduleAppointments(); track appointment.id) {
@@ -361,7 +181,7 @@
     <section class="dentist-secondary-section" aria-labelledby="dentist-patients-title">
       <div class="section-header">
         <h2 id="dentist-patients-title">My Patients</h2>
-        <p>Patients with appointments assigned to you. Only booking-related information is shown.</p>
+        <p>Search patients who booked with you. Select a patient to review their appointments. This is not a medical record.</p>
       </div>
       <label class="dentist-field-label" for="dentist-patient-search">Search by patient name</label>
       <input id="dentist-patient-search" class="dentist-field" type="search" placeholder="Search patients" [value]="patientSearch()" (input)="setPatientSearch($any($event.target).value)" />
@@ -373,10 +193,19 @@
         <mat-card class="dentist-empty"><mat-card-content>No matching patients found.</mat-card-content></mat-card>
       } @else {
         <div class="dentist-patient-grid">
-          @for (patient of patients(); track patient.name) {
+          @for (patient of patients(); track patient.id) {
             <mat-card class="dentist-patient-card"><mat-card-content>
-              <mat-icon>person</mat-icon>
-              <div><strong>{{ patient.name }}</strong><p>{{ patient.total }} total booking(s) · {{ patient.upcoming }} upcoming</p></div>
+              <button class="dentist-patient-toggle" type="button" [attr.aria-expanded]="expandedPatientId() === patient.id" (click)="togglePatient(patient.id)">
+                <mat-icon>person</mat-icon><span><strong>{{ patient.name }}</strong><small>{{ patient.total }} bookings · {{ patient.upcoming }} upcoming</small></span>
+                <mat-icon>{{ expandedPatientId() === patient.id ? 'expand_less' : 'expand_more' }}</mat-icon>
+              </button>
+              @if (expandedPatientId() === patient.id) {
+                <div class="dentist-patient-details">
+                  @for (booking of patientAppointments(patient.id); track booking.id) {
+                    <div class="dentist-patient-booking"><strong>{{ booking.serviceName }}</strong><span>{{ booking.appointmentDate | date:'mediumDate' }} · {{ booking.appointmentDate | date:'shortTime' }}</span><span class="dentist-status">{{ booking.status }}</span></div>
+                  }
+                </div>
+              }
             </mat-card-content></mat-card>
           }
         </div>

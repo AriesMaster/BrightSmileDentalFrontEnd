@@ -592,3 +592,72 @@ textarea {
     }
   }
 }
+
+
+// ==========================================
+// INTERACTIVE AVAILABILITY AND VISIT PREVIEW
+// ==========================================
+
+.time-field { grid-column: 1 / -1; }
+.time-slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  gap: 10px;
+}
+.time-slot {
+  min-height: 46px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--text-primary);
+  font: 600 13px "Poppins", sans-serif;
+  cursor: pointer;
+  transition: border-color .15s, background .15s, color .15s;
+  &:hover { border-color: #171717; background: #f5f5f5; }
+  &:focus-visible { outline: 3px solid #93c5fd; outline-offset: 2px; }
+  &.selected { background: #171717; border-color: #171717; color: #fff; }
+}
+.slot-helper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 2px 0 0;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.availability-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+  color: #991b1b;
+  font-size: 12px;
+  button {
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    background: #fff;
+    padding: 8px 12px;
+    color: #991b1b;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+}
+.booking-preview {
+  margin: 0 0 22px;
+  padding: 16px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid var(--border-light);
+  h3 { font-size: 13px; margin: 0 0 12px; }
+  > div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    mat-icon { font-size: 17px; height: 17px; width: 17px; }
+  }
+  small { color: var(--text-muted); }
+}

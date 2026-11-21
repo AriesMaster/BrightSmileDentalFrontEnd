@@ -173,7 +173,7 @@
             </p>
 
             <span class="feature-status">
-              Coming Soon
+              Live Summary
             </span>
 
           </mat-card-content>
@@ -199,7 +199,7 @@
             </p>
 
             <span class="feature-status">
-              Coming Soon
+              Daily View
             </span>
 
           </mat-card-content>
@@ -230,6 +230,13 @@
         <mat-card class="dentist-stat"><mat-card-content><strong>{{ completedCount() }}</strong><span>Completed</span></mat-card-content></mat-card>
       </div>
 
+      <div class="dentist-filter-row" aria-label="Filter appointments by status">
+        <span>Filter:</span>
+        @for (filter of ['All', 'Pending', 'Confirmed', 'Completed', 'Cancelled']; track filter) {
+          <button type="button" class="dentist-filter" [class.active]="statusFilter() === filter" [attr.aria-pressed]="statusFilter() === filter"
+            (click)="setFilter(filter)">{{ filter }}</button>
+        }
+      </div>
       @if (actionMessage()) {
         <p class="dentist-feedback success" role="status">{{ actionMessage() }}</p>
       }
@@ -243,11 +250,11 @@
         <div class="dentist-loading" role="status"><mat-spinner diameter="36"></mat-spinner><span>Loading appointments...</span></div>
       } @else if (!errorMessage()) {
         <h3 class="appointment-subtitle">Upcoming Appointments</h3>
-        @if (upcomingAppointments().length === 0) {
+        @if (filteredUpcoming().length === 0) {
           <mat-card class="dentist-empty"><mat-card-content>No upcoming appointments assigned to you.</mat-card-content></mat-card>
         } @else {
           <div class="dentist-appointment-grid">
-            @for (appointment of upcomingAppointments(); track appointment.id) {
+            @for (appointment of filteredUpcoming(); track appointment.id) {
               <mat-card class="dentist-appointment-card">
                 <mat-card-content>
                   <div class="dentist-appointment-top">
@@ -293,11 +300,11 @@
         }
 
         <h3 class="appointment-subtitle">Appointment History</h3>
-        @if (history().length === 0) {
+        @if (historyCount() === 0) {
           <mat-card class="dentist-empty"><mat-card-content>No previous or cancelled appointments.</mat-card-content></mat-card>
         } @else {
           <div class="dentist-appointment-grid">
-            @for (appointment of history(); track appointment.id) {
+            @for (appointment of filteredHistory(); track appointment.id) {
               <mat-card class="dentist-appointment-card">
                 <mat-card-content>
                   <div class="dentist-appointment-top">
@@ -317,6 +324,62 @@
             }
           </div>
         }
+        @if (historyCount() > 8) {
+          <button mat-stroked-button type="button" class="dentist-history-more" (click)="showAllHistory.set(!showAllHistory())">
+            {{ showAllHistory() ? 'Show less history' : 'Show all ' + historyCount() + ' history records' }}
+          </button>
+        }
+      }
+    </section>
+
+    <section class="dentist-secondary-section" aria-labelledby="dentist-schedule-title">
+      <div class="section-header">
+        <h2 id="dentist-schedule-title">My Schedule</h2>
+        <p>View assigned active bookings for a selected day. Times are shown in your local timezone.</p>
+      </div>
+      <label class="dentist-field-label" for="dentist-schedule-date">Schedule date</label>
+      <input id="dentist-schedule-date" class="dentist-field" type="date" [value]="selectedScheduleDate()" (change)="setScheduleDate($any($event.target).value)" />
+      @if (isLoading()) {
+        <p>Loading schedule...</p>
+      } @else if (errorMessage()) {
+        <p>Schedule unavailable until appointments can be loaded.</p>
+      } @else if (scheduleAppointments().length === 0) {
+        <mat-card class="dentist-empty"><mat-card-content>No active bookings for this date.</mat-card-content></mat-card>
+      } @else {
+        <div class="dentist-daily-list">
+          @for (appointment of scheduleAppointments(); track appointment.id) {
+            <mat-card class="dentist-daily-item"><mat-card-content>
+              <strong>{{ appointment.appointmentDate | date:'shortTime' }}</strong>
+              <span>{{ appointment.patientName }} — {{ appointment.serviceName }}</span>
+              <span class="dentist-status">{{ appointment.status }}</span>
+            </mat-card-content></mat-card>
+          }
+        </div>
+      }
+    </section>
+
+    <section class="dentist-secondary-section" aria-labelledby="dentist-patients-title">
+      <div class="section-header">
+        <h2 id="dentist-patients-title">My Patients</h2>
+        <p>Patients with appointments assigned to you. Only booking-related information is shown.</p>
+      </div>
+      <label class="dentist-field-label" for="dentist-patient-search">Search by patient name</label>
+      <input id="dentist-patient-search" class="dentist-field" type="search" placeholder="Search patients" [value]="patientSearch()" (input)="setPatientSearch($any($event.target).value)" />
+      @if (isLoading()) {
+        <p>Loading patients...</p>
+      } @else if (errorMessage()) {
+        <p>Patient summary unavailable until appointments can be loaded.</p>
+      } @else if (patients().length === 0) {
+        <mat-card class="dentist-empty"><mat-card-content>No matching patients found.</mat-card-content></mat-card>
+      } @else {
+        <div class="dentist-patient-grid">
+          @for (patient of patients(); track patient.name) {
+            <mat-card class="dentist-patient-card"><mat-card-content>
+              <mat-icon>person</mat-icon>
+              <div><strong>{{ patient.name }}</strong><p>{{ patient.total }} total booking(s) · {{ patient.upcoming }} upcoming</p></div>
+            </mat-card-content></mat-card>
+          }
+        </div>
       }
     </section>
 

@@ -265,9 +265,9 @@
                     Appointment Time
                   </label>
 
-                  <select id="appointmentTime" formControlName="appointmentTime"
+                  <select id="appointmentTime" formControlName="appointmentTime"\n                    [disabled]="isLoadingSlots() || !!slotsError() || !bookingForm.controls.doctorId.value || !bookingDate()"
                     [attr.aria-invalid]="bookingForm.controls.appointmentTime.invalid && bookingForm.controls.appointmentTime.touched">
-                    <option value="">Select an available time</option>
+                    <option value="">{{ isLoadingSlots() ? "Loading available times..." : "Select an available time" }}</option>
                     @for (time of availableTimes(); track time) {
                       <option [value]="time">{{ time }}</option>
                     }
@@ -288,11 +288,14 @@
 
               </div>
 
+              @if (slotsError()) {
+                <p class="field-error" role="alert">{{ slotsError() }}</p>
+              }
               @if (isSelectedWeekend()) {
                 <p class="field-error" role="alert">Bookings are closed on Saturdays and Sundays. Please choose Monday to Friday.</p>
               }
-              @if (bookingDate() && !isSelectedWeekend() && availableTimes().length === 0) {
-                <p class="field-error" role="alert">No time slots remain on this date. Please choose another weekday.</p>
+              @if (bookingDate() && bookingForm.controls.doctorId.value && !isSelectedWeekend() && !isLoadingSlots() && !slotsError() && availableTimes().length === 0) {
+                <p class="field-error" role="alert">No available appointments for this dentist on this date. Please choose another date or dentist.</p>
               }
               <p class="field-hint">
 

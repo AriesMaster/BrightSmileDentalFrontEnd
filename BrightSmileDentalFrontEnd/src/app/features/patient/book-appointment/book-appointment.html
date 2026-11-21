@@ -265,16 +265,13 @@
                     Appointment Time
                   </label>
 
-                  <input
-                    id="appointmentTime"
-                    type="time"
-                    formControlName="appointmentTime"
-                    step="1800"
-                    [attr.aria-invalid]="
-                      bookingForm.controls.appointmentTime.invalid &&
-                      bookingForm.controls.appointmentTime.touched
-                    "
-                  />
+                  <select id="appointmentTime" formControlName="appointmentTime"
+                    [attr.aria-invalid]="bookingForm.controls.appointmentTime.invalid && bookingForm.controls.appointmentTime.touched">
+                    <option value="">Select an available time</option>
+                    @for (time of availableTimes(); track time) {
+                      <option [value]="time">{{ time }}</option>
+                    }
+                  </select>
 
                   @if (
                     bookingForm.controls.appointmentTime.invalid &&
@@ -291,11 +288,17 @@
 
               </div>
 
+              @if (isSelectedWeekend()) {
+                <p class="field-error" role="alert">Bookings are closed on Saturdays and Sundays. Please choose Monday to Friday.</p>
+              }
+              @if (bookingDate() && !isSelectedWeekend() && availableTimes().length === 0) {
+                <p class="field-error" role="alert">No time slots remain on this date. Please choose another weekday.</p>
+              }
               <p class="field-hint">
 
                 <mat-icon>info_outline</mat-icon>
 
-                Appointment times are subject to dentist availability.
+                Opening hours: Monday–Friday, 09:00–17:00 (SAST). Appointment times are subject to dentist availability.
                 A booking is initially marked as pending.
 
               </p>

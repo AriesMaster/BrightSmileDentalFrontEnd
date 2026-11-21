@@ -22,7 +22,14 @@ import { Router } from '@angular/router';
 import {
   forkJoin,
   finalize,
-  timeout
+  timeout,
+  combineLatest,
+  startWith,
+  switchMap,
+  of,
+  catchError,
+  debounceTime,
+  distinctUntilChanged
 } from 'rxjs';
 
 import {
@@ -113,26 +120,23 @@ export class BookAppointmentComponent implements OnInit {
   readonly canSubmit = computed(() =>
     !this.isLoading() &&
     !this.isSubmitting() &&
+    !this.isLoadingSlots() &&
+    !this.slotsError() &&
     this.services().length > 0 &&
     this.dentists().length > 0
   );
 
   readonly openingHours = 'Monday to Friday, 09:00–17:00 (South Africa time)';
-  readonly availableTimes = computed(() => {
-    const date = this.bookingDate();
-    if (!date || !this.isWeekday(date)) return [];
-    const now = new Date();
-    const result: string[] = [];
-    for (let hour = 9; hour < 17; hour++) {
-      for (const minute of [0, 30]) {
-        const time = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
-        const candidate = new Date(`${date}T${time}:00+02:00`);
-        if (candidate > now) result.push(time);
-      }
-    }
-    return result;
-  });
   readonly bookingDate = signal('');
+  readonly bookedSlots = signal<string[]>([]);
+  readonly isLoadingSlots = signal(false);
+  readonly slotsError = signal('');
+  readonly availableTimes = computed(() => this.bookedSlots().filter(time => {
+    const date = this.bookingDate();
+    if (!date || !this.isWeekday(date)) return false;
+    return new Date(`${date}T${time}:00+02:00`) > new Date();
+  }));
+
   private isWeekday(value: string): boolean {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
     const date = new Date(`${value}T12:00:00+02:00`);
@@ -185,11 +189,45 @@ export class BookAppointmentComponent implements OnInit {
 
     this.loadBookingOptions();
 
-    this.bookingForm.controls.appointmentDate.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(value => {
-        this.bookingDate.set(value);
-        this.bookingForm.controls.appointmentTime.setValue('');
+    // A dentist or date change invalidates the previously selected time.
+    combineLatest([
+      this.bookingForm.controls.doctorId.valueChanges.pipe(
+        startWith(this.bookingForm.controls.doctorId.value),
+        distinctUntilChanged()
+      ),
+      this.bookingForm.controls.appointmentDate.valueChanges.pipe(
+        startWith(this.bookingForm.controls.appointmentDate.value),
+        distinctUntilChanged()
+      )
+    ])
+      .pipe(
+        debounceTime(100),
+        switchMap(([doctorId, date]) => {
+          this.bookingDate.set(date);
+          this.bookingForm.controls.appointmentTime.setValue('');
+          this.bookedSlots.set([]);
+          this.slotsError.set('');
+
+          if (!doctorId || !date || !this.isWeekday(date)) {
+            this.isLoadingSlots.set(false);
+            return of(null);
+          }
+
+          this.isLoadingSlots.set(true);
+          return this.appointmentService.getAvailableSlots(doctorId, date).pipe(
+            timeout(20000),
+            catchError((error: unknown) => {
+              console.error('Failed to load dentist availability:', error);
+              this.slotsError.set('Unable to load available times. Please select the date again or retry.');
+              return of(null);
+            })
+          );
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(slots => {
+        this.bookedSlots.set(slots ?? []);
+        this.isLoadingSlots.set(false);
       });
 
     this.bookingForm.controls.serviceId.valueChanges

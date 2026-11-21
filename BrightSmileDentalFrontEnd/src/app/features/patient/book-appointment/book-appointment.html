@@ -259,37 +259,34 @@
                 </div>
 
                 <!-- TIME -->
-                <div class="native-field">
-
-                  <label for="appointmentTime">
-                    Appointment Time
-                  </label>
-
-                  <select id="appointmentTime" formControlName="appointmentTime"\n                    [disabled]="isLoadingSlots() || !!slotsError() || !bookingForm.controls.doctorId.value || !bookingDate()"
-                    [attr.aria-invalid]="bookingForm.controls.appointmentTime.invalid && bookingForm.controls.appointmentTime.touched">
-                    <option value="">{{ isLoadingSlots() ? "Loading available times..." : "Select an available time" }}</option>
-                    @for (time of availableTimes(); track time) {
-                      <option [value]="time">{{ time }}</option>
-                    }
-                  </select>
-
-                  @if (
-                    bookingForm.controls.appointmentTime.invalid &&
-                    bookingForm.controls.appointmentTime.touched
-                  ) {
-
-                    <span class="field-error">
-                      Please select an appointment time.
-                    </span>
-
+                <div class="native-field time-field">
+                  <label id="appointmentTimeLabel">Available appointment times</label>
+                  <input type="hidden" formControlName="appointmentTime" />
+                  @if (!bookingForm.controls.doctorId.value || !bookingDate()) {
+                    <p class="slot-helper">Choose a dentist and date to view available times.</p>
+                  } @else if (isLoadingSlots()) {
+                    <p class="slot-helper" role="status"><mat-spinner diameter="18"></mat-spinner> Checking dentist availability...</p>
+                  } @else if (!isSelectedWeekend() && !slotsError() && availableTimes().length > 0) {
+                    <div class="time-slots" role="group" aria-labelledby="appointmentTimeLabel">
+                      @for (time of availableTimes(); track time) {
+                        <button type="button" class="time-slot"
+                          [class.selected]="selectedTime() === time"
+                          [attr.aria-pressed]="selectedTime() === time"
+                          (click)="selectTime(time)">
+                          {{ time }}
+                        </button>
+                      }
+                    </div>
+                    <span class="slot-helper">{{ availableTimes().length }} available time slots · South Africa time</span>
                   }
-
+                  @if (bookingForm.controls.appointmentTime.invalid && bookingForm.controls.appointmentTime.touched) {
+                    <span class="field-error">Please choose an available appointment time.</span>
+                  }
                 </div>
-
               </div>
 
               @if (slotsError()) {
-                <p class="field-error" role="alert">{{ slotsError() }}</p>
+                <div class="availability-error" role="alert"><span>{{ slotsError() }}</span><button type="button" (click)="retryAvailability()">Try again</button></div>
               }
               @if (isSelectedWeekend()) {
                 <p class="field-error" role="alert">Bookings are closed on Saturdays and Sundays. Please choose Monday to Friday.</p>
@@ -424,6 +421,14 @@
               <mat-icon>dentistry</mat-icon>
             </div>
 
+            @if (selectedDentistName() || displayDate() || selectedTime()) {
+              <div class="booking-preview" aria-live="polite">
+                <h3>Your visit</h3>
+                <div><mat-icon>person_outline</mat-icon><span>{{ selectedDentistName() || 'Choose a dentist' }}</span></div>
+                <div><mat-icon>calendar_today</mat-icon><span>{{ displayDate() || 'Choose a date' }}</span></div>
+                <div><mat-icon>schedule</mat-icon><span>{{ selectedTime() || 'Choose a time' }} <small>SAST</small></span></div>
+              </div>
+            }
             @if (selectedService(); as service) {
 
               <div class="summary-details">

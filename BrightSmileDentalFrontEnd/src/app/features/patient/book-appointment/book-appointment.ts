@@ -117,6 +117,33 @@ export class BookAppointmentComponent implements OnInit {
     this.dentists().length > 0
   );
 
+  readonly openingHours = 'Monday to Friday, 09:00–17:00 (South Africa time)';
+  readonly availableTimes = computed(() => {
+    const date = this.bookingDate();
+    if (!date || !this.isWeekday(date)) return [];
+    const now = new Date();
+    const result: string[] = [];
+    for (let hour = 9; hour < 17; hour++) {
+      for (const minute of [0, 30]) {
+        const time = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+        const candidate = new Date(`${date}T${time}:00+02:00`);
+        if (candidate > now) result.push(time);
+      }
+    }
+    return result;
+  });
+  readonly bookingDate = signal('');
+  private isWeekday(value: string): boolean {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+    const date = new Date(`${value}T12:00:00+02:00`);
+    if (Number.isNaN(date.getTime())) return false;
+    const day = date.getUTCDay();
+    return day >= 1 && day <= 5;
+  }
+  isSelectedWeekend(): boolean {
+    return !!this.bookingDate() && !this.isWeekday(this.bookingDate());
+  }
+
   // ==========================================
   // REACTIVE FORM
   // ==========================================
@@ -157,6 +184,13 @@ export class BookAppointmentComponent implements OnInit {
   ngOnInit(): void {
 
     this.loadBookingOptions();
+
+    this.bookingForm.controls.appointmentDate.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(value => {
+        this.bookingDate.set(value);
+        this.bookingForm.controls.appointmentTime.setValue('');
+      });
 
     this.bookingForm.controls.serviceId.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -274,30 +308,19 @@ export class BookAppointmentComponent implements OnInit {
     timeValue: string
   ): Date | null {
 
-    // Enforce 30-minute appointment intervals.
-    if (!/^(?:[01]\d|2[0-3]):(?:00|30)$/.test(timeValue)) {
+    if (!this.isWeekday(dateValue) || !this.availableTimes().includes(timeValue)) {
       return null;
     }
 
-    const appointmentDate = new Date(
-      `${dateValue}T${timeValue}:00`
-    );
-
-    if (Number.isNaN(appointmentDate.getTime())) {
+    // Booking times are always interpreted as South African Standard Time (UTC+02:00),
+    // independent of the patient's device timezone.
+    const appointmentDate = new Date(`${dateValue}T${timeValue}:00+02:00`);
+    if (Number.isNaN(appointmentDate.getTime()) || appointmentDate <= new Date()) {
       return null;
     }
-
-    // Reject normalized invalid dates.
-    if (
-      this.formatLocalDate(appointmentDate) !== dateValue ||
-      `${String(appointmentDate.getHours()).padStart(2, '0')}:${String(appointmentDate.getMinutes()).padStart(2, '0')}` !== timeValue
-    ) {
-      return null;
-    }
-
-    const now = new Date();
-
-    if (appointmentDate <= now) {
+    const sastDate = new Date(appointmentDate.getTime() + 2 * 60 * 60 * 1000);
+    if (sastDate.toISOString().slice(0, 10) !== dateValue ||
+        sastDate.toISOString().slice(11, 16) !== timeValue) {
       return null;
     }
 
@@ -353,7 +376,7 @@ export class BookAppointmentComponent implements OnInit {
     if (!appointmentDate) {
 
       this.errorMessage.set(
-        'Select a valid future date and a time in 30-minute intervals within the next two years.'
+        'Choose a weekday appointment between 09:00 and 16:30 (South Africa time), within the next two years.'
       );
 
       return;

@@ -15,7 +15,7 @@ import { Appointment, AppointmentStatus } from '../../../core/models/appointment
 @Component({
   selector: 'app-dentist-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, MatCardModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule],
+  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })

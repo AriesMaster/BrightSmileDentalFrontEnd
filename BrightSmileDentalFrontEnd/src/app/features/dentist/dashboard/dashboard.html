@@ -271,6 +271,19 @@
                         Mark Completed
                       </button>
                     }
+                    @if (appointment.status === 'Pending' || appointment.status === 'Confirmed') {
+                      <button mat-stroked-button class="dentist-cancel-button" type="button"
+                        (click)="requestCancellation(appointment)" [disabled]="updatingId() !== null">
+                        {{ appointment.status === 'Pending' ? 'Decline' : 'Cancel' }}
+                      </button>
+                    }
+                    @if (confirmCancellationId() === appointment.id) {
+                      <div class="dentist-confirm-cancel" role="group" aria-label="Confirm cancellation">
+                        <p>This will cancel the appointment and release the booking slot. Continue?</p>
+                        <button mat-stroked-button type="button" (click)="dismissCancellation()">Keep Appointment</button>
+                        <button mat-flat-button type="button" (click)="updateStatus(appointment, 'Cancelled')" [disabled]="updatingId() !== null">Yes, Cancel</button>
+                      </div>
+                    }
                     @if (updatingId() === appointment.id) { <span role="status">Saving...</span> }
                   </div>
                 </mat-card-content>

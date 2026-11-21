@@ -466,3 +466,34 @@ button:focus-visible {
   }
 
 }
+
+
+/* Live dentist appointment management — matches existing monochrome dashboard */
+.appointment-heading { display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; }
+.dentist-appointments { margin-top:40px; }
+.dentist-stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; margin-bottom:30px; }
+.dentist-stat { border:1px solid #d9dce1; border-radius:16px; background:#fff; }
+.dentist-stat mat-card-content { display:flex; flex-direction:column; gap:6px; padding:22px; }
+.dentist-stat strong { font-size:30px; color:#171717; }
+.dentist-stat span { font-size:13px; color:#666; }
+.appointment-subtitle { font-size:19px; margin:24px 0 16px; }
+.dentist-appointment-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
+.dentist-appointment-card, .dentist-empty { background:#fff; border:1px solid #d9dce1; border-radius:16px; }
+.dentist-appointment-card mat-card-content { padding:22px; }
+.dentist-appointment-top { display:flex; align-items:start; justify-content:space-between; gap:12px; }
+.dentist-appointment-top h3 { margin:0 0 16px; font-size:17px; }
+.dentist-appointment-card p { display:flex; align-items:center; gap:9px; color:#525252; font-size:14px; }
+.dentist-appointment-card p mat-icon { color:#525252; font-size:19px; width:20px; height:20px; }
+.dentist-status { padding:5px 10px; border:1px solid #ddd; border-radius:20px; font-size:12px; white-space:nowrap; }
+.dentist-status.pending { background:#fff8e8; }
+.dentist-status.confirmed { background:#edf8ef; }
+.dentist-notes { display:block!important; padding:12px; border-radius:8px; background:#f5f5f5; overflow-wrap:anywhere; }
+.dentist-card-actions { display:flex; align-items:center; gap:12px; margin-top:18px; }
+.dentist-card-actions button { background:#171717; color:#fff; }
+.dentist-feedback { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 16px; border-radius:10px; margin-bottom:18px; }
+.dentist-feedback.error { background:#fff1f1; border:1px solid #f1c4c4; }
+.dentist-feedback.success { background:#edf8ef; border:1px solid #b7dcc0; }
+.dentist-loading { display:flex; align-items:center; gap:16px; padding:32px 0; }
+.dentist-empty mat-card-content { padding:24px; color:#666; }
+@media(max-width:900px) { .dentist-stats { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:600px) { .dentist-appointment-grid { grid-template-columns:1fr; } .dentist-stats { gap:10px; } .dentist-stat mat-card-content { padding:14px; } .dentist-stat strong { font-size:24px; } }

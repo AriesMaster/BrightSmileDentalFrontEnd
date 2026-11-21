@@ -27,6 +27,7 @@ export class DashboardComponent implements OnInit {
   readonly appointments = signal<Appointment[]>([]);
   readonly isLoading = signal(false);
   readonly updatingId = signal<number | null>(null);
+  readonly confirmCancellationId = signal<number | null>(null);
   readonly errorMessage = signal('');
   readonly actionMessage = signal('');
 
@@ -78,10 +79,23 @@ export class DashboardComponent implements OnInit {
     return a.status === 'Confirmed' && Date.parse(a.appointmentDate) <= Date.now();
   }
 
-  updateStatus(appointment: Appointment, status: 'Confirmed' | 'Completed'): void {
+  requestCancellation(appointment: Appointment): void {
+    if (this.updatingId() !== null || !['Pending', 'Confirmed'].includes(appointment.status)) return;
+    this.confirmCancellationId.set(appointment.id);
+  }
+
+  dismissCancellation(): void {
+    this.confirmCancellationId.set(null);
+  }
+
+  updateStatus(appointment: Appointment, status: 'Confirmed' | 'Completed' | 'Cancelled'): void {
     if (this.updatingId() !== null) return;
     if (status === 'Confirmed' && !this.canConfirm(appointment)) return;
     if (status === 'Completed' && !this.canComplete(appointment)) return;
+    if (status === 'Cancelled') {
+      if (!['Pending', 'Confirmed'].includes(appointment.status) || this.confirmCancellationId() !== appointment.id) return;
+      this.confirmCancellationId.set(null);
+    }
 
     this.updatingId.set(appointment.id);
     this.errorMessage.set('');
@@ -95,7 +109,7 @@ export class DashboardComponent implements OnInit {
         this.appointments.update(items => items.map(item =>
           item.id === appointment.id ? { ...item, status: response.status as AppointmentStatus } : item
         ));
-        this.actionMessage.set('Appointment status updated to ' + status + '.');
+        this.actionMessage.set(status === 'Cancelled' ? 'Appointment cancelled successfully.' : 'Appointment status updated to ' + status + '.');
       },
       error: error => {
         this.errorMessage.set(this.describeError(error));

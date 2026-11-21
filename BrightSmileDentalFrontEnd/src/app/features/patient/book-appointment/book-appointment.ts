@@ -321,9 +321,26 @@ export class BookAppointmentComponent implements OnInit {
 
   retryAvailability(): void {
     const date = this.bookingForm.controls.appointmentDate.value;
-    if (date) {
-      this.bookingForm.controls.appointmentDate.setValue(date);
-    }
+    const doctorId = this.bookingForm.controls.doctorId.value;
+    if (!doctorId || !date || !this.isWeekday(date)) return;
+
+    this.slotsError.set('');
+    this.bookedSlots.set([]);
+    this.bookingForm.controls.appointmentTime.setValue('');
+    this.isLoadingSlots.set(true);
+
+    this.appointmentService.getAvailableSlots(doctorId, date)
+      .pipe(
+        timeout(20000),
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.isLoadingSlots.set(false))
+      )
+      .subscribe({
+        next: slots => this.bookedSlots.set(slots),
+        error: () => this.slotsError.set(
+          'Unable to load available times. Please try again.'
+        )
+      });
   }
 
   // ==========================================

@@ -34,6 +34,22 @@ export class DashboardComponent implements OnInit {
   readonly selectedScheduleDate = signal('');
   readonly showAllHistory = signal(false);
   readonly patientSearch = signal('');
+  readonly showHelp = signal(false);
+  readonly expandedPatientId = signal<number | null>(null);
+  readonly statusOptions: Array<'All' | AppointmentStatus> = ['All','Pending','Confirmed','Completed','Cancelled'];
+  filterCount(s: 'All' | AppointmentStatus): number { return s === 'All' ? this.appointments().length : this.appointments().filter(a => a.status === s).length; }
+  togglePatient(id: number): void { this.expandedPatientId.set(this.expandedPatientId() === id ? null : id); }
+  patientAppointments(id: number): Appointment[] { return this.appointments().filter(a => a.patientId === id).sort((a,b) => Date.parse(b.appointmentDate)-Date.parse(a.appointmentDate)); }
+  selectToday(): void { this.selectedScheduleDate.set(this.localDateKey(new Date())); }
+  shiftScheduleDate(days: number): void {
+    const p = this.selectedScheduleDate().split('-').map(Number);
+    if (p.length !== 3 || p.some(n => !Number.isFinite(n))) return;
+    this.selectedScheduleDate.set(this.localDateKey(new Date(p[0],p[1]-1,p[2]+days)));
+  }
+  selectNextAppointment(): void {
+    const next = this.upcomingAppointments()[0];
+    if (next) this.selectedScheduleDate.set(this.localDateKey(next.appointmentDate));
+  }
 
   readonly filteredUpcoming = computed(() => this.upcomingAppointments().filter(a => this.matchesFilter(a)));
   readonly filteredHistory = computed(() => this.history().filter(a => this.matchesFilter(a)).slice(0, this.showAllHistory() ? undefined : 8));
@@ -43,9 +59,9 @@ export class DashboardComponent implements OnInit {
     .filter(a => this.localDateKey(a.appointmentDate) === this.selectedScheduleDate())
     .sort((a, b) => Date.parse(a.appointmentDate) - Date.parse(b.appointmentDate)));
   readonly patients = computed(() => {
-    const result = new Map<number, { name: string; total: number; upcoming: number }>();
+    const result = new Map<number, { id: number; name: string; total: number; upcoming: number }>();
     for (const a of this.appointments()) {
-      const item = result.get(a.patientId) ?? { name: a.patientName, total: 0, upcoming: 0 };
+      const item = result.get(a.patientId) ?? { id: a.patientId, name: a.patientName, total: 0, upcoming: 0 };
       item.total++;
       if ((a.status === 'Pending' || a.status === 'Confirmed') && Date.parse(a.appointmentDate) >= Date.now()) item.upcoming++;
       result.set(a.patientId, item);
@@ -60,7 +76,7 @@ export class DashboardComponent implements OnInit {
   setScheduleDate(value: string): void { this.selectedScheduleDate.set(value); }
   setPatientSearch(value: string): void { this.patientSearch.set(value); }
   private matchesFilter(a: Appointment): boolean { return this.statusFilter() === 'All' || a.status === this.statusFilter(); }
-  private localDateKey(value: string): string {
+  private localDateKey(value: string | Date): string {
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) return '';
     const pad = (n: number) => String(n).padStart(2, '0');
@@ -83,7 +99,7 @@ export class DashboardComponent implements OnInit {
   readonly completedCount = computed(() => this.appointments().filter(a => a.status === 'Completed').length);
 
   ngOnInit(): void {
-    this.selectedScheduleDate.set(this.localDateKey(new Date().toISOString()));
+    this.selectedScheduleDate.set(this.localDateKey(new Date()));
     this.loadAppointments();
   }
 

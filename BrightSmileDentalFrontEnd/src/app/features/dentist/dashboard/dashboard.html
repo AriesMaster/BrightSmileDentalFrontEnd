@@ -148,7 +148,7 @@
             </p>
 
             <span class="feature-status">
-              Coming Soon
+              Live API
             </span>
 
           </mat-card-content>
@@ -208,6 +208,103 @@
 
       </div>
 
+    </section>
+
+
+    <!-- LIVE DENTIST APPOINTMENTS -->
+    <section class="dentist-appointments" aria-labelledby="dentist-appointments-title">
+      <div class="section-header appointment-heading">
+        <div>
+          <h2 id="dentist-appointments-title">My Appointments</h2>
+          <p>Review bookings assigned to you and manage their status.</p>
+        </div>
+        <button mat-stroked-button type="button" (click)="loadAppointments()" [disabled]="isLoading() || updatingId() !== null">
+          <mat-icon>refresh</mat-icon> Refresh
+        </button>
+      </div>
+
+      <div class="dentist-stats" aria-label="Appointment statistics">
+        <mat-card class="dentist-stat"><mat-card-content><strong>{{ appointments().length }}</strong><span>Total appointments</span></mat-card-content></mat-card>
+        <mat-card class="dentist-stat"><mat-card-content><strong>{{ pendingCount() }}</strong><span>Pending</span></mat-card-content></mat-card>
+        <mat-card class="dentist-stat"><mat-card-content><strong>{{ confirmedCount() }}</strong><span>Confirmed</span></mat-card-content></mat-card>
+        <mat-card class="dentist-stat"><mat-card-content><strong>{{ completedCount() }}</strong><span>Completed</span></mat-card-content></mat-card>
+      </div>
+
+      @if (actionMessage()) {
+        <p class="dentist-feedback success" role="status">{{ actionMessage() }}</p>
+      }
+      @if (errorMessage()) {
+        <div class="dentist-feedback error" role="alert">
+          <span>{{ errorMessage() }}</span>
+          <button mat-stroked-button type="button" (click)="loadAppointments()" [disabled]="isLoading()">Retry</button>
+        </div>
+      }
+      @if (isLoading()) {
+        <div class="dentist-loading" role="status"><mat-spinner diameter="36"></mat-spinner><span>Loading appointments...</span></div>
+      } @else if (!errorMessage()) {
+        <h3 class="appointment-subtitle">Upcoming Appointments</h3>
+        @if (upcomingAppointments().length === 0) {
+          <mat-card class="dentist-empty"><mat-card-content>No upcoming appointments assigned to you.</mat-card-content></mat-card>
+        } @else {
+          <div class="dentist-appointment-grid">
+            @for (appointment of upcomingAppointments(); track appointment.id) {
+              <mat-card class="dentist-appointment-card">
+                <mat-card-content>
+                  <div class="dentist-appointment-top">
+                    <h3>{{ appointment.serviceName }}</h3>
+                    <span class="dentist-status" [class.pending]="appointment.status === 'Pending'" [class.confirmed]="appointment.status === 'Confirmed'">{{ appointment.status }}</span>
+                  </div>
+                  <p><mat-icon>person</mat-icon> {{ appointment.patientName }}</p>
+                  <p><mat-icon>event</mat-icon> {{ appointment.appointmentDate | date:'EEEE, d MMM y' }}</p>
+                  <p><mat-icon>schedule</mat-icon> {{ appointment.appointmentDate | date:'shortTime' }}</p>
+                  @if (appointment.additionalInfo) {
+                    <p class="dentist-notes"><strong>Patient notes:</strong> {{ appointment.additionalInfo }}</p>
+                  }
+                  <div class="dentist-card-actions">
+                    @if (canConfirm(appointment)) {
+                      <button mat-flat-button type="button" (click)="updateStatus(appointment, 'Confirmed')" [disabled]="updatingId() !== null">
+                        Confirm
+                      </button>
+                    }
+                    @if (canComplete(appointment)) {
+                      <button mat-flat-button type="button" (click)="updateStatus(appointment, 'Completed')" [disabled]="updatingId() !== null">
+                        Mark Completed
+                      </button>
+                    }
+                    @if (updatingId() === appointment.id) { <span role="status">Saving...</span> }
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            }
+          </div>
+        }
+
+        <h3 class="appointment-subtitle">Appointment History</h3>
+        @if (history().length === 0) {
+          <mat-card class="dentist-empty"><mat-card-content>No previous or cancelled appointments.</mat-card-content></mat-card>
+        } @else {
+          <div class="dentist-appointment-grid">
+            @for (appointment of history(); track appointment.id) {
+              <mat-card class="dentist-appointment-card">
+                <mat-card-content>
+                  <div class="dentist-appointment-top">
+                    <h3>{{ appointment.serviceName }}</h3>
+                    <span class="dentist-status">{{ appointment.status }}</span>
+                  </div>
+                  <p><mat-icon>person</mat-icon> {{ appointment.patientName }}</p>
+                  <p><mat-icon>event</mat-icon> {{ appointment.appointmentDate | date:'mediumDate' }} at {{ appointment.appointmentDate | date:'shortTime' }}</p>
+                  @if (appointment.additionalInfo) { <p class="dentist-notes"><strong>Patient notes:</strong> {{ appointment.additionalInfo }}</p> }
+                  @if (canComplete(appointment)) {
+                    <div class="dentist-card-actions">
+                      <button mat-flat-button type="button" (click)="updateStatus(appointment, 'Completed')" [disabled]="updatingId() !== null">Mark Completed</button>
+                    </div>
+                  }
+                </mat-card-content>
+              </mat-card>
+            }
+          </div>
+        }
+      }
     </section>
 
   </main>

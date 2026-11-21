@@ -523,3 +523,23 @@ button:focus-visible {
 .dentist-patient-card mat-card-content { display:flex; gap:14px; align-items:center; padding:20px; }
 .dentist-patient-card p { margin:5px 0 0; font-size:13px; color:#666; }
 @media(max-width:600px) { .dentist-patient-grid { grid-template-columns:1fr; } .dentist-daily-item mat-card-content { align-items:flex-start; } }
+
+.workspace-shortcut { display:flex; flex-direction:column; text-decoration:none; color:#171717; cursor:pointer; }
+.workspace-shortcut strong { font-size:18px; margin-bottom:10px; }
+.workspace-shortcut > span:not(.workspace-icon):not(.workspace-link) { flex:1; font-size:14px; color:#666; line-height:1.6; }
+.workspace-link { margin-top:18px; font-size:13px; font-weight:600; }
+#dentist-appointments-title,#dentist-patients-title,#dentist-schedule-title { scroll-margin-top:95px; }
+.dentist-help { margin:0 0 18px; }
+.dentist-help-panel { padding:16px 20px; background:#fff; border:1px solid #d9dce1; border-radius:12px; margin-top:12px; }
+.dentist-help-panel p { margin:0 0 10px; line-height:1.6; font-size:14px; }
+.dentist-help-panel p:last-child { margin-bottom:0; }
+.dentist-schedule-controls { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; }
+.dentist-patient-card mat-card-content { display:block; padding:0; }
+.dentist-patient-toggle { display:flex; align-items:center; gap:12px; width:100%; text-align:left; border:0; background:transparent; padding:20px; cursor:pointer; color:#171717; font:inherit; }
+.dentist-patient-toggle span { flex:1; }
+.dentist-patient-toggle small { display:block; font-size:12px; color:#666; margin-top:5px; }
+.dentist-patient-details { border-top:1px solid #eee; padding:4px 20px 16px; }
+.dentist-patient-booking { display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px; padding:12px 0; border-bottom:1px solid #eee; font-size:13px; }
+.dentist-patient-booking:last-child { border-bottom:0; }
+.dentist-patient-booking > span:nth-child(2) { flex:1; color:#666; }
+.workspace-shortcut:focus-visible,.dentist-patient-toggle:focus-visible { outline:2px solid #333; outline-offset:3px; }

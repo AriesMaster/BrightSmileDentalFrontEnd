@@ -88,6 +88,17 @@ export class AppointmentService {
 
   /**
    * PATIENT
+   * GET /api/Appointments/availability?doctorId=...&date=YYYY-MM-DD
+   * Returns unoccupied 30-minute slots in South African local time.
+   */
+  getAvailableSlots(doctorId: number, date: string): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/availability`, {
+      params: { doctorId: String(doctorId), date }
+    });
+  }
+
+  /**
+   * PATIENT
    * POST /api/Appointments
    *
    * Create a new appointment.

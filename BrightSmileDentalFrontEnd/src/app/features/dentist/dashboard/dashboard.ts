@@ -30,6 +30,43 @@ export class DashboardComponent implements OnInit {
   readonly confirmCancellationId = signal<number | null>(null);
   readonly errorMessage = signal('');
   readonly actionMessage = signal('');
+  readonly statusFilter = signal<'All' | AppointmentStatus>('All');
+  readonly selectedScheduleDate = signal('');
+  readonly showAllHistory = signal(false);
+  readonly patientSearch = signal('');
+
+  readonly filteredUpcoming = computed(() => this.upcomingAppointments().filter(a => this.matchesFilter(a)));
+  readonly filteredHistory = computed(() => this.history().filter(a => this.matchesFilter(a)).slice(0, this.showAllHistory() ? undefined : 8));
+  readonly historyCount = computed(() => this.history().filter(a => this.matchesFilter(a)).length);
+  readonly scheduleAppointments = computed(() => this.appointments()
+    .filter(a => a.status === 'Pending' || a.status === 'Confirmed')
+    .filter(a => this.localDateKey(a.appointmentDate) === this.selectedScheduleDate())
+    .sort((a, b) => Date.parse(a.appointmentDate) - Date.parse(b.appointmentDate)));
+  readonly patients = computed(() => {
+    const result = new Map<number, { name: string; total: number; upcoming: number }>();
+    for (const a of this.appointments()) {
+      const item = result.get(a.patientId) ?? { name: a.patientName, total: 0, upcoming: 0 };
+      item.total++;
+      if ((a.status === 'Pending' || a.status === 'Confirmed') && Date.parse(a.appointmentDate) >= Date.now()) item.upcoming++;
+      result.set(a.patientId, item);
+    }
+    return Array.from(result.values()).filter(p => p.name.toLowerCase().includes(this.patientSearch().toLowerCase().trim())).sort((a,b) => a.name.localeCompare(b.name));
+  });
+
+  setFilter(value: string): void {
+    if (['All', 'Pending', 'Confirmed', 'Completed', 'Cancelled'].includes(value)) this.statusFilter.set(value as 'All' | AppointmentStatus);
+  }
+
+  setScheduleDate(value: string): void { this.selectedScheduleDate.set(value); }
+  setPatientSearch(value: string): void { this.patientSearch.set(value); }
+  private matchesFilter(a: Appointment): boolean { return this.statusFilter() === 'All' || a.status === this.statusFilter(); }
+  private localDateKey(value: string): string {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return '';
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}`;
+  }
+
 
   readonly upcomingAppointments = computed(() =>
     this.appointments()
@@ -46,6 +83,7 @@ export class DashboardComponent implements OnInit {
   readonly completedCount = computed(() => this.appointments().filter(a => a.status === 'Completed').length);
 
   ngOnInit(): void {
+    this.selectedScheduleDate.set(this.localDateKey(new Date().toISOString()));
     this.loadAppointments();
   }
 

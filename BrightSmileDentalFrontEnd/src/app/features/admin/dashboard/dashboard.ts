@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -14,7 +15,7 @@ type StatusFilter = 'All' | AppointmentStatus;
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatProgressSpinnerModule],
+  imports: [CommonModule, RouterLink, MatIconModule, MatProgressSpinnerModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })

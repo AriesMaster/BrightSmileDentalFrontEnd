@@ -10,9 +10,12 @@
 
   <section class="welcome-bar">
     <div><strong>Welcome, Administrator</strong><span>{{ email() }}</span></div>
-    <button class="refresh-button" type="button" (click)="loadAppointments()" [disabled]="loading()">
+    <div class="admin-actions">
+      <a class="refresh-button patient-directory-link" routerLink="/admin/patients"><mat-icon>groups</mat-icon> Patient directory</a>
+      <button class="refresh-button" type="button" (click)="loadAppointments()" [disabled]="loading()">
       <mat-icon>refresh</mat-icon> Refresh data
-    </button>
+      </button>
+    </div>
   </section>
 
   @if (errorMessage()) {

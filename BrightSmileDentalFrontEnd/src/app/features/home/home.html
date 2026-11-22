@@ -1,193 +1,46 @@
-
-<!-- ==========================================
-     BRIGHTSMILE DENTAL
-     HOME PAGE
-========================================== -->
-
 <div class="home-shell">
-
-  <!-- ======================================
-       MAIN PAGE CONTENT
-  ======================================= -->
-
-  <div class="page-content">
-
-    <!-- ======================================
-         HERO SECTION
-    ======================================= -->
-
-    <section class="hero-section">
-
-      <!-- HERO TEXT -->
-
+  <main class="page-content">
+    <section class="hero-section" aria-labelledby="home-title">
       <div class="hero-copy">
-
-        <p class="eyebrow">
-          Trusted dental care
-        </p>
-
-        <h1>
-          Modern dentistry for a brighter,
-          healthier smile.
-        </h1>
-
-        <p class="subheading">
-          Personalized treatments, compassionate
-          specialists, and a patient-first
-          experience designed to make every
-          visit feel easy.
-        </p>
-
-        <!-- HERO ACTIONS -->
-
+        <span class="eyebrow"><span class="eyebrow-dot"></span> BRIGHTSMILE DENTAL</span>
+        <h1 id="home-title">A better way to care for <span>your smile.</span></h1>
+        <p class="subheading">Explore dental services, book appointments online and manage your visits in one simple, connected experience.</p>
         <div class="hero-actions">
-
-          <a
-            mat-raised-button
-            color="primary"
-            routerLink="/register"
-          >
-            Book an Appointment
-          </a>
-
+          <a mat-raised-button routerLink="/register" class="primary-action">Book an appointment <span aria-hidden="true">→</span></a>
+          <a routerLink="/services" class="secondary-action">Explore services <span aria-hidden="true">↗</span></a>
         </div>
-
-        <!-- TRUST INDICATORS -->
-
-        <ul class="hero-trust">
-
-          <li>
-            Same-day appointments
-          </li>
-
-          <li>
-            Friendly care for all ages
-          </li>
-
-          <li>
-            Digital, stress-free visits
-          </li>
-
-        </ul>
-
+        <p class="hero-note">Simple booking · Clear appointment updates · Convenient access</p>
       </div>
 
-      <!-- ======================================
-           HERO VISUAL
-      ======================================= -->
-
-      <div
-        class="hero-visual"
-        aria-label="Dental appointment preview"
-      >
-
-        <!-- PATIENT RATING -->
-
-        <div class="rating-badge">
-
-          <span class="star" aria-hidden="true">
-            ★
-          </span>
-
-          4.9 patient rating
-
-        </div>
-
-        <!-- ==================================
-             APPOINTMENT PREVIEW CARD
-        =================================== -->
-
-        <mat-card class="visual-card appointment-card">
-
-          <div class="card-header">
-
-            <span class="mini-label">
-              Upcoming visit
-            </span>
-
-            <span
-              class="status-dot"
-              aria-hidden="true"
-            >
-              ●
-            </span>
-
-          </div>
-
-          <h2>
-            Smile Care Checkup
-          </h2>
-
-          <div class="appointment-meta">
-
-            <span>
-              Tue, 10:30 AM
-            </span>
-
-            <span>
-              Dr. Gomez
-            </span>
-
-          </div>
-
-          <!-- APPOINTMENT PROGRESS -->
-
-          <div class="progress-row">
-
-            <span>
-              Consultation
-            </span>
-
-            <strong>
-              85%
-            </strong>
-
-          </div>
-
-          <div class="progress-bar">
-
-            <span></span>
-
-          </div>
-
-        </mat-card>
-
-        <!-- ==================================
-             PRACTICE STATISTICS
-        =================================== -->
-
-        <mat-card class="visual-card stats-card">
-
-          <div class="stat-item">
-
-            <strong>
-              2.5k+
-            </strong>
-
-            <span>
-              happy patients
-            </span>
-
-          </div>
-
-          <div class="stat-item">
-
-            <strong>
-              18 yrs
-            </strong>
-
-            <span>
-              of experience
-            </span>
-
-          </div>
-
-        </mat-card>
-
+      <div class="hero-visual" aria-label="Illustration of the online appointment booking process">
+        <div class="preview-topline"><span class="preview-mark"></span><span>YOUR DENTAL CARE, SIMPLIFIED</span><span class="preview-spark">✳</span></div>
+        <div class="preview-heading"><div><span class="preview-kicker">APPOINTMENTS</span><h2>Plan your next visit</h2></div><span class="preview-calendar" aria-hidden="true">▦</span></div>
+        <div class="preview-step"><span class="step-index">01</span><div><strong>Choose a service</strong><small>Find the treatment that suits your needs</small></div><span class="step-arrow">↗</span></div>
+        <div class="preview-step"><span class="step-index">02</span><div><strong>Select your appointment</strong><small>Choose a dentist and an available time</small></div><span class="step-arrow">↗</span></div>
+        <div class="preview-step"><span class="step-index">03</span><div><strong>Manage your booking</strong><small>Follow your appointment status online</small></div><span class="step-arrow">↗</span></div>
+        <div class="preview-footer"><span class="preview-status-dot"></span> Designed around your convenience <span aria-hidden="true">✦</span></div>
       </div>
-
     </section>
 
-  </div>
+    <section class="section-block" aria-labelledby="benefits-title">
+      <div class="section-heading"><div><span class="section-label">WHY BRIGHTSMILE</span><h2 id="benefits-title">Dental care, without the complexity.</h2></div><p>From finding a service to keeping track of your visits, everything is designed to feel straightforward.</p></div>
+      <div class="feature-grid">
+        <article class="feature-card"><span class="feature-icon" aria-hidden="true">▦</span><h3>Easy online booking</h3><p>Browse services and request your next appointment from one place.</p></article>
+        <article class="feature-card"><span class="feature-icon" aria-hidden="true">◎</span><h3>Stay informed</h3><p>View your bookings and keep track of their current status.</p></article>
+        <article class="feature-card"><span class="feature-icon" aria-hidden="true">♧</span><h3>Care that fits</h3><p>Explore available dental treatments and choose what works for you.</p></article>
+      </div>
+    </section>
 
+    <section class="services-band" aria-labelledby="services-title">
+      <div><span class="section-label">EXPLORE OUR SERVICES</span><h2 id="services-title">Find the right care for your smile.</h2><p>Discover the dental services available through BrightSmile Dental.</p></div>
+      <a routerLink="/services" class="band-link">View dental services <span aria-hidden="true">↗</span></a>
+    </section>
+
+    <section class="final-cta" aria-labelledby="cta-title">
+      <span class="section-label">GET STARTED</span>
+      <h2 id="cta-title">Your next smile starts here.</h2>
+      <p>Create your account to book and manage your dental appointments.</p>
+      <a routerLink="/register" class="cta-button">Get started <span aria-hidden="true">→</span></a>
+    </section>
+  </main>
 </div>

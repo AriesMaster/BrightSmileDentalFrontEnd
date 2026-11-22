@@ -1,261 +1,116 @@
+<div class="admin-page">
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">BRIGHTSMILE DENTAL · ADMINISTRATION</span>
+      <h1>Practice overview</h1>
+      <p>Monitor appointments and manage your dental practice from one workspace.</p>
+    </div>
+    <div class="header-actions">
+      <a mat-stroked-button routerLink="/profile"><mat-icon>person_outline</mat-icon> My profile</a>
+      <button mat-stroked-button type="button" (click)="logout()"><mat-icon>logout</mat-icon> Logout</button>
+    </div>
+  </header>
 
-<!-- ==========================================
-     BRIGHTSMILE DENTAL
-     ADMIN DASHBOARD
-========================================== -->
+  <section class="welcome-bar">
+    <div><strong>Welcome, Administrator</strong><span>{{ email() }}</span></div>
+    <button mat-stroked-button type="button" (click)="loadAppointments()" [disabled]="loading()">
+      <mat-icon>refresh</mat-icon> Refresh data
+    </button>
+  </section>
 
-<div class="dashboard-shell">
+  @if (errorMessage()) {
+    <div class="alert error" role="alert"><mat-icon>error_outline</mat-icon>{{ errorMessage() }}</div>
+  }
+  @if (successMessage()) {
+    <div class="alert success" role="status"><mat-icon>check_circle</mat-icon>{{ successMessage() }}</div>
+  }
 
-  <main class="dashboard-container">
+  <section aria-label="Appointment statistics" class="metrics">
+    <div class="metric"><span>Total appointments</span><strong>{{ totalAppointments() }}</strong><mat-icon>event_note</mat-icon></div>
+    <div class="metric"><span>Pending requests</span><strong>{{ pendingCount() }}</strong><mat-icon>pending_actions</mat-icon></div>
+    <div class="metric"><span>Confirmed</span><strong>{{ confirmedCount() }}</strong><mat-icon>event_available</mat-icon></div>
+    <div class="metric"><span>Upcoming active</span><strong>{{ upcomingCount() }}</strong><mat-icon>calendar_month</mat-icon></div>
+  </section>
+  <div class="context-stats">
+    <span><strong>{{ bookedPatientCount() }}</strong> patients with bookings</span>
+    <span><strong>{{ dentistCount() }}</strong> dentists with bookings</span>
+    <span><strong>{{ completedCount() }}</strong> completed appointments</span>
+  </div>
 
-    <!-- ======================================
-         DASHBOARD HEADER
-    ======================================= -->
+  <section class="appointments-panel" aria-labelledby="appointments-title">
+    <div class="panel-header">
+      <div><h2 id="appointments-title">Appointment management</h2><p>Search, review and cancel appointments across the practice.</p></div>
+      <span class="result-count">{{ filteredAppointments().length }} results</span>
+    </div>
 
-    <header class="dashboard-header">
+    <div class="filters">
+      <label>Search appointments
+        <input type="search" placeholder="Patient, dentist, service or ID"
+          [value]="searchTerm()" (input)="setSearch($any($event.target).value)" />
+      </label>
+      <label>Status
+        <select [value]="statusFilter()" (change)="setStatus($any($event.target).value)">
+          @for (status of statusOptions; track status) { <option [value]="status">{{ status }}</option> }
+        </select>
+      </label>
+      <label>Appointment date (SAST)
+        <input type="date" [value]="dateFilter()" (change)="setDate($any($event.target).value)" />
+      </label>
+      <button type="button" class="clear-button" (click)="clearFilters()">Clear filters</button>
+    </div>
 
-      <div class="header-content">
-
-        <p class="eyebrow">
-          ADMINISTRATION PORTAL
-        </p>
-
-        <h1>Admin Dashboard</h1>
-
-        <p class="header-description">
-          Manage your dental practice, users,
-          services and appointments from one
-          central workspace.
-        </p>
-
+    @if (loading()) {
+      <div class="empty-state" role="status"><mat-spinner diameter="32"></mat-spinner><p>Loading appointments...</p></div>
+    } @else if (filteredAppointments().length === 0) {
+      <div class="empty-state"><mat-icon>event_busy</mat-icon><h3>No appointments found</h3>
+        <p>Try another search or date, or refresh your appointments.</p>
       </div>
-
-      <!-- HEADER ACTIONS -->
-
-      <div class="header-actions">
-
-        <!-- MY PROFILE -->
-
-        <a
-          mat-stroked-button
-          routerLink="/profile"
-          aria-label="View and edit your administrator profile"
-        >
-          <mat-icon>account_circle</mat-icon>
-          My Profile
-        </a>
-
-        <!-- LOGOUT -->
-
-        <button
-          mat-stroked-button
-          type="button"
-          (click)="logout()"
-          aria-label="Sign out of your administrator account"
-        >
-          <mat-icon>logout</mat-icon>
-          Logout
-        </button>
-
+    } @else {
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Patient</th><th>Treatment</th><th>Dentist</th><th>Date & time (SAST)</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody>
+            @for (a of filteredAppointments(); track a.id) {
+              <tr>
+                <td><strong>{{ a.patientName }}</strong><small>#{{ a.id }}</small></td>
+                <td>{{ a.serviceName }}</td>
+                <td>{{ a.doctorName }}</td>
+                <td>{{ formatDate(a.appointmentDate) }}</td>
+                <td><span class="status" [attr.data-status]="a.status">{{ a.status }}</span></td>
+                <td>
+                  @if (canCancel(a)) {
+                    <button type="button" class="cancel-button" (click)="requestCancel(a)" [disabled]="actionId() !== null">
+                      {{ actionId() === a.id ? 'Cancelling...' : 'Cancel' }}
+                    </button>
+                  } @else { <span class="no-action">—</span> }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
       </div>
+    }
+  </section>
 
-    </header>
+  <section class="next-steps">
+    <mat-icon>info_outline</mat-icon>
+    <p><strong>Next modules:</strong> Full patient and dentist account management, dental service management and additional practice analytics.</p>
+  </section>
 
-    <!-- ======================================
-         ADMIN ACCOUNT OVERVIEW
-    ======================================= -->
-
-    <section
-      class="welcome-section"
-      aria-labelledby="welcome-title"
-    >
-
-      <mat-card class="dashboard-card">
-
-        <mat-card-content>
-
-          <div class="welcome-icon">
-            <mat-icon>admin_panel_settings</mat-icon>
-          </div>
-
-          <p class="welcome-eyebrow">
-            ADMINISTRATOR WORKSPACE
-          </p>
-
-          <h2 id="welcome-title">
-            Welcome to BrightSmileDental
-          </h2>
-
-          <p class="welcome-description">
-            Your central administration workspace
-            for overseeing dental practice operations,
-            managing accounts and maintaining
-            dental services.
-          </p>
-
-          <!-- ACCOUNT DETAILS -->
-
-          <div class="account-overview">
-
-            <div class="account-detail">
-
-              <span class="account-label">
-                Signed in as
-              </span>
-
-              <span class="account-value">
-                {{ email() || 'Administrator' }}
-              </span>
-
-            </div>
-
-            <div class="account-detail">
-
-              <span class="account-label">
-                Account Role
-              </span>
-
-              <span class="role-badge">
-                {{ role() || 'Admin' }}
-              </span>
-
-            </div>
-
-          </div>
-
-          <!-- PROFILE ACTION -->
-
-          <div class="dashboard-actions">
-
-            <a
-              mat-flat-button
-              routerLink="/profile"
-              aria-label="Manage your administrator profile"
-            >
-              <mat-icon>manage_accounts</mat-icon>
-              Manage My Profile
-            </a>
-
-          </div>
-
-        </mat-card-content>
-
-      </mat-card>
-
-    </section>
-
-    <!-- ======================================
-         ADMIN MANAGEMENT FEATURES
-    ======================================= -->
-
-    <section
-      class="management-section"
-      aria-labelledby="management-title"
-    >
-
-      <div class="section-header">
-
-        <div>
-
-          <h2 id="management-title">
-            Practice Management
-          </h2>
-
-          <p>
-            Administration tools for managing
-            BrightSmileDental operations.
-          </p>
-
+  @if (cancellationId() !== null) {
+    <div class="dialog-backdrop" role="presentation">
+      <div class="confirm-dialog" role="alertdialog" aria-modal="true" aria-labelledby="cancel-title" aria-describedby="cancel-description">
+        <h2 id="cancel-title">Cancel appointment?</h2>
+        <p id="cancel-description">This will mark the appointment as cancelled and release the dentist's time slot.</p>
+        <div class="dialog-actions">
+          <button type="button" (click)="dismissCancel()">Keep appointment</button>
+          @for (a of appointments(); track a.id) {
+            @if (a.id === cancellationId()) {
+              <button type="button" class="danger-button" (click)="confirmCancel(a)">Yes, cancel appointment</button>
+            }
+          }
         </div>
-
       </div>
-
-      <!-- MANAGEMENT CARDS -->
-
-      <div class="management-grid">
-
-        @for (
-          feature of dashboardFeatures;
-          track feature.title
-        ) {
-
-          <mat-card class="management-card">
-
-            <mat-card-content>
-
-              <!-- FEATURE ICON -->
-
-              <div class="management-icon">
-
-                <mat-icon>
-                  {{ feature.icon }}
-                </mat-icon>
-
-              </div>
-
-              <!-- FEATURE INFORMATION -->
-
-              <h3>
-                {{ feature.title }}
-              </h3>
-
-              <p>
-                {{ feature.description }}
-              </p>
-
-              <!-- FEATURE STATUS -->
-
-              <span class="feature-status">
-                {{ feature.status }}
-              </span>
-
-            </mat-card-content>
-
-          </mat-card>
-
-        }
-
-      </div>
-
-    </section>
-
-    <!-- ======================================
-         ADMINISTRATION INFORMATION
-    ======================================= -->
-
-    <section
-      class="information-section"
-      aria-labelledby="information-title"
-    >
-
-      <div class="information-content">
-
-        <div class="information-icon">
-          <mat-icon>info_outline</mat-icon>
-        </div>
-
-        <div>
-
-          <h2 id="information-title">
-            Administration Workspace
-          </h2>
-
-          <p>
-            Your administrator account provides
-            access to the management features
-            being developed for BrightSmileDental.
-            User management, dentist management,
-            dental services and appointment
-            oversight will be introduced as
-            these modules are implemented.
-          </p>
-
-        </div>
-
-      </div>
-
-    </section>
-
-  </main>
-
+    </div>
+  }
 </div>

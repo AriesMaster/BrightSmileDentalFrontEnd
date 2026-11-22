@@ -28,6 +28,7 @@ export class DashboardComponent implements OnInit {
   readonly loading = signal(false);
   readonly actionId = signal<number | null>(null);
   readonly cancellationId = signal<number | null>(null);
+  readonly statusChange = signal<{ id: number; status: 'Confirmed' | 'Completed' } | null>(null);
   readonly errorMessage = signal('');
   readonly successMessage = signal('');
   readonly searchTerm = signal('');
@@ -114,6 +115,43 @@ export class DashboardComponent implements OnInit {
       timeZone: 'Africa/Johannesburg', day: 'numeric', month: 'short', year: 'numeric',
       hour: '2-digit', minute: '2-digit', hour12: false
     }).format(new Date(value));
+  }
+
+  canConfirm(a: Appointment): boolean { return a.status === 'Pending'; }
+  canComplete(a: Appointment): boolean { return a.status === 'Confirmed' && Date.parse(a.appointmentDate) <= Date.now(); }
+  requestStatusChange(a: Appointment, status: 'Confirmed' | 'Completed'): void {
+    if (this.actionId() !== null || (status === 'Confirmed' ? !this.canConfirm(a) : !this.canComplete(a))) return;
+    this.statusChange.set({ id: a.id, status });
+  }
+  dismissStatusChange(): void { this.statusChange.set(null); }
+  confirmStatusChange(): void {
+    const change = this.statusChange();
+    if (!change || this.actionId() !== null) return;
+    const appointment = this.appointments().find(a => a.id === change.id);
+    if (!appointment || (change.status === 'Confirmed' ? !this.canConfirm(appointment) : !this.canComplete(appointment))) {
+      this.statusChange.set(null);
+      return;
+    }
+    this.statusChange.set(null);
+    this.actionId.set(change.id);
+    this.errorMessage.set('');
+    this.successMessage.set('');
+    this.appointmentService.updateAppointmentStatus(change.id, { status: change.status }).pipe(
+      timeout(20000),
+      takeUntilDestroyed(this.destroyRef),
+      finalize(() => this.actionId.set(null))
+    ).subscribe({
+      next: response => {
+        this.appointments.update(items => items.map(item =>
+          item.id === change.id ? { ...item, status: response.status } : item
+        ));
+        this.successMessage.set('Appointment #' + change.id + ' marked as ' + response.status.toLowerCase() + '.');
+      },
+      error: error => {
+        this.errorMessage.set(this.describeError(error));
+        this.loadAppointments();
+      }
+    });
   }
 
   canCancel(a: Appointment): boolean {

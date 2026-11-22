@@ -108,3 +108,6 @@ button.metric:hover{transform:translateY(-2px);border-color:#a3a3a3;box-shadow:0
 .welcome-bar>button{flex-shrink:0}
 @media(max-width:950px){.management-grid{grid-template-columns:1fr}}
 @media(max-width:650px){.management-card{padding:16px}.management-icon{width:42px;height:42px}}
+
+/* Four evenly spaced management cards on wide screens */
+@media(min-width:1200px){.management-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}

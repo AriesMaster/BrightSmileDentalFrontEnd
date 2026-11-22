@@ -187,6 +187,10 @@ export class DashboardComponent implements OnInit {
     return 'The request failed or timed out. Refresh the appointments before retrying.';
   }
 
+  scrollToSection(sectionId: string): void {
+    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   logout(): void {
     this.authService.logout();
   }

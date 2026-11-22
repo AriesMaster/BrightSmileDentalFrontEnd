@@ -33,7 +33,7 @@
   @if (data(); as report) {
     <div class="period-label">Reporting period: {{ report.period.from }} to {{ report.period.to }} · South African time</div>
     <section class="stats" aria-label="Report summary">
-      <div class="stat"><span>Total appointments</span><strong>{{ report.summary.totalAppointments }}</strong><small>Bookings in selected period</small></div>
+      <div class="stat"><span>Total appointments</span><strong>{{ report.summary.totalAppointments }}</strong><small>Appointments scheduled in selected period</small></div>
       <div class="stat"><span>Unique patients</span><strong>{{ report.summary.uniquePatients }}</strong><small>Patients with bookings in period</small></div>
       <div class="stat"><span>Completed visits</span><strong>{{ report.summary.completedAppointments }}</strong><small>{{ report.summary.completionRate }}% of bookings</small></div>
       <div class="stat"><span>Cancelled visits</span><strong>{{ report.summary.cancelledAppointments }}</strong><small>{{ report.summary.cancellationRate }}% of bookings</small></div>
@@ -43,7 +43,7 @@
 
     <div class="chart-grid">
       <section class="report-card trend-card">
-        <div class="card-heading"><h2>Appointment trend</h2><p>Daily bookings within the selected period</p></div>
+        <div class="card-heading"><h2>Appointment trend</h2><p>Daily scheduled appointments within the selected period</p></div>
         @if (report.summary.totalAppointments === 0) {
           <div class="empty">No appointments in this period.</div>
         } @else {
@@ -111,6 +111,6 @@
         }
       </section>
     </div>
-    <p class="disclaimer">Financial values are estimates based on current service prices. They do not represent invoices, collected payments or historical prices at the time of booking.</p>
+    <p class="disclaimer">Financial values use current service catalogue prices rather than historical prices at booking. They are estimates only, not invoices, collected payments or actual revenue.</p>
   }
 </main>

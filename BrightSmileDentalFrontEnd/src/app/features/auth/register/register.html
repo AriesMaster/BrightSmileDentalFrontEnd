@@ -308,6 +308,7 @@
               [matDatepicker]="birthDatePicker"
               [max]="maxDate"
               [(ngModel)]="dateOfBirth"
+              #birthDateControl="ngModel"
               placeholder="DD/MM/YYYY"
               autocomplete="bday"
             />
@@ -322,9 +323,10 @@
               startView="multi-year"
             ></mat-datepicker>
 
-            <mat-hint>
-              Optional
-            </mat-hint>
+            <mat-hint>Optional. Date cannot be in the future.</mat-hint>
+            @if (birthDateControl.invalid && (birthDateControl.touched || birthDateControl.dirty)) {
+              <mat-error>Please enter a valid date of birth.</mat-error>
+            }
 
           </mat-form-field>
 

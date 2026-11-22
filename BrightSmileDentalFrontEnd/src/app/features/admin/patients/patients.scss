@@ -32,3 +32,8 @@ td small{display:block;margin-top:5px;color:#888}td strong{color:#171717}
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}
 @media(max-width:850px){.stats{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:580px){.patients-page{padding:16px 10px 45px}.page-header{padding:20px;align-items:flex-start;flex-direction:column}.filters{grid-template-columns:1fr;padding:0 16px 20px}.directory-head{padding:20px 16px}.stats{gap:9px}.stats>div{padding:16px}.stats strong{font-size:26px}.detail{padding:20px}.profile-info>div{grid-template-columns:1fr;gap:5px}}
+
+/* Accessible viewport-contained patient drawer */
+.overlay{z-index:1100;overscroll-behavior:contain}
+.detail{height:100dvh;max-height:100dvh;overscroll-behavior:contain;scrollbar-gutter:stable}
+@media(max-width:580px){.detail{width:100%;max-width:100%;padding:22px 18px}}

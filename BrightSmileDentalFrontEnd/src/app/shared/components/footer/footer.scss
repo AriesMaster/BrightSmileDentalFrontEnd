@@ -2,13 +2,13 @@
 /* ==========================================
    BRIGHTSMILE DENTAL
    SHARED FOOTER STYLES
-   WHITE / BLACK / BLUE THEME
+   MONOCHROME DESIGN SYSTEM
 ========================================== */
 
 :host {
   display: block;
   width: 100%;
-  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 *,
@@ -25,8 +25,8 @@
   --footer-background: #ffffff;
   --footer-text: #111111;
   --footer-muted: #555555;
-  --footer-blue: #2563eb;
-  --footer-blue-dark: #1d4ed8;
+  --footer-blue: #171717;
+  --footer-blue-dark: #333333;
   --footer-border: #e5e7eb;
 
   width: 100%;
@@ -41,7 +41,7 @@
 
 .footer-container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1360px;
   margin: 0 auto;
   padding: 64px 24px 24px;
 }
@@ -96,7 +96,7 @@
 }
 
 .brand-subtitle {
-  color: var(--footer-blue);
+  color: #666666;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 3.5px;
@@ -249,9 +249,9 @@
   width: 36px;
   height: 36px;
   flex-shrink: 0;
-  border: 1px solid #dbeafe;
+  border: 1px solid #e5e5e5;
   border-radius: 9px;
-  background: #eff6ff;
+  background: #f2f2f2;
   color: var(--footer-blue);
 }
 
@@ -284,7 +284,7 @@
   &:hover {
     background: var(--footer-blue-dark);
     border-color: var(--footer-blue-dark);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
     transform: translateY(-2px);
   }
 
@@ -445,3 +445,10 @@
   }
 
 }
+
+/* Consistent monochrome link and focus treatments */
+.footer-column h2::after { background:#171717; }
+.footer-links a:hover, .contact-link:hover, .services-more-link:hover { color:#171717; }
+.services-more-link { color:#171717; border-bottom-color:#171717; }
+.footer-cta { border-radius:10px; }
+.site-footer a:focus-visible { outline-color:#171717; }

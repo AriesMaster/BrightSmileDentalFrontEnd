@@ -83,3 +83,8 @@ button.metric:hover{transform:translateY(-2px);border-color:#a3a3a3;box-shadow:0
 .detail-list .notes{white-space:pre-wrap;font-weight:400}
 .danger-outline{border-color:#fecaca!important;color:#991b1b}
 @media(max-width:650px){.attention-heading{padding:20px 16px;align-items:flex-start;flex-direction:column}.attention-item{padding:14px 16px;flex-wrap:wrap}.attention-date{width:100%}.detail-list>div{grid-template-columns:1fr;gap:4px}}
+
+/* Status workflow actions */
+.dialog-actions .primary-action{background:#171717;color:#fff;border-color:#171717}
+.dialog-actions .primary-action:hover{background:#333}
+.dialog-actions button:disabled{opacity:.5;cursor:not-allowed}

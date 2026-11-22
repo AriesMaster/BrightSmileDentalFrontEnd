@@ -53,3 +53,33 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 @media(max-width:1050px){.metrics{grid-template-columns:repeat(2,1fr)}.filters{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:650px){.admin-page{padding:20px 12px 50px}.page-header{flex-direction:column;padding:22px}.header-actions{width:100%}.welcome-bar{align-items:flex-start;flex-direction:column}.metrics{gap:10px}.metric{padding:17px}.metric strong{font-size:28px}.filters{grid-template-columns:1fr;padding:0 18px 20px}.panel-header{padding:22px 18px}.context-stats{gap:12px}.dialog-actions{flex-direction:column}.dialog-actions button{width:100%}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+
+/* Admin dashboard refinements */
+.page-header{align-items:center}
+.refresh-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:9px 14px;border:1px solid #d4d4d4;border-radius:9px;background:#fff;color:#171717;font:600 12px "Poppins",sans-serif;cursor:pointer}
+.refresh-button:disabled{opacity:.55;cursor:wait}
+.metric{text-align:left;font-family:inherit;cursor:default}
+button.metric{cursor:pointer;transition:transform .15s,border-color .15s,box-shadow .15s}
+button.metric:hover{transform:translateY(-2px);border-color:#a3a3a3;box-shadow:0 8px 20px #0000000b}
+.metric small{font-size:11px;color:#737373}
+.attention-panel{background:#fff;border:1px solid #e0e0e0;border-radius:18px;box-shadow:0 4px 16px #00000008;margin:0 0 22px;overflow:hidden}
+.attention-heading{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:24px 26px;border-bottom:1px solid #eee}
+.attention-heading h2{font-size:18px;margin:0 0 5px}.attention-heading p{font-size:12px;color:#666;margin:0}
+.text-button{border:0;background:transparent;color:#1d4ed8;font:600 12px "Poppins",sans-serif;cursor:pointer;white-space:nowrap}
+.attention-item{display:flex;align-items:center;gap:18px;padding:15px 26px;border-top:1px solid #f3f3f3}
+.attention-item:first-child{border-top:0}
+.attention-item>div:first-child{display:flex;flex-direction:column;gap:5px;flex:1;min-width:0}
+.attention-item strong{font-size:12px}.attention-item span,.attention-date{font-size:11px;color:#666}
+.attention-date small{color:#888}
+.attention-empty{display:flex;align-items:center;gap:9px;margin:0;padding:23px 26px;color:#666;font-size:12px}
+.details-button{border:1px solid #d4d4d4;background:#fff;border-radius:8px;padding:8px 11px;color:#171717;font:600 11px "Poppins",sans-serif;cursor:pointer;margin-right:8px}
+.patient-link{border:0;background:transparent;padding:0;color:#171717;font:700 12px "Poppins",sans-serif;text-align:left;cursor:pointer;text-decoration:underline;text-decoration-color:#d4d4d4;text-underline-offset:3px}
+.dialog-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
+.dialog-title h2{margin:0}.icon-button{border:0;background:transparent;cursor:pointer}
+.appointment-dialog{max-height:min(90vh,760px);overflow:auto}
+.detail-list{margin:18px 0 0}
+.detail-list>div{display:grid;grid-template-columns:125px 1fr;gap:12px;padding:12px 0;border-top:1px solid #eee}
+.detail-list dt{font-size:12px;color:#737373}.detail-list dd{margin:0;font-size:12px;font-weight:600;overflow-wrap:anywhere}
+.detail-list .notes{white-space:pre-wrap;font-weight:400}
+.danger-outline{border-color:#fecaca!important;color:#991b1b}
+@media(max-width:650px){.attention-heading{padding:20px 16px;align-items:flex-start;flex-direction:column}.attention-item{padding:14px 16px;flex-wrap:wrap}.attention-date{width:100%}.detail-list>div{grid-template-columns:1fr;gap:4px}}

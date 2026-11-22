@@ -2,10 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { RouterLink } from '@angular/router';
 import { finalize, timeout } from 'rxjs';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../../core/services/auth.service';
@@ -17,7 +14,7 @@ type StatusFilter = 'All' | AppointmentStatus;
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, MatButtonModule, MatCardModule, MatIconModule, MatProgressSpinnerModule],
+  imports: [CommonModule, MatIconModule, MatProgressSpinnerModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })
@@ -36,6 +33,12 @@ export class DashboardComponent implements OnInit {
   readonly searchTerm = signal('');
   readonly statusFilter = signal<StatusFilter>('All');
   readonly dateFilter = signal('');
+  readonly selectedAppointmentId = signal<number | null>(null);
+  readonly selectedAppointment = computed(() => this.appointments().find(a => a.id === this.selectedAppointmentId()) ?? null);
+  readonly todaySast = computed(() => this.sastDate(new Date().toISOString()));
+  readonly todayCount = computed(() => this.appointments().filter(a => this.sastDate(a.appointmentDate) === this.todaySast() && a.status !== 'Cancelled').length);
+  readonly cancelledCount = computed(() => this.appointments().filter(a => a.status === 'Cancelled').length);
+  readonly pendingAppointments = computed(() => this.appointments().filter(a => a.status === 'Pending' && Date.parse(a.appointmentDate) >= Date.now()).sort((a,b) => Date.parse(a.appointmentDate)-Date.parse(b.appointmentDate)).slice(0,4));
   readonly statusOptions: StatusFilter[] = ['All', 'Pending', 'Confirmed', 'Completed', 'Cancelled'];
 
   readonly totalAppointments = computed(() => this.appointments().length);
@@ -61,6 +64,11 @@ export class DashboardComponent implements OnInit {
   });
 
   ngOnInit(): void { this.loadAppointments(); }
+  viewAppointment(id: number): void { this.selectedAppointmentId.set(id); }
+  closeAppointment(): void { this.selectedAppointmentId.set(null); }
+  showPending(): void { this.statusFilter.set('Pending'); this.dateFilter.set(''); this.searchTerm.set(''); }
+  showToday(): void { this.statusFilter.set('All'); this.dateFilter.set(this.todaySast()); this.searchTerm.set(''); }
+  showAll(): void { this.clearFilters(); }
 
   loadAppointments(): void {
     if (this.loading()) return;
@@ -154,5 +162,4 @@ export class DashboardComponent implements OnInit {
     return 'Unable to load or update appointments. Please try again.';
   }
 
-  logout(): void { this.authService.logout(); }
 }

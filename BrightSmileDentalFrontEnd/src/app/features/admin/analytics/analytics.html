@@ -1,0 +1,116 @@
+<main class="analytics-page">
+  <header class="page-header">
+    <div>
+      <a routerLink="/dashboard" class="back-link">← Back to overview</a>
+      <p class="eyebrow">BRIGHTSMILE DENTAL · ADMINISTRATION</p>
+      <h1>Analytics & reporting</h1>
+      <p class="subtitle">Explore practice activity using real appointment records.</p>
+    </div>
+    <div class="header-actions">
+      <button type="button" class="outline-button" [disabled]="!data() || loading()" (click)="exportCsv()">Export CSV</button>
+      <button type="button" class="primary-button" [disabled]="loading() || !!dateError()" (click)="load()">{{ loading() ? 'Loading...' : 'Refresh report' }}</button>
+    </div>
+  </header>
+
+  <section class="filters-panel" aria-label="Reporting period">
+    <div class="quick-ranges">
+      <span>Quick range</span>
+      <button type="button" (click)="setRange(7)">7 days</button>
+      <button type="button" (click)="setRange(30)">30 days</button>
+      <button type="button" (click)="setRange(90)">90 days</button>
+    </div>
+    <div class="date-fields">
+      <label>From <input type="date" [value]="from()" (change)="from.set($any($event.target).value)" /></label>
+      <label>To <input type="date" [value]="to()" (change)="to.set($any($event.target).value)" /></label>
+      <button type="button" class="primary-button" [disabled]="loading() || !!dateError()" (click)="load()">Apply dates</button>
+    </div>
+    @if (dateError()) { <p class="error-text" role="alert">{{ dateError() }}</p> }
+  </section>
+
+  @if (error()) { <div class="notice error" role="alert">{{ error() }} <button type="button" (click)="load()">Retry</button></div> }
+  @if (loading()) { <div class="notice" role="status">Loading practice analytics...</div> }
+
+  @if (data(); as report) {
+    <div class="period-label">Reporting period: {{ report.period.from }} to {{ report.period.to }} · South African time</div>
+    <section class="stats" aria-label="Report summary">
+      <div class="stat"><span>Total appointments</span><strong>{{ report.summary.totalAppointments }}</strong><small>Bookings in selected period</small></div>
+      <div class="stat"><span>Unique patients</span><strong>{{ report.summary.uniquePatients }}</strong><small>Patients with bookings in period</small></div>
+      <div class="stat"><span>Completed visits</span><strong>{{ report.summary.completedAppointments }}</strong><small>{{ report.summary.completionRate }}% of bookings</small></div>
+      <div class="stat"><span>Cancelled visits</span><strong>{{ report.summary.cancelledAppointments }}</strong><small>{{ report.summary.cancellationRate }}% of bookings</small></div>
+      <div class="stat"><span>Estimated completed value</span><strong>{{ money(report.summary.estimatedCompletedValue) }}</strong><small>Current catalogue prices; not payments</small></div>
+      <div class="stat"><span>Estimated scheduled value</span><strong>{{ money(report.summary.estimatedScheduledValue) }}</strong><small>Pending and confirmed; not revenue</small></div>
+    </section>
+
+    <div class="chart-grid">
+      <section class="report-card trend-card">
+        <div class="card-heading"><h2>Appointment trend</h2><p>Daily bookings within the selected period</p></div>
+        @if (report.summary.totalAppointments === 0) {
+          <div class="empty">No appointments in this period.</div>
+        } @else {
+          <div class="trend-scroll">
+            <div class="trend-bars" role="img" aria-label="Daily appointment count bar chart">
+              @for (point of report.dailyTrend; track point.date) {
+                <div class="trend-col" [title]="point.date + ': ' + point.count + ' appointments'">
+                  <span class="trend-value">{{ point.count || '' }}</span>
+                  <div class="trend-track"><div class="trend-fill" [style.height.%]="barHeight(point.count)"></div></div>
+                  <small>{{ formatDay(point.date) }}</small>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </section>
+
+      <section class="report-card status-card">
+        <div class="card-heading"><h2>Appointment status</h2><p>Breakdown of all recorded outcomes</p></div>
+        @if (report.summary.totalAppointments === 0) {
+          <div class="empty">No status data to display.</div>
+        } @else {
+          <div class="status-list">
+            @for (item of report.statusBreakdown; track item.status) {
+              <div class="bar-item">
+                <div class="bar-label"><span>{{ item.status }}</span><strong>{{ item.count }}</strong></div>
+                <div class="bar-track"><div class="bar-fill" [attr.data-status]="item.status" [style.width.%]="statusWidth(item.count)"></div></div>
+              </div>
+            }
+          </div>
+        }
+      </section>
+
+      <section class="report-card">
+        <div class="card-heading"><h2>Popular treatments</h2><p>Services ranked by appointment count</p></div>
+        @if (report.popularServices.length === 0) {
+          <div class="empty">No treatments booked in this period.</div>
+        } @else {
+          <div class="bar-list">
+            @for (service of report.popularServices; track service.serviceName) {
+              <div class="bar-item">
+                <div class="bar-label"><span>{{ service.serviceName }}</span><strong>{{ service.appointmentCount }}</strong></div>
+                <div class="bar-track"><div class="bar-fill" [style.width.%]="serviceWidth(service.appointmentCount)"></div></div>
+                <small>{{ service.completedCount }} completed · {{ money(service.estimatedCompletedValue) }} estimated value</small>
+              </div>
+            }
+          </div>
+        }
+      </section>
+
+      <section class="report-card">
+        <div class="card-heading"><h2>Dentist workloads</h2><p>Appointment distribution across the clinical team</p></div>
+        @if (report.dentistWorkload.length === 0) {
+          <div class="empty">No dentist appointments in this period.</div>
+        } @else {
+          <div class="bar-list">
+            @for (dentist of report.dentistWorkload; track dentist.dentistId) {
+              <div class="bar-item">
+                <div class="bar-label"><span>{{ dentist.dentistName }}</span><strong>{{ dentist.appointmentCount }}</strong></div>
+                <div class="bar-track"><div class="bar-fill" [style.width.%]="dentistWidth(dentist.appointmentCount)"></div></div>
+                <small>{{ dentist.completedCount }} completed · {{ dentist.confirmedCount }} confirmed · {{ dentist.pendingCount }} pending</small>
+              </div>
+            }
+          </div>
+        }
+      </section>
+    </div>
+    <p class="disclaimer">Financial values are estimates based on current service prices. They do not represent invoices, collected payments or historical prices at the time of booking.</p>
+  }
+</main>

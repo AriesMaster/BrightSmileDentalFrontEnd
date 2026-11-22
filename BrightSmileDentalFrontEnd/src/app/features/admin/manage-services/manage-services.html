@@ -1,0 +1,103 @@
+<main class="services-page">
+  <header class="page-header">
+    <div>
+      <a routerLink="/dashboard" class="back-link">← Back to overview</a>
+      <p class="eyebrow">BRIGHTSMILE DENTAL · ADMINISTRATION</p>
+      <h1>Dental services</h1>
+      <p class="subtitle">Manage treatments, descriptions and patient-facing prices.</p>
+    </div>
+    <div class="header-actions">
+      <button type="button" class="outline-button" [disabled]="loading()" (click)="load()">Refresh</button>
+      <button type="button" class="primary-button" (click)="openCreate()">+ Add service</button>
+    </div>
+  </header>
+
+  @if (success()) { <div class="notice success" role="status">{{ success() }}</div> }
+  @if (error()) { <div class="notice error" role="alert">{{ error() }} <button type="button" (click)="load()">Retry</button></div> }
+
+  <section class="stats" aria-label="Service statistics">
+    <div><span>Available treatments</span><strong>{{ count() }}</strong></div>
+    <div><span>Average listed price</span><strong>{{ money(averagePrice()) }}</strong></div>
+  </section>
+
+  <section class="directory">
+    <div class="directory-head"><h2>Treatment directory</h2><p>{{ filtered().length }} services shown</p></div>
+    <div class="filters">
+      <label>Search treatments
+        <input type="search" placeholder="Search by name, description or ID" [value]="search()"
+          (input)="search.set($any($event.target).value)" />
+      </label>
+    </div>
+    @if (loading()) {
+      <div class="empty" role="status">Loading dental services...</div>
+    } @else if (!error() && filtered().length === 0) {
+      <div class="empty">No dental services match your search.</div>
+    } @else if (!error()) {
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Treatment</th><th>Description</th><th>Price</th><th>Actions</th></tr></thead>
+          <tbody>
+            @for (item of filtered(); track item.id) {
+              <tr>
+                <td><strong>{{ item.name }}</strong><small>Service #{{ item.id }}</small></td>
+                <td class="description">{{ item.description || 'No description provided' }}</td>
+                <td><strong>{{ money(item.price) }}</strong></td>
+                <td>
+                  <div class="row-actions">
+                    <button type="button" class="outline-button" (click)="openEdit(item)">Edit</button>
+                    <button type="button" class="outline-button danger-button" (click)="requestDelete(item)">Delete</button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+
+  @if (showForm()) {
+    <div class="overlay">
+      <section class="panel" role="dialog" aria-modal="true" aria-labelledby="service-form-title">
+        <div class="panel-header">
+          <div><h2 id="service-form-title">{{ editingId() === null ? 'Add dental service' : 'Edit dental service' }}</h2>
+            <p class="muted">Changes to the service catalogue are reflected in booking options.</p></div>
+          <button type="button" class="close" aria-label="Close service form" [disabled]="saving()" (click)="closeForm()">×</button>
+        </div>
+        <form [formGroup]="form" (ngSubmit)="submit()" class="service-form">
+          <label>Treatment name <span>*</span>
+            <input type="text" formControlName="name" maxlength="100" placeholder="e.g. Dental cleaning" />
+            @if (form.controls.name.touched && form.controls.name.invalid) { <small class="field-error">Enter a treatment name.</small> }
+          </label>
+          <label>Description
+            <textarea formControlName="description" rows="5" maxlength="1000" placeholder="Describe the treatment and what patients can expect."></textarea>
+          </label>
+          <label>Price (ZAR) <span>*</span>
+            <input type="number" formControlName="price" min="0.01" step="0.01" />
+            @if (form.controls.price.touched && form.controls.price.invalid) { <small class="field-error">Enter a valid price greater than zero.</small> }
+          </label>
+          @if (formError()) { <p class="notice error" role="alert">{{ formError() }}</p> }
+          <div class="form-actions">
+            <button type="button" class="outline-button" [disabled]="saving()" (click)="closeForm()">Cancel</button>
+            <button type="submit" class="primary-button" [disabled]="saving()">{{ saving() ? 'Saving...' : (editingId() === null ? 'Create service' : 'Save changes') }}</button>
+          </div>
+        </form>
+      </section>
+    </div>
+  }
+
+  @if (deleteTarget(); as item) {
+    <div class="overlay centered">
+      <section class="confirm-panel" role="alertdialog" aria-modal="true" aria-labelledby="delete-service-title">
+        <h2 id="delete-service-title">Delete dental service?</h2>
+        <p>Are you sure you want to delete <strong>{{ item.name }}</strong>? This cannot be undone.</p>
+        <p class="muted">Services with existing appointments cannot be deleted, to preserve appointment history.</p>
+        @if (deleteError()) { <p class="notice error" role="alert">{{ deleteError() }}</p> }
+        <div class="form-actions">
+          <button type="button" class="outline-button" [disabled]="deleting()" (click)="closeDelete()">Keep service</button>
+          <button type="button" class="primary-button danger" [disabled]="deleting()" (click)="confirmDelete()">{{ deleting() ? 'Deleting...' : 'Delete service' }}</button>
+        </div>
+      </section>
+    </div>
+  }
+</main>

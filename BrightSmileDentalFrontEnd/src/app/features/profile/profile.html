@@ -290,7 +290,10 @@
                 id="dateOfBirth"
                 type="date"
                 formControlName="dateOfBirth"
+                [max]="todayDate"
+                [class.input-error]="isFieldInvalid('dateOfBirth')"
               />
+              <small *ngIf="isFieldInvalid('dateOfBirth')" class="field-error">Enter a valid date of birth.</small>
 
             </div>
 

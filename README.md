@@ -1,226 +1,94 @@
-# BrightSmile Dental Frontend
+# BrightSmile Dental — Angular Frontend
 
-## Overview
+**Dental appointment management | Angular · TypeScript · REST APIs · JWT**
 
-BrightSmile Dental Frontend is a Single Page Application (SPA) built with Angular. The application provides a modern user interface for managing dental appointments, patient records, services, and user authentication. It communicates with the BrightSmile Dental ASP.NET Core Web API through RESTful endpoints and uses JWT authentication for secure access.
+BrightSmile Dental is a full-stack dental management portfolio project with separate Angular and ASP.NET Core repositories. The frontend provides role-oriented interfaces for **patients, dentists and administrators**.
 
-## Technologies Used
+[Live frontend](https://brightsmiledentalfrontend.netlify.app/) · [Backend API repository](https://github.com/AriesMaster/BrightSmileDentalBackEnd) · [Developer portfolio](https://thabo.netlify.app/)
 
-* Angular 21
-* TypeScript
-* HTML5
-* CSS3 / SCSS
-* RxJS
-* Angular Router
-* Angular Forms
-* JWT Authentication
-* RESTful API Integration
+> **Project status:** Active development. The frontend is published on Netlify, but a successful end-to-end connection to the deployed API has not yet been verified. Features described below represent the project's implemented or developing workflows, not a claim that every workflow is production-ready.
 
-## Project Structure
+## What the application covers
 
-```text
-src/
-│
-├── app/
-│   ├── core/
-│   │   ├── services/
-│   │   ├── guards/
-│   │   ├── interceptors/
-│   │   └── models/
-│   │
-│   ├── shared/
-│   │   ├── components/
-│   │   └── interfaces/
-│   │
-│   ├── features/
-│   │   ├── auth/
-│   │   ├── admin/
-│   │   ├── patient/
-│   │   └── dentist/
-│   │
-│   ├── layouts/
-│   │
-│   ├── app.routes.ts
-│   └── app.config.ts
-│
-├── assets/
-├── environments/
-└── styles.scss
-```
+| Area | Workflow |
+| --- | --- |
+| Authentication | Registration, login, password recovery and protected routes |
+| Patients | Patient dashboard, appointments and profile workflows |
+| Dentists | Dentist dashboard and assigned-appointment workflows |
+| Administration | Administration dashboard, users and dental services |
+| Shared UI | Navigation, forms, responsive layouts and API communication |
 
-## Features
+The backend enforces authorization and booking rules. Frontend route guards improve navigation but **do not replace server-side authorization**.
 
-### Authentication
+## Technology
 
-* User Registration
-* User Login
-* JWT Token Authentication
-* Role-Based Access Control
-* Route Protection with Guards
+- Angular and TypeScript
+- HTML, CSS/SCSS, Angular routing and forms
+- HTTP integration with an ASP.NET Core 10 REST API
+- JWT bearer authentication and role-aware navigation
+- Netlify frontend hosting
+- PostgreSQL (Supabase) accessed **through the backend**, not directly from the browser
 
-### Administration
+**Version note:** Confirm the installed Angular/CLI versions against the actual application workspace before pinning version-specific requirements here. The current repository-root `package.json` does not yet contain a complete Angular workspace script/dependency configuration.
 
-* Dashboard
-* User Management
-* Service Management
-
-### Patient Management
-
-* Patient Dashboard
-* Appointment Booking
-* Profile Management
-
-### Dentist Management
-
-* Dentist Dashboard
-* Appointment Scheduling
-* Profile Management
-
-### Shared Features
-
-* Responsive Navigation
-* Reusable Components
-* Centralized API Communication
-* Error Handling
-* Loading Indicators
-
-## Prerequisites
-
-Before running the application, ensure the following are installed:
-
-* Node.js 24+
-* npm 11+
-* Angular CLI 21+
-
-Verify installation:
-
-```bash
-node -v
-npm -v
-ng version
-```
-
-## Installation
-
-Clone the repository:
-
-```bash
-git clone https://github.com/your-username/BrightSmileDentalFrontEnd.git
-```
-
-Navigate to the project folder:
-
-```bash
-cd BrightSmileDentalFrontEnd
-```
-
-Install dependencies:
-
-```bash
-npm install
-```
-
-## Environment Configuration
-
-Create the environment file:
-
-```typescript
-export const environment = {
-  apiUrl: 'http://localhost:5243/api'
-};
-```
-
-Update the API URL if the backend is hosted elsewhere.
-
-## Running the Application
-
-Start the Angular development server:
-
-```bash
-ng serve
-```
-
-The application will be available at:
+## System overview
 
 ```text
-http://localhost:4200
+Browser
+  |
+  v
+Angular SPA (Netlify / local development)
+  | HTTPS + JSON + Authorization: Bearer <token>
+  v
+ASP.NET Core 10 Web API
+  | Entity Framework Core / Npgsql
+  v
+Supabase PostgreSQL
 ```
 
-## Backend API
+See the [backend README](https://github.com/AriesMaster/BrightSmileDentalBackEnd#readme) for the data model, endpoints, role permissions, scheduling rules and manual API verification.
 
-This frontend application requires the BrightSmile Dental Backend API to be running.
+## Run locally
 
-Default backend URL:
+The intended workflow is:
 
-```text
-http://localhost:5243
-```
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/AriesMaster/BrightSmileDentalFrontEnd.git
+   cd BrightSmileDentalFrontEnd
+   ```
+2. Install a compatible Node.js version and the Angular CLI.
+3. **Verify or restore the complete Angular workspace files** (including its scripts, configuration and dependencies) before attempting an install or build. The repository-root `package.json` currently needs attention.
+4. Configure the frontend's API base URL to point to your locally running backend; do not commit secrets.
+5. Once the workspace configuration is verified, install dependencies and start the development server using the scripts defined in that workspace.
 
-The backend provides:
+Typical Angular commands, **once supported by the restored workspace**, are `npm install`, `ng serve`, `ng build` and `ng test`. These commands are not claimed as verified against the current repository state.
 
-* Authentication
-* User Management
-* Appointment Management
-* Service Management
-* Role-Based Authorization
+## Security and engineering notes
 
-## Authentication Flow
+- The API, not the Angular client, is responsible for enforcing role and resource authorization.
+- Never embed database credentials or JWT signing keys in frontend code.
+- Avoid logging access tokens or sensitive patient information.
+- Verify the frontend's environment-specific API URL and CORS settings when deploying.
 
-1. User submits login credentials.
-2. Angular sends the request to the backend API.
-3. ASP.NET Core validates the user credentials.
-4. A JWT token is generated and returned.
-5. The token is stored locally.
-6. Protected requests include the JWT token in the Authorization header.
-7. Backend endpoints validate the token before granting access.
+## Roadmap
 
-## Development Practices
+- [ ] Verify and repair the committed Angular workspace configuration.
+- [ ] Confirm deployed frontend-to-API connectivity and all role workflows.
+- [ ] Add project screenshots and an accurate feature walkthrough.
+- [ ] Add automated component/service tests and browser end-to-end tests.
+- [ ] Add GitHub Actions build/test checks and deployment gates.
 
-The project follows:
+Items are unchecked until implemented and verified.
 
-* SOLID Principles
-* Separation of Concerns
-* Feature-Based Architecture
-* Reusable Components
-* Dependency Injection
-* Strong Typing with TypeScript
-* Clean Folder Structure
-* RESTful Communication Standards
+## Related repositories
 
-## Available Scripts
+- [BrightSmile Dental Backend](https://github.com/AriesMaster/BrightSmileDentalBackEnd)
+- [Developer GitHub profile](https://github.com/AriesMaster)
 
-Start development server:
+## Developer
 
-```bash
-ng serve
-```
+**Thabo Tankiso Mavundza** — Junior Full-Stack Software Developer  
+Angular · TypeScript · C# · ASP.NET Core · EF Core · PostgreSQL
 
-Build for production:
-
-```bash
-ng build
-```
-
-Run unit tests:
-
-```bash
-ng test
-```
-
-Generate components:
-
-```bash
-ng generate component component-name
-```
-
-## Author
-
-**Thabo Mavundza**
-
-BSc Information Technology Graduate
-Full-Stack Software Developer
-Angular | ASP.NET Core | Entity Framework Core | SQL Server | PostgreSQL | REST APIs
-
-## License
-
-This project is intended for educational, portfolio, and professional development purposes.
+This is an actively developed portfolio project, not a production clinical records system.

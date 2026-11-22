@@ -32,3 +32,9 @@ td small{display:block;margin-top:5px;color:#888}td strong{color:#171717}.descri
 .field-error{font-size:11px;color:#b91c1c}.form-actions{justify-content:flex-end;border-top:1px solid #eee;padding-top:20px}
 button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}
 @media(max-width:580px){.services-page{padding:16px 10px 45px}.page-header{padding:20px;align-items:flex-start;flex-direction:column}.directory-head{padding:20px 16px}.filters{padding:0 16px 20px}.stats{gap:9px}.stats>div{padding:16px}.stats strong{font-size:23px}.panel{padding:20px}}
+
+/* Consistent service drawer and confirmation dialog */
+.overlay{z-index:1100;overscroll-behavior:contain}
+.panel{height:100dvh;max-height:100dvh;overscroll-behavior:contain;scrollbar-gutter:stable}
+.confirm-panel{max-height:calc(100dvh - 30px);overflow-y:auto}
+@media(max-width:580px){.panel{width:100%;max-width:100%;padding:22px 18px}.confirm-panel{padding:22px}}

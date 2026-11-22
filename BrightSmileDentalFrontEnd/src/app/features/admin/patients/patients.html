@@ -1,0 +1,101 @@
+<main class="patients-page">
+  <header class="page-header">
+    <div>
+      <a routerLink="/dashboard" class="back-link">← Back to overview</a>
+      <p class="eyebrow">BRIGHTSMILE DENTAL · ADMINISTRATION</p>
+      <h1>Patient management</h1>
+      <p class="subtitle">Find registered patients and review their appointment history.</p>
+    </div>
+    <button type="button" class="outline-button" [disabled]="loading()" (click)="load()">Refresh patients</button>
+  </header>
+
+  <section class="stats" aria-label="Patient statistics">
+    <div><span>Registered patients</span><strong>{{ count() }}</strong></div>
+    <div><span>Patients with bookings</span><strong>{{ withBookings() }}</strong></div>
+    <div><span>Patients without bookings</span><strong>{{ withoutBookings() }}</strong></div>
+    <div><span>Patients with upcoming visits</span><strong>{{ upcoming() }}</strong></div>
+  </section>
+
+  <section class="directory">
+    <div class="directory-head">
+      <div><h2>Patient directory</h2><p>{{ filtered().length }} patients shown</p></div>
+    </div>
+    <div class="filters">
+      <label>Search patients
+        <input type="search" placeholder="Name, email, phone or ID" [value]="search()"
+          (input)="search.set($any($event.target).value)" />
+      </label>
+      <label>Show
+        <select [value]="filter()" (change)="filter.set($any($event.target).value)">
+          <option value="All">All patients</option>
+          <option value="Upcoming">Upcoming visits</option>
+          <option value="NoBookings">No bookings yet</option>
+        </select>
+      </label>
+    </div>
+    @if (error()) {
+      <div class="message error" role="alert">{{ error() }} <button type="button" (click)="load()">Try again</button></div>
+    }
+    @if (loading()) {
+      <div class="empty" role="status">Loading registered patients...</div>
+    } @else if (filtered().length === 0) {
+      <div class="empty">No patients match these filters.</div>
+    } @else {
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Patient</th><th>Email</th><th>Phone</th><th>Appointments</th><th>Upcoming</th><th></th></tr></thead>
+          <tbody>
+            @for (p of filtered(); track p.id) {
+              <tr>
+                <td><strong>{{ name(p) }}</strong><small>Patient #{{ p.id }}</small></td>
+                <td>{{ p.email }}</td>
+                <td>{{ p.phoneNumber || 'Not provided' }}</td>
+                <td>{{ p.appointmentCount }}</td>
+                <td>{{ p.upcomingAppointments }}</td>
+                <td><button type="button" class="outline-button" (click)="openPatient(p.id)">View profile</button></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+
+  @if (selectedId() !== null) {
+    <div class="overlay">
+      <section class="detail" role="dialog" aria-modal="true" aria-labelledby="patient-title">
+        <div class="detail-head">
+          <h2 id="patient-title">Patient profile</h2>
+          <button type="button" class="close" aria-label="Close patient profile" (click)="closePatient()">×</button>
+        </div>
+        @if (loadingDetail()) {
+          <p role="status">Loading patient details...</p>
+        } @else if (detailError()) {
+          <p class="message error" role="alert">{{ detailError() }}</p>
+          <button type="button" class="outline-button" (click)="openPatient(selectedId()!)">Retry</button>
+        } @else if (selected(); as detail) {
+          <div class="profile-info">
+            <div><span>Name</span><strong>{{ detail.patient.profile?.firstName || 'Not provided' }} {{ detail.patient.profile?.lastName || '' }}</strong></div>
+            <div><span>Email</span><strong>{{ detail.patient.email }}</strong></div>
+            <div><span>Phone</span><strong>{{ detail.patient.profile?.phoneNumber || 'Not provided' }}</strong></div>
+            <div><span>Gender</span><strong>{{ detail.patient.profile?.gender || 'Not provided' }}</strong></div>
+            <div><span>Date of birth</span><strong>{{ detail.patient.profile?.dateOfBirth ? (detail.patient.profile?.dateOfBirth | date:'mediumDate':'UTC') : 'Not provided' }}</strong></div>
+          </div>
+          <h3>Appointment history ({{ detail.appointments.length }})</h3>
+          @if (detail.appointments.length === 0) {
+            <p class="muted">This patient has not booked an appointment yet.</p>
+          } @else {
+            <div class="history">
+              @for (a of detail.appointments; track a.id) {
+                <article class="history-item">
+                  <div><strong>{{ a.serviceName }}</strong><small>{{ formatDate(a.appointmentDate) }} SAST</small><small>Dentist: {{ a.dentistEmail }}</small></div>
+                  <span class="status" [attr.data-status]="a.status">{{ a.status }}</span>
+                </article>
+              }
+            </div>
+          }
+        }
+      </section>
+    </div>
+  }
+</main>

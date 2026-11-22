@@ -151,6 +151,16 @@ export const routes: Routes = [
         .then(m => m.ManageServicesComponent)
   },
 
+  {
+    path: 'admin/analytics',
+    title: 'Analytics & Reporting | BrightSmile Dental',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['Admin'] },
+    loadComponent: () =>
+      import('./features/admin/analytics/analytics')
+        .then(m => m.AnalyticsComponent)
+  },
+
   // ==========================================
   // DENTIST DASHBOARD
   // ==========================================

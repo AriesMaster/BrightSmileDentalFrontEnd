@@ -10,13 +10,31 @@
 
   <section class="welcome-bar">
     <div><strong>Welcome, Administrator</strong><span>{{ email() }}</span></div>
-    <div class="admin-actions">
-      <a class="refresh-button patient-directory-link" routerLink="/admin/patients"><mat-icon>groups</mat-icon> Patient directory</a>
-      <a class="refresh-button patient-directory-link" routerLink="/admin/dentists"><mat-icon>medical_services</mat-icon> Dentist management</a>
-      <a class="refresh-button patient-directory-link" routerLink="/admin/services"><mat-icon>inventory_2</mat-icon> Dental services</a>
-      <button class="refresh-button" type="button" (click)="loadAppointments()" [disabled]="loading()">
+    <button class="refresh-button" type="button" (click)="loadAppointments()" [disabled]="loading()">
       <mat-icon>refresh</mat-icon> Refresh data
-      </button>
+    </button>
+  </section>
+
+  <section class="management-section" aria-labelledby="management-title">
+    <div class="management-heading">
+      <div><h2 id="management-title">Practice management</h2><p>Quick access to your patients, clinical team and treatment catalogue.</p></div>
+    </div>
+    <div class="management-grid">
+      <a routerLink="/admin/patients" class="management-card">
+        <span class="management-icon"><mat-icon>groups</mat-icon></span>
+        <span class="management-copy"><strong>Patients</strong><small>View registered patients and their appointment history</small></span>
+        <mat-icon class="management-arrow">arrow_forward</mat-icon>
+      </a>
+      <a routerLink="/admin/dentists" class="management-card">
+        <span class="management-icon"><mat-icon>medical_services</mat-icon></span>
+        <span class="management-copy"><strong>Dentists</strong><small>Register clinicians and review their workloads</small></span>
+        <mat-icon class="management-arrow">arrow_forward</mat-icon>
+      </a>
+      <a routerLink="/admin/services" class="management-card">
+        <span class="management-icon"><mat-icon>inventory_2</mat-icon></span>
+        <span class="management-copy"><strong>Dental services</strong><small>Manage treatments, descriptions and pricing</small></span>
+        <mat-icon class="management-arrow">arrow_forward</mat-icon>
+      </a>
     </div>
   </section>
 

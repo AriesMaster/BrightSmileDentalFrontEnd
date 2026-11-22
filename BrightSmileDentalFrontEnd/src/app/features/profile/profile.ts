@@ -74,6 +74,8 @@ export class ProfileComponent implements OnInit {
   // REACTIVE PROFILE FORM
   // ==========================================
 
+  readonly todayDate = this.localDateString(new Date());
+
   readonly profileForm = this.fb.nonNullable.group({
 
     firstName: [
@@ -103,7 +105,8 @@ export class ProfileComponent implements OnInit {
     ],
 
     dateOfBirth: [
-      ''
+      '',
+      [Validators.pattern(/^$|^\d{4}-\d{2}-\d{2}$/)]
     ],
 
     gender: [
@@ -296,7 +299,12 @@ export class ProfileComponent implements OnInit {
         String(today.getDate()).padStart(2, '0')
       ].join('-');
 
-      if (selectedDate > todayString) {
+      const parsedDate = new Date(`${selectedDate}T00:00:00.000Z`);
+      const validDate = /^\d{4}-\d{2}-\d{2}$/.test(selectedDate) &&
+        !Number.isNaN(parsedDate.getTime()) &&
+        parsedDate.toISOString().slice(0, 10) === selectedDate;
+
+      if (!validDate || selectedDate > todayString) {
 
         this.errorMessage.set(
           'Date of birth cannot be in the future.'
@@ -366,6 +374,10 @@ export class ProfileComponent implements OnInit {
         }
 
       });
+  }
+
+  private localDateString(date: Date): string {
+    return [date.getFullYear(), String(date.getMonth() + 1).padStart(2, '0'), String(date.getDate()).padStart(2, '0')].join('-');
   }
 
   // ==========================================

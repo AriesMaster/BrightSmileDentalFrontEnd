@@ -68,22 +68,41 @@ export class AnalyticsComponent implements OnInit {
   formatDay(date: string): string {
     return new Intl.DateTimeFormat('en-ZA', { day: 'numeric', month: 'short', timeZone: 'UTC' }).format(new Date(date + 'T00:00:00Z'));
   }
+  private readonly summaryLabels: Record<string, string> = {
+    totalAppointments: 'Total appointments',
+    pendingAppointments: 'Pending appointments',
+    confirmedAppointments: 'Confirmed appointments',
+    completedAppointments: 'Completed appointments',
+    cancelledAppointments: 'Cancelled appointments',
+    otherAppointments: 'Other appointments',
+    uniquePatients: 'Unique patients',
+    upcomingAppointments: 'Upcoming appointments',
+    completionRate: 'Completion rate (%)',
+    cancellationRate: 'Cancellation rate (%)',
+    estimatedCompletedValue: 'Estimated completed service value (ZAR)',
+    estimatedScheduledValue: 'Estimated scheduled service value (ZAR)',
+    currency: 'Currency'
+  };
+
   exportCsv(): void {
     const d = this.data();
     if (!d) return;
     const rows: (string | number)[][] = [
-      ['BrightSmile Dental Analytics', d.period.from, d.period.to],
+      ['BrightSmile Dental - Practice Analytics Report'],
+      ['Reporting period', d.period.from, d.period.to],
+      ['Timezone', d.period.timezone],
+      ['Value methodology', 'Estimates use current service catalogue prices, not prices at the time of booking. They are not invoices, payments or actual revenue.'],
       [],
       ['Metric', 'Value'],
-      ...Object.entries(d.summary).map(([key, value]) => [key, value]),
+      ...Object.entries(d.summary).map(([key, value]) => [this.summaryLabels[key] ?? key, value]),
       [],
-      ['Date', 'Appointments'],
+      ['Scheduled appointment date (SAST)', 'Appointments'],
       ...d.dailyTrend.map(x => [x.date, x.count]),
       [],
       ['Status', 'Appointments'],
       ...d.statusBreakdown.map(x => [x.status, x.count]),
       [],
-      ['Service', 'Appointments', 'Completed', 'Estimated completed value (ZAR)'],
+      ['Service', 'Appointments', 'Completed', 'Estimated completed service value (ZAR; current prices)'],
       ...d.popularServices.map(x => [x.serviceName, x.appointmentCount, x.completedCount, x.estimatedCompletedValue]),
       [],
       ['Dentist', 'Appointments', 'Pending', 'Confirmed', 'Completed', 'Cancelled'],

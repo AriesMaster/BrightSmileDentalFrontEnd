@@ -6,30 +6,29 @@ BrightSmile Dental is a full-stack dental management portfolio project with sepa
 
 [Live frontend](https://brightsmiledentalfrontend.netlify.app/) · [Backend API repository](https://github.com/AriesMaster/BrightSmileDentalBackEnd) · [Developer portfolio](https://thabo.netlify.app/)
 
-> **Project status:** Live in production. The Angular frontend is hosted on Netlify and connected to the deployed ASP.NET Core API. BrightSmile Dental is a full-stack portfolio project that continues to receive feature updates and improvements.
+> **Project status:** Live in production. The Angular frontend is hosted on Netlify and connected to the ASP.NET Core API hosted on Render. BrightSmile Dental is a full-stack portfolio project that continues to receive feature updates and improvements.
 
 ## What the application covers
 
 | Area | Workflow |
 | --- | --- |
-| Authentication | Registration, login, password recovery and protected routes |
-| Patients | Patient dashboard, appointments and profile workflows |
+| Public site | Home, dental services catalogue and practice information |
+| Authentication | Patient registration, login and role-protected routes |
+| Patients | Patient dashboard, availability-based appointment booking and profile management |
 | Dentists | Dentist dashboard and assigned-appointment workflows |
-| Administration | Administration dashboard, users and dental services |
+| Administration | Admin dashboard, patient and dentist management, service management, and date-filtered analytics with CSV export |
 | Shared UI | Navigation, forms, responsive layouts and API communication |
 
 The backend enforces authorization and booking rules. Frontend route guards improve navigation but **do not replace server-side authorization**.
 
 ## Technology
 
-- Angular and TypeScript
+- Angular 21.2, Angular Material, TypeScript and RxJS
 - HTML, CSS/SCSS, Angular routing and forms
 - HTTP integration with an ASP.NET Core 10 REST API
 - JWT bearer authentication and role-aware navigation
 - Netlify frontend hosting
 - PostgreSQL (Supabase) accessed **through the backend**, not directly from the browser
-
-**Version note:** Confirm the installed Angular/CLI versions against the actual application workspace before pinning version-specific requirements here. The current repository-root `package.json` does not yet contain a complete Angular workspace script/dependency configuration.
 
 ## System overview
 
@@ -40,7 +39,7 @@ Browser
 Angular SPA (Netlify / local development)
   | HTTPS + JSON + Authorization: Bearer <token>
   v
-ASP.NET Core 10 Web API
+ASP.NET Core 10 Web API (Render)
   | Entity Framework Core / Npgsql
   v
 Supabase PostgreSQL
@@ -50,19 +49,21 @@ See the [backend README](https://github.com/AriesMaster/BrightSmileDentalBackEnd
 
 ## Run locally
 
-The intended workflow is:
+Install a Node.js version supported by Angular 21.2 and npm. Run the frontend commands from the nested workspace that contains `angular.json` and `package-lock.json`.
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/AriesMaster/BrightSmileDentalFrontEnd.git
-   cd BrightSmileDentalFrontEnd
-   ```
-2. Install a compatible Node.js version and the Angular CLI.
-3. **Verify or restore the complete Angular workspace files** (including its scripts, configuration and dependencies) before attempting an install or build. The repository-root `package.json` currently needs attention.
-4. Configure the frontend's API base URL to point to your locally running backend; do not commit secrets.
-5. Once the workspace configuration is verified, install dependencies and start the development server using the scripts defined in that workspace.
+```bash
+git clone https://github.com/AriesMaster/BrightSmileDentalFrontEnd.git
+cd BrightSmileDentalFrontEnd/BrightSmileDentalFrontEnd
+npm ci
+```
 
-Typical Angular commands, **once supported by the restored workspace**, are `npm install`, `ng serve`, `ng build` and `ng test`. These commands are not claimed as verified against the current repository state.
+Start the backend using the [backend setup instructions](https://github.com/AriesMaster/BrightSmileDentalBackEnd#local-development). Set `apiUrl` in `src/assets/environments/environment.ts` to your local backend URL, including the `/api` suffix.
+
+```bash
+npm start
+```
+
+Open http://localhost:4200. Use `npm run build` for a production build and `npm test` to invoke the configured test runner. The production build uses `src/assets/environments/environment.prod.ts`, which points to the Render API.
 
 ## Security and engineering notes
 
@@ -73,12 +74,10 @@ Typical Angular commands, **once supported by the restored workspace**, are `npm
 
 ## Roadmap
 
-- [ ] Verify and repair the committed Angular workspace configuration.
 - [x] Deploy the frontend and backend and connect them in production.
 - [ ] Add project screenshots and an accurate feature walkthrough.
-- [ ] Add automated component/service tests and browser end-to-end tests.
+- [ ] Expand automated component/service coverage and browser end-to-end tests.
 - [ ] Add GitHub Actions build/test checks and deployment gates.
-
 
 ## Related repositories
 

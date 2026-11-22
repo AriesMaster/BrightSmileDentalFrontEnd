@@ -90,3 +90,21 @@ button.metric:hover{transform:translateY(-2px);border-color:#a3a3a3;box-shadow:0
 .dialog-actions button:disabled{opacity:.5;cursor:not-allowed}
 
 .admin-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.patient-directory-link{text-decoration:none;background:#171717;color:#fff;border-color:#171717}.patient-directory-link:hover{background:#333}@media(max-width:650px){.admin-actions{width:100%}}
+
+/* Practice management shortcuts */
+.management-section{margin:0 0 22px}
+.management-heading{margin:0 0 14px;padding:0 3px}
+.management-heading h2{font-size:19px;margin:0 0 5px}
+.management-heading p{font-size:12px;color:#666;margin:0;line-height:1.6}
+.management-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.management-card{min-width:0;display:flex;align-items:center;gap:14px;padding:20px;background:#fff;border:1px solid #e0e0e0;border-radius:16px;color:#171717;text-decoration:none;transition:border-color .18s,box-shadow .18s,transform .18s}
+.management-card:hover{border-color:#999;box-shadow:0 8px 24px #0000000d;transform:translateY(-2px)}
+.management-icon{width:46px;height:46px;border-radius:12px;background:#f3f3f3;display:grid;place-items:center;flex-shrink:0}
+.management-icon mat-icon{color:#171717}
+.management-copy{display:flex;flex-direction:column;gap:6px;min-width:0;flex:1}
+.management-copy strong{font-size:14px}
+.management-copy small{font-size:11px;color:#737373;line-height:1.6}
+.management-arrow{color:#666;flex-shrink:0}
+.welcome-bar>button{flex-shrink:0}
+@media(max-width:950px){.management-grid{grid-template-columns:1fr}}
+@media(max-width:650px){.management-card{padding:16px}.management-icon{width:42px;height:42px}}

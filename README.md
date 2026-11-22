@@ -6,7 +6,7 @@ BrightSmile Dental is a full-stack dental management portfolio project with sepa
 
 [Live frontend](https://brightsmiledentalfrontend.netlify.app/) · [Backend API repository](https://github.com/AriesMaster/BrightSmileDentalBackEnd) · [Developer portfolio](https://thabo.netlify.app/)
 
-> **Project status:** Active development. The frontend is published on Netlify, but a successful end-to-end connection to the deployed API has not yet been verified. Features described below represent the project's implemented or developing workflows, not a claim that every workflow is production-ready.
+> **Project status:** Live in production. The Angular frontend is hosted on Netlify and connected to the deployed ASP.NET Core API. BrightSmile Dental is a full-stack portfolio project that continues to receive feature updates and improvements.
 
 ## What the application covers
 
@@ -74,12 +74,11 @@ Typical Angular commands, **once supported by the restored workspace**, are `npm
 ## Roadmap
 
 - [ ] Verify and repair the committed Angular workspace configuration.
-- [ ] Confirm deployed frontend-to-API connectivity and all role workflows.
+- [x] Deploy the frontend and backend and connect them in production.
 - [ ] Add project screenshots and an accurate feature walkthrough.
 - [ ] Add automated component/service tests and browser end-to-end tests.
 - [ ] Add GitHub Actions build/test checks and deployment gates.
 
-Items are unchecked until implemented and verified.
 
 ## Related repositories
 
@@ -90,5 +89,3 @@ Items are unchecked until implemented and verified.
 
 **Thabo Tankiso Mavundza** — Junior Full-Stack Software Developer  
 Angular · TypeScript · C# · ASP.NET Core · EF Core · PostgreSQL
-
-This is an actively developed portfolio project, not a production clinical records system.

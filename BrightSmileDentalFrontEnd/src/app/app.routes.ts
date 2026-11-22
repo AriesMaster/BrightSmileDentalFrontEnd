@@ -121,6 +121,16 @@ export const routes: Routes = [
         .then(m => m.DashboardComponent)
   },
 
+  {
+    path: 'admin/patients',
+    title: 'Patient Management | BrightSmile Dental',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['Admin'] },
+    loadComponent: () =>
+      import('./features/admin/patients/patients')
+        .then(m => m.PatientsComponent)
+  },
+
   // ==========================================
   // DENTIST DASHBOARD
   // ==========================================

@@ -5,15 +5,12 @@
       <h1>Practice overview</h1>
       <p>Monitor appointments and manage your dental practice from one workspace.</p>
     </div>
-    <div class="header-actions">
-      <a mat-stroked-button routerLink="/profile"><mat-icon>person_outline</mat-icon> My profile</a>
-      <button mat-stroked-button type="button" (click)="logout()"><mat-icon>logout</mat-icon> Logout</button>
-    </div>
+
   </header>
 
   <section class="welcome-bar">
     <div><strong>Welcome, Administrator</strong><span>{{ email() }}</span></div>
-    <button mat-stroked-button type="button" (click)="loadAppointments()" [disabled]="loading()">
+    <button class="refresh-button" type="button" (click)="loadAppointments()" [disabled]="loading()">
       <mat-icon>refresh</mat-icon> Refresh data
     </button>
   </section>
@@ -26,16 +23,39 @@
   }
 
   <section aria-label="Appointment statistics" class="metrics">
-    <div class="metric"><span>Total appointments</span><strong>{{ totalAppointments() }}</strong><mat-icon>event_note</mat-icon></div>
-    <div class="metric"><span>Pending requests</span><strong>{{ pendingCount() }}</strong><mat-icon>pending_actions</mat-icon></div>
-    <div class="metric"><span>Confirmed</span><strong>{{ confirmedCount() }}</strong><mat-icon>event_available</mat-icon></div>
-    <div class="metric"><span>Upcoming active</span><strong>{{ upcomingCount() }}</strong><mat-icon>calendar_month</mat-icon></div>
+    <button type="button" class="metric" (click)="showAll()" aria-label="Show all appointments"><span>Total appointments</span><strong>{{ totalAppointments() }}</strong><mat-icon>event_note</mat-icon><small>View all</small></button>
+    <button type="button" class="metric" (click)="showPending()" aria-label="Filter pending requests"><span>Pending requests</span><strong>{{ pendingCount() }}</strong><mat-icon>pending_actions</mat-icon><small>Review requests</small></button>
+    <button type="button" class="metric" (click)="showToday()" aria-label="Filter today's appointments"><span>Today's appointments</span><strong>{{ todayCount() }}</strong><mat-icon>today</mat-icon><small>South Africa time</small></button>
+    <div class="metric"><span>Upcoming active</span><strong>{{ upcomingCount() }}</strong><mat-icon>calendar_month</mat-icon><small>Pending and confirmed</small></div>
   </section>
   <div class="context-stats">
     <span><strong>{{ bookedPatientCount() }}</strong> patients with bookings</span>
     <span><strong>{{ dentistCount() }}</strong> dentists with bookings</span>
     <span><strong>{{ completedCount() }}</strong> completed appointments</span>
+    <span><strong>{{ cancelledCount() }}</strong> cancelled appointments</span>
   </div>
+
+  <section class="attention-panel" aria-labelledby="attention-title">
+    <div class="attention-heading">
+      <div><h2 id="attention-title">Needs attention</h2><p>Upcoming appointment requests awaiting confirmation.</p></div>
+      <button type="button" class="text-button" (click)="showPending()">View all pending</button>
+    </div>
+    @if (loading()) {
+      <p class="attention-empty">Checking pending appointments...</p>
+    } @else if (pendingAppointments().length === 0) {
+      <p class="attention-empty"><mat-icon>check_circle_outline</mat-icon> No upcoming pending requests.</p>
+    } @else {
+      <div class="attention-list">
+        @for (a of pendingAppointments(); track a.id) {
+          <div class="attention-item">
+            <div><strong>{{ a.patientName }}</strong><span>{{ a.serviceName }} · {{ a.doctorName }}</span></div>
+            <div class="attention-date">{{ formatDate(a.appointmentDate) }} <small>SAST</small></div>
+            <button type="button" class="details-button" (click)="viewAppointment(a.id)">Details</button>
+          </div>
+        }
+      </div>
+    }
+  </section>
 
   <section class="appointments-panel" aria-labelledby="appointments-title">
     <div class="panel-header">
@@ -72,12 +92,13 @@
           <tbody>
             @for (a of filteredAppointments(); track a.id) {
               <tr>
-                <td><strong>{{ a.patientName }}</strong><small>#{{ a.id }}</small></td>
+                <td><button type="button" class="patient-link" (click)="viewAppointment(a.id)">{{ a.patientName }}</button><small>#{{ a.id }}</small></td>
                 <td>{{ a.serviceName }}</td>
                 <td>{{ a.doctorName }}</td>
                 <td>{{ formatDate(a.appointmentDate) }}</td>
                 <td><span class="status" [attr.data-status]="a.status">{{ a.status }}</span></td>
                 <td>
+                  <button type="button" class="details-button" (click)="viewAppointment(a.id)">View</button>
                   @if (canCancel(a)) {
                     <button type="button" class="cancel-button" (click)="requestCancel(a)" [disabled]="actionId() !== null">
                       {{ actionId() === a.id ? 'Cancelling...' : 'Cancel' }}
@@ -92,10 +113,27 @@
     }
   </section>
 
-  <section class="next-steps">
-    <mat-icon>info_outline</mat-icon>
-    <p><strong>Next modules:</strong> Full patient and dentist account management, dental service management and additional practice analytics.</p>
-  </section>
+
+
+  @if (selectedAppointment(); as selected) {
+    <div class="dialog-backdrop" role="presentation">
+      <div class="confirm-dialog appointment-dialog" role="dialog" aria-modal="true" aria-labelledby="appointment-details-title">
+        <div class="dialog-title"><h2 id="appointment-details-title">Appointment #{{ selected.id }}</h2><button type="button" class="icon-button" aria-label="Close details" (click)="closeAppointment()"><mat-icon>close</mat-icon></button></div>
+        <span class="status" [attr.data-status]="selected.status">{{ selected.status }}</span>
+        <dl class="detail-list">
+          <div><dt>Patient</dt><dd>{{ selected.patientName }}</dd></div>
+          <div><dt>Dentist</dt><dd>{{ selected.doctorName }}</dd></div>
+          <div><dt>Treatment</dt><dd>{{ selected.serviceName }}</dd></div>
+          <div><dt>Service price</dt><dd>{{ selected.servicePrice | currency:'ZAR':'symbol':'1.2-2' }}</dd></div>
+          <div><dt>Appointment (SAST)</dt><dd>{{ formatDate(selected.appointmentDate) }}</dd></div>
+          <div><dt>Patient notes</dt><dd class="notes">{{ selected.additionalInfo || 'No additional information' }}</dd></div>
+        </dl>
+        <div class="dialog-actions"><button type="button" (click)="closeAppointment()">Close</button>
+          @if (canCancel(selected)) { <button type="button" class="danger-outline" (click)="closeAppointment(); requestCancel(selected)">Cancel appointment</button> }
+        </div>
+      </div>
+    </div>
+  }
 
   @if (cancellationId() !== null) {
     <div class="dialog-backdrop" role="presentation">

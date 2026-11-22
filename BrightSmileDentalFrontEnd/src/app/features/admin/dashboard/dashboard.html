@@ -59,7 +59,7 @@
 
   <section class="appointments-panel" aria-labelledby="appointments-title">
     <div class="panel-header">
-      <div><h2 id="appointments-title">Appointment management</h2><p>Search, review and cancel appointments across the practice.</p></div>
+      <div><h2 id="appointments-title">Appointment management</h2><p>Search, review and manage appointments across the practice.</p></div>
       <span class="result-count">{{ filteredAppointments().length }} results</span>
     </div>
 
@@ -98,12 +98,7 @@
                 <td>{{ formatDate(a.appointmentDate) }}</td>
                 <td><span class="status" [attr.data-status]="a.status">{{ a.status }}</span></td>
                 <td>
-                  <button type="button" class="details-button" (click)="viewAppointment(a.id)">View</button>
-                  @if (canCancel(a)) {
-                    <button type="button" class="cancel-button" (click)="requestCancel(a)" [disabled]="actionId() !== null">
-                      {{ actionId() === a.id ? 'Cancelling...' : 'Cancel' }}
-                    </button>
-                  } @else { <span class="no-action">—</span> }
+                  <button type="button" class="details-button" (click)="viewAppointment(a.id)">View details</button>
                 </td>
               </tr>
             }
@@ -128,8 +123,38 @@
           <div><dt>Appointment (SAST)</dt><dd>{{ formatDate(selected.appointmentDate) }}</dd></div>
           <div><dt>Patient notes</dt><dd class="notes">{{ selected.additionalInfo || 'No additional information' }}</dd></div>
         </dl>
-        <div class="dialog-actions"><button type="button" (click)="closeAppointment()">Close</button>
-          @if (canCancel(selected)) { <button type="button" class="danger-outline" (click)="closeAppointment(); requestCancel(selected)">Cancel appointment</button> }
+        <div class="dialog-actions">
+          <button type="button" (click)="closeAppointment()">Close</button>
+          @if (canCancel(selected)) {
+            <button type="button" class="danger-outline" [disabled]="actionId() !== null" (click)="closeAppointment(); requestCancel(selected)">Cancel</button>
+          }
+          @if (canConfirm(selected)) {
+            <button type="button" class="primary-action" [disabled]="actionId() !== null" (click)="closeAppointment(); requestStatusChange(selected, 'Confirmed')">Confirm appointment</button>
+          }
+          @if (canComplete(selected)) {
+            <button type="button" class="primary-action" [disabled]="actionId() !== null" (click)="closeAppointment(); requestStatusChange(selected, 'Completed')">Mark completed</button>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (statusChange(); as change) {
+    <div class="dialog-backdrop" role="presentation">
+      <div class="confirm-dialog" role="alertdialog" aria-modal="true" aria-labelledby="status-title" aria-describedby="status-description">
+        <h2 id="status-title">{{ change.status === 'Confirmed' ? 'Confirm appointment?' : 'Mark appointment completed?' }}</h2>
+        <p id="status-description">
+          @if (change.status === 'Confirmed') {
+            Confirm appointment #{{ change.id }}? The patient booking will change from Pending to Confirmed.
+          } @else {
+            Mark appointment #{{ change.id }} as Completed? Only do this after the visit has taken place.
+          }
+        </p>
+        <div class="dialog-actions">
+          <button type="button" (click)="dismissStatusChange()">Go back</button>
+          <button type="button" class="primary-action" (click)="confirmStatusChange()">
+            {{ change.status === 'Confirmed' ? 'Yes, confirm' : 'Yes, complete' }}
+          </button>
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@
 
 BrightSmile Dental is a full-stack dental management portfolio project with separate Angular and ASP.NET Core repositories. The frontend provides role-oriented interfaces for **patients, dentists and administrators**.
 
-[Live frontend](https://brightsmiledentalfrontend.netlify.app/) · [Backend API repository](https://github.com/AriesMaster/BrightSmileDentalBackEnd) · [Developer portfolio](https://thabo.netlify.app/)
+[Live frontend](https://brightsmiledentalfrontend.netlify.app/) · [Backend API repository](https://github.com/AriesMaster/BrightSmileDentalBackEnd) · [Portfolio case study](https://thabo.netlify.app/brightsmile.html)
 
 > **Project status:** Live in production. The Angular frontend is hosted on Netlify and connected to the ASP.NET Core API hosted on Render. BrightSmile Dental is a full-stack portfolio project that continues to receive feature updates and improvements.
 

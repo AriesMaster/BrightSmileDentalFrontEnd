@@ -1,0 +1,32 @@
+name: Angular CI
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: BrightSmileDentalFrontEnd
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: BrightSmileDentalFrontEnd/package-lock.json
+      - run: npm install --global npm@11.6.2
+      - run: npm ci
+      - run: npm run build
+      - run: npm test -- --watch=false
+        env:
+          CI: 'true'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: angular-build
+          path: BrightSmileDentalFrontEnd/dist/
+          retention-days: 7
